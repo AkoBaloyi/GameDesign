@@ -1,0 +1,2067 @@
+fileFormatVersion: 2
+guid: c666d18e73a7bb244b7ab6f850a2063c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6065096638848509468
+    second: Game Controls in Industrial Setting_0
+  - first:
+      213: 5657389649830488251
+    second: Game Controls in Industrial Setting_1
+  - first:
+      213: 665438616634679946
+    second: Game Controls in Industrial Setting_2
+  - first:
+      213: -5337095333938837473
+    second: Game Controls in Industrial Setting_3
+  - first:
+      213: -673784924114663252
+    second: Game Controls in Industrial Setting_4
+  - first:
+      213: -6528180838842328379
+    second: Game Controls in Industrial Setting_5
+  - first:
+      213: 4621812627742506697
+    second: Game Controls in Industrial Setting_6
+  - first:
+      213: 2290370049569309942
+    second: Game Controls in Industrial Setting_7
+  - first:
+      213: -5503880020909990202
+    second: Game Controls in Industrial Setting_8
+  - first:
+      213: 1352977298215011214
+    second: Game Controls in Industrial Setting_9
+  - first:
+      213: 4468208459119503250
+    second: Game Controls in Industrial Setting_10
+  - first:
+      213: -4942784322362390197
+    second: Game Controls in Industrial Setting_11
+  - first:
+      213: -7939827067980150294
+    second: Game Controls in Industrial Setting_12
+  - first:
+      213: -7417336050147582687
+    second: Game Controls in Industrial Setting_13
+  - first:
+      213: 3175515344618580965
+    second: Game Controls in Industrial Setting_14
+  - first:
+      213: -3774645119815258233
+    second: Game Controls in Industrial Setting_15
+  - first:
+      213: 2300748012089508495
+    second: Game Controls in Industrial Setting_16
+  - first:
+      213: 9204477866234193116
+    second: Game Controls in Industrial Setting_17
+  - first:
+      213: 1961693937075027601
+    second: Game Controls in Industrial Setting_18
+  - first:
+      213: 3970575875805732057
+    second: Game Controls in Industrial Setting_19
+  - first:
+      213: -6820155930822140714
+    second: Game Controls in Industrial Setting_20
+  - first:
+      213: 7570664114695832332
+    second: Game Controls in Industrial Setting_21
+  - first:
+      213: 8378718315929610904
+    second: Game Controls in Industrial Setting_22
+  - first:
+      213: -7853414754621806343
+    second: Game Controls in Industrial Setting_23
+  - first:
+      213: -523174171994675601
+    second: Game Controls in Industrial Setting_24
+  - first:
+      213: 3778157340572829127
+    second: Game Controls in Industrial Setting_25
+  - first:
+      213: 4419482881469228882
+    second: Game Controls in Industrial Setting_26
+  - first:
+      213: -4116161651820000538
+    second: Game Controls in Industrial Setting_27
+  - first:
+      213: 3978553163176334196
+    second: Game Controls in Industrial Setting_28
+  - first:
+      213: -3684233973699735437
+    second: Game Controls in Industrial Setting_29
+  - first:
+      213: -6053393380508229766
+    second: Game Controls in Industrial Setting_30
+  - first:
+      213: 4699802226815841009
+    second: Game Controls in Industrial Setting_31
+  - first:
+      213: -2848337382935070806
+    second: Game Controls in Industrial Setting_32
+  - first:
+      213: -7803625006271293274
+    second: Game Controls in Industrial Setting_33
+  - first:
+      213: 974331008037540547
+    second: Game Controls in Industrial Setting_34
+  - first:
+      213: -7984322256967850014
+    second: Game Controls in Industrial Setting_35
+  - first:
+      213: -7448023271698872571
+    second: Game Controls in Industrial Setting_36
+  - first:
+      213: -3220895445375131771
+    second: Game Controls in Industrial Setting_37
+  - first:
+      213: -5705311933595308852
+    second: Game Controls in Industrial Setting_38
+  - first:
+      213: 4993046494871483
+    second: Game Controls in Industrial Setting_39
+  - first:
+      213: 7321359500393939876
+    second: Game Controls in Industrial Setting_40
+  - first:
+      213: 193506803181961418
+    second: Game Controls in Industrial Setting_41
+  - first:
+      213: -7670584311173610469
+    second: Game Controls in Industrial Setting_42
+  - first:
+      213: 5191471059047516473
+    second: Game Controls in Industrial Setting_43
+  - first:
+      213: -1442854505463092876
+    second: Game Controls in Industrial Setting_44
+  - first:
+      213: -6931347908732930943
+    second: Game Controls in Industrial Setting_45
+  - first:
+      213: -2471940848505920298
+    second: Game Controls in Industrial Setting_46
+  - first:
+      213: 5566006079908012477
+    second: Game Controls in Industrial Setting_47
+  - first:
+      213: 8604371159364898901
+    second: Game Controls in Industrial Setting_48
+  - first:
+      213: -1467970889312742304
+    second: Game Controls in Industrial Setting_49
+  - first:
+      213: 175982254238700940
+    second: Game Controls in Industrial Setting_50
+  - first:
+      213: -1174556557256399952
+    second: Game Controls in Industrial Setting_51
+  - first:
+      213: 8481551542694780878
+    second: Game Controls in Industrial Setting_52
+  - first:
+      213: -9125732043882528228
+    second: Game Controls in Industrial Setting_53
+  - first:
+      213: 8110976883481349081
+    second: Game Controls in Industrial Setting_54
+  - first:
+      213: -6574502863312626034
+    second: Game Controls in Industrial Setting_55
+  - first:
+      213: 2486531669909376912
+    second: Game Controls in Industrial Setting_56
+  - first:
+      213: 6907837409247183904
+    second: Game Controls in Industrial Setting_57
+  - first:
+      213: -5788815790284402701
+    second: Game Controls in Industrial Setting_58
+  - first:
+      213: -2582527449731873195
+    second: Game Controls in Industrial Setting_59
+  - first:
+      213: 5958913709334074580
+    second: Game Controls in Industrial Setting_60
+  - first:
+      213: 6358530488254392100
+    second: Game Controls in Industrial Setting_61
+  - first:
+      213: 5590990945885926355
+    second: Game Controls in Industrial Setting_62
+  - first:
+      213: -3679082416038364132
+    second: Game Controls in Industrial Setting_63
+  - first:
+      213: -6609498802804826014
+    second: Game Controls in Industrial Setting_64
+  - first:
+      213: 3803929342950258033
+    second: Game Controls in Industrial Setting_65
+  - first:
+      213: -7750760334679364946
+    second: Game Controls in Industrial Setting_66
+  - first:
+      213: -8240270080253049948
+    second: Game Controls in Industrial Setting_67
+  - first:
+      213: -2381682332953019866
+    second: Game Controls in Industrial Setting_68
+  - first:
+      213: 3249372796986939574
+    second: Game Controls in Industrial Setting_69
+  - first:
+      213: -460572565595660814
+    second: Game Controls in Industrial Setting_70
+  - first:
+      213: 5725528827024876710
+    second: Game Controls in Industrial Setting_71
+  - first:
+      213: -4681371757849420888
+    second: Game Controls in Industrial Setting_72
+  - first:
+      213: -2591124732920713101
+    second: Game Controls in Industrial Setting_73
+  - first:
+      213: 3337892005398023781
+    second: Game Controls in Industrial Setting_74
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1186
+        width: 689
+        height: 339
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e9d401cdb274dba0800000000000000
+      internalID: -6065096638848509468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_1
+      rect:
+        serializedVersion: 2
+        x: 189
+        y: 1311
+        width: 124
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb82e1299e5138e40800000000000000
+      internalID: 5657389649830488251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_2
+      rect:
+        serializedVersion: 2
+        x: 333
+        y: 1315
+        width: 62
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a82665c65ec1c3900800000000000000
+      internalID: 665438616634679946
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_3
+      rect:
+        serializedVersion: 2
+        x: 391
+        y: 1314
+        width: 67
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f184e282214dee5b0800000000000000
+      internalID: -5337095333938837473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_4
+      rect:
+        serializedVersion: 2
+        x: 515
+        y: 0
+        width: 509
+        height: 1525
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca8c12f6e2c36a6f0800000000000000
+      internalID: -673784924114663252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_5
+      rect:
+        serializedVersion: 2
+        x: 524
+        y: 1319
+        width: 56
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ca9a476d1e3765a0800000000000000
+      internalID: -6528180838842328379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_6
+      rect:
+        serializedVersion: 2
+        x: 583
+        y: 1315
+        width: 122
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ceb107f81af32040800000000000000
+      internalID: 4621812627742506697
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_7
+      rect:
+        serializedVersion: 2
+        x: 680
+        y: 1387
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f4c5c8dc6709cf10800000000000000
+      internalID: 2290370049569309942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_8
+      rect:
+        serializedVersion: 2
+        x: 709
+        y: 1317
+        width: 47
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ce5a43284a4e93b0800000000000000
+      internalID: -5503880020909990202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 130
+        width: 335
+        height: 1111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8306413fadb6c210800000000000000
+      internalID: 1352977298215011214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_10
+      rect:
+        serializedVersion: 2
+        x: 113
+        y: 1207
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 297a6348be3420e30800000000000000
+      internalID: 4468208459119503250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_11
+      rect:
+        serializedVersion: 2
+        x: 121
+        y: 1210
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b494838c8d3b76bb0800000000000000
+      internalID: -4942784322362390197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_12
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 1039
+        width: 83
+        height: 186
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae90303495110d190800000000000000
+      internalID: -7939827067980150294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_13
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 1183
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12d114f3924501990800000000000000
+      internalID: -7417336050147582687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_14
+      rect:
+        serializedVersion: 2
+        x: 347
+        y: 971
+        width: 237
+        height: 230
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ebeace9162b11c20800000000000000
+      internalID: 3175515344618580965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_15
+      rect:
+        serializedVersion: 2
+        x: 572
+        y: 1136
+        width: 51
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78fef303344cd9bc0800000000000000
+      internalID: -3774645119815258233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_16
+      rect:
+        serializedVersion: 2
+        x: 618
+        y: 1146
+        width: 41
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f82084a8026edef10800000000000000
+      internalID: 2300748012089508495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_17
+      rect:
+        serializedVersion: 2
+        x: 619
+        y: 1088
+        width: 99
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd4a5d71adfdcbf70800000000000000
+      internalID: 9204477866234193116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_18
+      rect:
+        serializedVersion: 2
+        x: 717
+        y: 1146
+        width: 37
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19ef4650e36593b10800000000000000
+      internalID: 1961693937075027601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_19
+      rect:
+        serializedVersion: 2
+        x: 719
+        y: 1143
+        width: 80
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9dcd227d8b15a1730800000000000000
+      internalID: 3970575875805732057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_20
+      rect:
+        serializedVersion: 2
+        x: 795
+        y: 1143
+        width: 45
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6dc929ec050f951a0800000000000000
+      internalID: -6820155930822140714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_21
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 1112
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c030e36b6e6601960800000000000000
+      internalID: 7570664114695832332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_22
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 911
+        width: 96
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89a2b0e7aef274470800000000000000
+      internalID: 8378718315929610904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_23
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 1018
+        width: 22
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f8a4fcc3e0130390800000000000000
+      internalID: -7853414754621806343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_24
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 844
+        width: 96
+        height: 157
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f66299accdf4db8f0800000000000000
+      internalID: -523174171994675601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_25
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 944
+        width: 30
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c5c06e6516be6430800000000000000
+      internalID: 3778157340572829127
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_26
+      rect:
+        serializedVersion: 2
+        x: 446
+        y: 875
+        width: 70
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 257a4e8e348255d30800000000000000
+      internalID: 4419482881469228882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_27
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 943
+        width: 49
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ea0f2939c470e6c0800000000000000
+      internalID: -4116161651820000538
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_28
+      rect:
+        serializedVersion: 2
+        x: 554
+        y: 943
+        width: 50
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 473d12bc509a63730800000000000000
+      internalID: 3978553163176334196
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_29
+      rect:
+        serializedVersion: 2
+        x: 604
+        y: 943
+        width: 45
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 370933888b8fedcc0800000000000000
+      internalID: -3684233973699735437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_30
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 767
+        width: 235
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7f1b1deac60efba0800000000000000
+      internalID: -6053393380508229766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_31
+      rect:
+        serializedVersion: 2
+        x: 446
+        y: 774
+        width: 65
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f2b2f3893d093140800000000000000
+      internalID: 4699802226815841009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_32
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 773
+        width: 44
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa770b9cd3ca878d0800000000000000
+      internalID: -2848337382935070806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_33
+      rect:
+        serializedVersion: 2
+        x: 556
+        y: 775
+        width: 53
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a818d4f664f3b390800000000000000
+      internalID: -7803625006271293274
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_34
+      rect:
+        serializedVersion: 2
+        x: 612
+        y: 775
+        width: 42
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c2d9bbb3e4858d00800000000000000
+      internalID: 974331008037540547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_35
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 583
+        width: 77
+        height: 123
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e7af25c53df13190800000000000000
+      internalID: -7984322256967850014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_36
+      rect:
+        serializedVersion: 2
+        x: 343
+        y: 607
+        width: 70
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 507cb83bb4e43a890800000000000000
+      internalID: -7448023271698872571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_37
+      rect:
+        serializedVersion: 2
+        x: 462
+        y: 593
+        width: 52
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58fddbf48a41d43d0800000000000000
+      internalID: -3220895445375131771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_38
+      rect:
+        serializedVersion: 2
+        x: 516
+        y: 617
+        width: 44
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ccc21414609a2d0b0800000000000000
+      internalID: -5705311933595308852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_39
+      rect:
+        serializedVersion: 2
+        x: 559
+        y: 616
+        width: 49
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bbf7caa362db11000800000000000000
+      internalID: 4993046494871483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_40
+      rect:
+        serializedVersion: 2
+        x: 607
+        y: 615
+        width: 47
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a389e5eca1ba9560800000000000000
+      internalID: 7321359500393939876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_41
+      rect:
+        serializedVersion: 2
+        x: 650
+        y: 615
+        width: 40
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac0484989697fa200800000000000000
+      internalID: 193506803181961418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_42
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 450
+        width: 122
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1400d0a53c9c8590800000000000000
+      internalID: -7670584311173610469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_43
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 443
+        width: 106
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9398f303c6fcb0840800000000000000
+      internalID: 5191471059047516473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_44
+      rect:
+        serializedVersion: 2
+        x: 404
+        y: 415
+        width: 160
+        height: 117
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 479ec4bc873f9fbe0800000000000000
+      internalID: -1442854505463092876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_45
+      rect:
+        serializedVersion: 2
+        x: 558
+        y: 471
+        width: 53
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 184b3550dc7eecf90800000000000000
+      internalID: -6931347908732930943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_46
+      rect:
+        serializedVersion: 2
+        x: 606
+        y: 472
+        width: 46
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d4e60b25e6e1bdd0800000000000000
+      internalID: -2471940848505920298
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_47
+      rect:
+        serializedVersion: 2
+        x: 646
+        y: 471
+        width: 48
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db1e49a2a0d6e3d40800000000000000
+      internalID: 5566006079908012477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_48
+      rect:
+        serializedVersion: 2
+        x: 647
+        y: 504
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5509f854bfdd86770800000000000000
+      internalID: 8604371159364898901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_49
+      rect:
+        serializedVersion: 2
+        x: 647
+        y: 493
+        width: 6
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06456e9f048b0abe0800000000000000
+      internalID: -1467970889312742304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_50
+      rect:
+        serializedVersion: 2
+        x: 694
+        y: 471
+        width: 43
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c859ba68de6317200800000000000000
+      internalID: 175982254238700940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_51
+      rect:
+        serializedVersion: 2
+        x: 523
+        y: 471
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b36024c80323bfe0800000000000000
+      internalID: -1174556557256399952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_52
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 327
+        width: 79
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ecf1d7ed03684b570800000000000000
+      internalID: 8481551542694780878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_53
+      rect:
+        serializedVersion: 2
+        x: 335
+        y: 308
+        width: 97
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c128bf86e03ea5180800000000000000
+      internalID: -9125732043882528228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_54
+      rect:
+        serializedVersion: 2
+        x: 415
+        y: 67
+        width: 257
+        height: 287
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9db8f41708aff8070800000000000000
+      internalID: 8110976883481349081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_55
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 338
+        width: 51
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8e5671aa7ca2c4a0800000000000000
+      internalID: -6574502863312626034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_56
+      rect:
+        serializedVersion: 2
+        x: 516
+        y: 338
+        width: 19
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09f05bb216fe18220800000000000000
+      internalID: 2486531669909376912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_57
+      rect:
+        serializedVersion: 2
+        x: 530
+        y: 340
+        width: 50
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 024455046819ddf50800000000000000
+      internalID: 6907837409247183904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_58
+      rect:
+        serializedVersion: 2
+        x: 579
+        y: 336
+        width: 44
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ff0ded85bef9afa0800000000000000
+      internalID: -5788815790284402701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_59
+      rect:
+        serializedVersion: 2
+        x: 620
+        y: 337
+        width: 43
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5564900a7f4092cd0800000000000000
+      internalID: -2582527449731873195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_60
+      rect:
+        serializedVersion: 2
+        x: 662
+        y: 335
+        width: 43
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d4101c627052b250800000000000000
+      internalID: 5958913709334074580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_61
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 191
+        width: 88
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 427e4e54ac90e3850800000000000000
+      internalID: 6358530488254392100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_62
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 103
+        width: 114
+        height: 171
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d3b4f794a0379d40800000000000000
+      internalID: 5590990945885926355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_63
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 8
+        width: 196
+        height: 300
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1cb5a4090641fcc0800000000000000
+      internalID: -3679082416038364132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_64
+      rect:
+        serializedVersion: 2
+        x: 644
+        y: 207
+        width: 63
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 260e2738bd75644a0800000000000000
+      internalID: -6609498802804826014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_65
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 8
+        width: 358
+        height: 129
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1753c3555954ac430800000000000000
+      internalID: 3803929342950258033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_66
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 60
+        width: 71
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eaaaf387a84cf6490800000000000000
+      internalID: -7750760334679364946
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_67
+      rect:
+        serializedVersion: 2
+        x: 415
+        y: 0
+        width: 87
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a3cc35550ea4ad80800000000000000
+      internalID: -8240270080253049948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_68
+      rect:
+        serializedVersion: 2
+        x: 469
+        y: 66
+        width: 50
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62af280798092fed0800000000000000
+      internalID: -2381682332953019866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_69
+      rect:
+        serializedVersion: 2
+        x: 663
+        y: 68
+        width: 43
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b8593bc757181d20800000000000000
+      internalID: 3249372796986939574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_70
+      rect:
+        serializedVersion: 2
+        x: 685
+        y: 59
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fd516a11b7bb99f0800000000000000
+      internalID: -460572565595660814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_71
+      rect:
+        serializedVersion: 2
+        x: 675
+        y: 38
+        width: 30
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a4a31e022a257f40800000000000000
+      internalID: 5725528827024876710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_72
+      rect:
+        serializedVersion: 2
+        x: 695
+        y: 30
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8abd6df603d680fb0800000000000000
+      internalID: -4681371757849420888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_73
+      rect:
+        serializedVersion: 2
+        x: 703
+        y: 25
+        width: 13
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3703885a8c97a0cd0800000000000000
+      internalID: -2591124732920713101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Controls in Industrial Setting_74
+      rect:
+        serializedVersion: 2
+        x: 717
+        y: 11
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56e8d501813925e20800000000000000
+      internalID: 3337892005398023781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Game Controls in Industrial Setting_0: -6065096638848509468
+      Game Controls in Industrial Setting_1: 5657389649830488251
+      Game Controls in Industrial Setting_10: 4468208459119503250
+      Game Controls in Industrial Setting_11: -4942784322362390197
+      Game Controls in Industrial Setting_12: -7939827067980150294
+      Game Controls in Industrial Setting_13: -7417336050147582687
+      Game Controls in Industrial Setting_14: 3175515344618580965
+      Game Controls in Industrial Setting_15: -3774645119815258233
+      Game Controls in Industrial Setting_16: 2300748012089508495
+      Game Controls in Industrial Setting_17: 9204477866234193116
+      Game Controls in Industrial Setting_18: 1961693937075027601
+      Game Controls in Industrial Setting_19: 3970575875805732057
+      Game Controls in Industrial Setting_2: 665438616634679946
+      Game Controls in Industrial Setting_20: -6820155930822140714
+      Game Controls in Industrial Setting_21: 7570664114695832332
+      Game Controls in Industrial Setting_22: 8378718315929610904
+      Game Controls in Industrial Setting_23: -7853414754621806343
+      Game Controls in Industrial Setting_24: -523174171994675601
+      Game Controls in Industrial Setting_25: 3778157340572829127
+      Game Controls in Industrial Setting_26: 4419482881469228882
+      Game Controls in Industrial Setting_27: -4116161651820000538
+      Game Controls in Industrial Setting_28: 3978553163176334196
+      Game Controls in Industrial Setting_29: -3684233973699735437
+      Game Controls in Industrial Setting_3: -5337095333938837473
+      Game Controls in Industrial Setting_30: -6053393380508229766
+      Game Controls in Industrial Setting_31: 4699802226815841009
+      Game Controls in Industrial Setting_32: -2848337382935070806
+      Game Controls in Industrial Setting_33: -7803625006271293274
+      Game Controls in Industrial Setting_34: 974331008037540547
+      Game Controls in Industrial Setting_35: -7984322256967850014
+      Game Controls in Industrial Setting_36: -7448023271698872571
+      Game Controls in Industrial Setting_37: -3220895445375131771
+      Game Controls in Industrial Setting_38: -5705311933595308852
+      Game Controls in Industrial Setting_39: 4993046494871483
+      Game Controls in Industrial Setting_4: -673784924114663252
+      Game Controls in Industrial Setting_40: 7321359500393939876
+      Game Controls in Industrial Setting_41: 193506803181961418
+      Game Controls in Industrial Setting_42: -7670584311173610469
+      Game Controls in Industrial Setting_43: 5191471059047516473
+      Game Controls in Industrial Setting_44: -1442854505463092876
+      Game Controls in Industrial Setting_45: -6931347908732930943
+      Game Controls in Industrial Setting_46: -2471940848505920298
+      Game Controls in Industrial Setting_47: 5566006079908012477
+      Game Controls in Industrial Setting_48: 8604371159364898901
+      Game Controls in Industrial Setting_49: -1467970889312742304
+      Game Controls in Industrial Setting_5: -6528180838842328379
+      Game Controls in Industrial Setting_50: 175982254238700940
+      Game Controls in Industrial Setting_51: -1174556557256399952
+      Game Controls in Industrial Setting_52: 8481551542694780878
+      Game Controls in Industrial Setting_53: -9125732043882528228
+      Game Controls in Industrial Setting_54: 8110976883481349081
+      Game Controls in Industrial Setting_55: -6574502863312626034
+      Game Controls in Industrial Setting_56: 2486531669909376912
+      Game Controls in Industrial Setting_57: 6907837409247183904
+      Game Controls in Industrial Setting_58: -5788815790284402701
+      Game Controls in Industrial Setting_59: -2582527449731873195
+      Game Controls in Industrial Setting_6: 4621812627742506697
+      Game Controls in Industrial Setting_60: 5958913709334074580
+      Game Controls in Industrial Setting_61: 6358530488254392100
+      Game Controls in Industrial Setting_62: 5590990945885926355
+      Game Controls in Industrial Setting_63: -3679082416038364132
+      Game Controls in Industrial Setting_64: -6609498802804826014
+      Game Controls in Industrial Setting_65: 3803929342950258033
+      Game Controls in Industrial Setting_66: -7750760334679364946
+      Game Controls in Industrial Setting_67: -8240270080253049948
+      Game Controls in Industrial Setting_68: -2381682332953019866
+      Game Controls in Industrial Setting_69: 3249372796986939574
+      Game Controls in Industrial Setting_7: 2290370049569309942
+      Game Controls in Industrial Setting_70: -460572565595660814
+      Game Controls in Industrial Setting_71: 5725528827024876710
+      Game Controls in Industrial Setting_72: -4681371757849420888
+      Game Controls in Industrial Setting_73: -2591124732920713101
+      Game Controls in Industrial Setting_74: 3337892005398023781
+      Game Controls in Industrial Setting_8: -5503880020909990202
+      Game Controls in Industrial Setting_9: 1352977298215011214
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
