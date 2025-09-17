@@ -691,10 +691,10 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: 2f7eb111-70f1-4288-87f5-3ce976dc8ff4
+  cloudProjectId: 934fddf7-83f4-4e71-9e97-f95bbbb496e7
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: DIGI2001
+  projectName: GameDesignProject
   organizationId: baloyiako
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
