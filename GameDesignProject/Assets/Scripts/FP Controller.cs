@@ -44,7 +44,7 @@ public class FPController : MonoBehaviour
     public GameObject pauseMenuPanel;
     public Image brightnessOverlay;
     public bool isPaused = false;
-    
+
     [Header("Game State Reference")]
     public GameStateManager gameStateManager;
 
@@ -55,51 +55,53 @@ public class FPController : MonoBehaviour
     private float verticalRotation = 0f;
     private bool isCrouching = false;
     private float horizontalRotation = 0f;
-    
-    
+    private HighlightableObject currentHighlightedObject;
+
+
     private bool inputEnabled = true;
 
     private void Awake()
-{
-    controller = GetComponent<CharacterController>();
-    originalMoveSpeed = moveSpeed;
-    currentSpeed = moveSpeed;
-    
-    
-    horizontalRotation = transform.eulerAngles.y;
-    transform.rotation = Quaternion.Euler(0f, horizontalRotation, 0f);
-    
-    
-    Cursor.lockState = CursorLockMode.Locked;
-    Cursor.visible = false;
-}
+    {
+        controller = GetComponent<CharacterController>();
+        originalMoveSpeed = moveSpeed;
+        currentSpeed = moveSpeed;
+
+
+        horizontalRotation = transform.eulerAngles.y;
+        transform.rotation = Quaternion.Euler(0f, horizontalRotation, 0f);
+
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
 
     private void Update()
     {
-        
+
         if (!isPaused && inputEnabled)
         {
             HandleMovement();
             HandleLook();
+            HandlePickupHighlighting();
         }
-        
-        
+
+
         UpdatePauseInput();
 
-        
+
         if (heldObject != null)
         {
             heldObject.MoveToHoldPoint(holdPoint.position);
         }
     }
 
-    
+
     public void SetInputEnabled(bool enabled)
     {
         inputEnabled = enabled;
         if (!enabled)
         {
-            
+
             moveInput = Vector2.zero;
             lookInput = Vector2.zero;
             isSprinting = false;
@@ -130,7 +132,7 @@ public class FPController : MonoBehaviour
     public void OnSprint(InputAction.CallbackContext context)
     {
         if (!inputEnabled || isPaused) return;
-        
+
         if (context.performed)
         {
             if (!isCrouching && moveInput.magnitude > 0.1f)
@@ -169,7 +171,7 @@ public class FPController : MonoBehaviour
     public void onCrouch(InputAction.CallbackContext context)
     {
         if (!inputEnabled || isPaused) return;
-        
+
         if (context.performed)
         {
             controller.height = crouchHeight;
@@ -184,48 +186,48 @@ public class FPController : MonoBehaviour
     }
 
     public void OnPickUp(InputAction.CallbackContext context)
-{
-    if (!inputEnabled || isPaused) return;
-    if (!context.performed) return;
-
-    Debug.Log("Pickup input detected!"); 
-
-    if (heldObject == null)
     {
-        
-        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
-        
-        Debug.DrawRay(cameraTransform.position, cameraTransform.forward * pickupRange, Color.red, 1f); 
-        
-        if (Physics.Raycast(ray, out RaycastHit hit, pickupRange))
-        {
-            Debug.Log($"Raycast hit: {hit.collider.name}"); 
-            
-            PickUpObject pickUp = hit.collider.GetComponent<PickUpObject>();
+        if (!inputEnabled || isPaused) return;
+        if (!context.performed) return;
 
-            if (pickUp != null)
+        Debug.Log("Pickup input detected!");
+
+        if (heldObject == null)
+        {
+
+            Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
+
+            Debug.DrawRay(cameraTransform.position, cameraTransform.forward * pickupRange, Color.red, 1f);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, pickupRange))
             {
-                Debug.Log($"Picking up: {hit.collider.name}");
-                pickUp.PickUp(holdPoint);
-                heldObject = pickUp;
+                Debug.Log($"Raycast hit: {hit.collider.name}");
+
+                PickUpObject pickUp = hit.collider.GetComponent<PickUpObject>();
+
+                if (pickUp != null)
+                {
+                    Debug.Log($"Picking up: {hit.collider.name}");
+                    pickUp.PickUp(holdPoint);
+                    heldObject = pickUp;
+                }
+                else
+                {
+                    Debug.Log($"Object {hit.collider.name} doesn't have PickUpObject component");
+                }
             }
             else
             {
-                Debug.Log($"Object {hit.collider.name} doesn't have PickUpObject component");
+                Debug.Log("Raycast didn't hit anything within pickup range");
             }
         }
         else
         {
-            Debug.Log("Raycast didn't hit anything within pickup range");
+            Debug.Log($"Dropping: {heldObject.name}");
+            heldObject.Drop();
+            heldObject = null;
         }
     }
-    else
-    {
-        Debug.Log($"Dropping: {heldObject.name}");
-        heldObject.Drop();
-        heldObject = null;
-    }
-}
 
 
     public void OnThrow(InputAction.CallbackContext context)
@@ -243,7 +245,7 @@ public class FPController : MonoBehaviour
 
     private void UpdatePauseInput()
     {
-        
+
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             if (gameStateManager != null)
@@ -259,7 +261,7 @@ public class FPController : MonoBehaviour
             }
             else
             {
-                
+
                 if (isPaused)
                     ResumeGame();
                 else
@@ -268,7 +270,7 @@ public class FPController : MonoBehaviour
         }
     }
 
-    
+
     public void PauseGame()
     {
         pauseMenuPanel.SetActive(true);
@@ -290,10 +292,10 @@ public class FPController : MonoBehaviour
     public void HandleMovement()
     {
         if (!inputEnabled) return;
-        
+
         float targetSpeed = GetTargetSpeed();
         currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, GetSpeedTransitionRate() * Time.deltaTime);
-        
+
         if (moveInput.magnitude < 0.1f)
         {
             isSprinting = false;
@@ -327,23 +329,23 @@ public class FPController : MonoBehaviour
             return sprintDeceleration;
     }
 
-   
 
-public void HandleLook()
-{
-    if (!inputEnabled) return;
-    
-    float mouseX = lookInput.x * lookSensitivity;
-    float mouseY = lookInput.y * lookSensitivity;
 
-    verticalRotation -= mouseY;
-    verticalRotation = Mathf.Clamp(verticalRotation, -verticalLookLimit, verticalLookLimit);
-    cameraTransform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
+    public void HandleLook()
+    {
+        if (!inputEnabled) return;
 
-    horizontalRotation += mouseX;
-    transform.rotation = Quaternion.Euler(0f, horizontalRotation, 0f);
-}
-    
+        float mouseX = lookInput.x * lookSensitivity;
+        float mouseY = lookInput.y * lookSensitivity;
+
+        verticalRotation -= mouseY;
+        verticalRotation = Mathf.Clamp(verticalRotation, -verticalLookLimit, verticalLookLimit);
+        cameraTransform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
+
+        horizontalRotation += mouseX;
+        transform.rotation = Quaternion.Euler(0f, horizontalRotation, 0f);
+    }
+
     public void SetSensitivity(float value)
     {
         lookSensitivity = value;
@@ -363,4 +365,57 @@ public void HandleLook()
     {
         return isSprinting;
     }
+
+
+private void HandlePickupHighlighting()
+{
+    Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
+
+    // Debug ray - you can see this in Scene view
+    Debug.DrawRay(cameraTransform.position, cameraTransform.forward * pickupRange, Color.green, 0.1f);
+
+    if (Physics.Raycast(ray, out RaycastHit hit, pickupRange))
+    {
+        PickUpObject pickupObject = hit.collider.GetComponent<PickUpObject>();
+
+        if (pickupObject != null)
+        {
+            HighlightableObject highlightable = hit.collider.GetComponent<HighlightableObject>();
+
+            // If we're looking at a new object, unhighlight the old one
+            if (highlightable != currentHighlightedObject)
+            {
+                if (currentHighlightedObject != null)
+                {
+                    currentHighlightedObject.HighlightOff();
+                }
+
+                // Highlight the new object
+                currentHighlightedObject = highlightable;
+                if (currentHighlightedObject != null)
+                {
+                    currentHighlightedObject.HighlightOn();
+                }
+            }
+        }
+        else
+        {
+            // Not looking at a pickup object, turn off highlighting
+            if (currentHighlightedObject != null)
+            {
+                currentHighlightedObject.HighlightOff();
+                currentHighlightedObject = null;
+            }
+        }
+    }
+    else
+    {
+        // Not looking at anything, turn off highlighting
+        if (currentHighlightedObject != null)
+        {
+            currentHighlightedObject.HighlightOff();
+            currentHighlightedObject = null;
+        }
+    }
+}
 }
