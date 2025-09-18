@@ -54,18 +54,25 @@ public class FPController : MonoBehaviour
     private Vector3 velocity;
     private float verticalRotation = 0f;
     private bool isCrouching = false;
+    private float horizontalRotation = 0f;
     
     
     private bool inputEnabled = true;
 
     private void Awake()
-    {
-        controller = GetComponent<CharacterController>();
-        originalMoveSpeed = moveSpeed;
-        currentSpeed = moveSpeed;
-        
-        
-    }
+{
+    controller = GetComponent<CharacterController>();
+    originalMoveSpeed = moveSpeed;
+    currentSpeed = moveSpeed;
+    
+    
+    horizontalRotation = transform.eulerAngles.y;
+    transform.rotation = Quaternion.Euler(0f, horizontalRotation, 0f);
+    
+    
+    Cursor.lockState = CursorLockMode.Locked;
+    Cursor.visible = false;
+}
 
     private void Update()
     {
@@ -177,30 +184,49 @@ public class FPController : MonoBehaviour
     }
 
     public void OnPickUp(InputAction.CallbackContext context)
+{
+    if (!inputEnabled || isPaused) return;
+    if (!context.performed) return;
+
+    Debug.Log("Pickup input detected!"); 
+
+    if (heldObject == null)
     {
-        if (!inputEnabled || isPaused) return;
-        if (!context.performed) return;
-
-        if (heldObject == null)
+        
+        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
+        
+        Debug.DrawRay(cameraTransform.position, cameraTransform.forward * pickupRange, Color.red, 1f); 
+        
+        if (Physics.Raycast(ray, out RaycastHit hit, pickupRange))
         {
-            Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
-            if (Physics.Raycast(ray, out RaycastHit hit, pickupRange))
-            {
-                PickUpObject pickUp = hit.collider.GetComponent<PickUpObject>();
+            Debug.Log($"Raycast hit: {hit.collider.name}"); 
+            
+            PickUpObject pickUp = hit.collider.GetComponent<PickUpObject>();
 
-                if (pickUp != null)
-                {
-                    pickUp.PickUp(holdPoint);
-                    heldObject = pickUp;
-                }
+            if (pickUp != null)
+            {
+                Debug.Log($"Picking up: {hit.collider.name}");
+                pickUp.PickUp(holdPoint);
+                heldObject = pickUp;
+            }
+            else
+            {
+                Debug.Log($"Object {hit.collider.name} doesn't have PickUpObject component");
             }
         }
         else
         {
-            heldObject.Drop();
-            heldObject = null;
+            Debug.Log("Raycast didn't hit anything within pickup range");
         }
     }
+    else
+    {
+        Debug.Log($"Dropping: {heldObject.name}");
+        heldObject.Drop();
+        heldObject = null;
+    }
+}
+
 
     public void OnThrow(InputAction.CallbackContext context)
     {
@@ -301,19 +327,22 @@ public class FPController : MonoBehaviour
             return sprintDeceleration;
     }
 
-    public void HandleLook()
-    {
-        if (!inputEnabled) return;
-        
-        float mouseX = lookInput.x * lookSensitivity;
-        float mouseY = lookInput.y * lookSensitivity;
+   
 
-        verticalRotation -= mouseY;
-        verticalRotation = Mathf.Clamp(verticalRotation, -verticalLookLimit, verticalLookLimit);
+public void HandleLook()
+{
+    if (!inputEnabled) return;
+    
+    float mouseX = lookInput.x * lookSensitivity;
+    float mouseY = lookInput.y * lookSensitivity;
 
-        cameraTransform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
-        transform.Rotate(Vector3.up * mouseX);
-    }
+    verticalRotation -= mouseY;
+    verticalRotation = Mathf.Clamp(verticalRotation, -verticalLookLimit, verticalLookLimit);
+    cameraTransform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
+
+    horizontalRotation += mouseX;
+    transform.rotation = Quaternion.Euler(0f, horizontalRotation, 0f);
+}
     
     public void SetSensitivity(float value)
     {
