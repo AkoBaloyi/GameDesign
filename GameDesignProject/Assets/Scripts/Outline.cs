@@ -1,4 +1,3 @@
-// Replace your Outline.cs with this improved version:
 using UnityEngine;
 
 [RequireComponent(typeof(Renderer))]
