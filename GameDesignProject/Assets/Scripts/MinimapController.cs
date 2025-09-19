@@ -3,29 +3,69 @@ using UnityEngine;
 public class MinimapController : MonoBehaviour
 {
     [Header("References")]
-    public Transform player;                    
-    public RectTransform arrow;                 
-    public RectTransform minimapBackground;     
-
-    [Header("World Settings")]
-    public Vector2 worldSize = new Vector2(100f, 100f);    
-    public Vector2 worldCenter = Vector2.zero;              
+    public Transform player;
+    public RectTransform arrow;
+    public RectTransform minimapBackground;
 
     [Header("Minimap Settings")]
-    public float minimapSize = 250f;            
-    public float arrowSize = 12f;               
+    public float minimapSize = 250f;
+    public float arrowSize = 12f;
+    public float mapScale = 1f; // How much world space per minimap pixel
+
+    [Header("Dynamic Bounds")]
+    public bool usePlayerStartAsCenter = true;
+    public float initialMapRange = 50f; // Initial range around player start position
+    
+    [Header("Manual Override")]
+    public bool useManualBounds = false;
+    public Vector2 manualCenter = Vector2.zero;
+    public Vector2 manualSize = new Vector2(100f, 100f);
 
     [Header("Debug")]
-    public bool showDebugInfo = false;
-    public bool clampArrowToEdge = true;        
+    public bool showDebugInfo = true;
+    public bool clampArrowToEdge = true;
+
+    private Vector2 mapCenter;
+    private Vector2 mapWorldSize;
+    private bool initialized = false;
+
+    private void Start()
+    {
+        InitializeMinimap();
+    }
+
+    private void InitializeMinimap()
+    {
+        if (player == null)
+        {
+            Debug.LogError("Player not assigned to minimap!");
+            return;
+        }
+
+        if (useManualBounds)
+        {
+            // Use manual settings
+            mapCenter = manualCenter;
+            mapWorldSize = manualSize;
+            Debug.Log($"Using manual bounds - Center: {mapCenter}, Size: {mapWorldSize}");
+        }
+        else if (usePlayerStartAsCenter)
+        {
+            // Use player's starting position as center
+            mapCenter = new Vector2(player.position.x, player.position.z);
+            mapWorldSize = new Vector2(initialMapRange * 2f, initialMapRange * 2f);
+            Debug.Log($"Minimap centered on player start: {mapCenter}, Size: {mapWorldSize}");
+        }
+
+        // Calculate scale: how many world units per minimap pixel
+        mapScale = mapWorldSize.x / minimapSize;
+        
+        initialized = true;
+    }
 
     private void Update()
     {
-        if (player == null || arrow == null || minimapBackground == null) 
-        {
-            Debug.LogWarning("MinimapController: Missing references!");
-            return;
-        }
+        if (!initialized || player == null || arrow == null) return;
 
         UpdateArrowPosition();
         UpdateArrowRotation();
@@ -38,99 +78,114 @@ public class MinimapController : MonoBehaviour
 
     private void UpdateArrowPosition()
     {
-        Vector3 playerWorldPos = player.position;
+        // Get player position relative to map center
+        float worldX = player.position.x - mapCenter.x;
+        float worldZ = player.position.z - mapCenter.y;
         
-        float relativeX = playerWorldPos.x - worldCenter.x;
-        float relativeZ = playerWorldPos.z - worldCenter.y;
+        // Convert to minimap coordinates
+        float minimapX = worldX / mapScale;
+        float minimapZ = worldZ / mapScale;
         
-        float normalizedX = relativeX / (worldSize.x * 0.5f);  
-        float normalizedZ = relativeZ / (worldSize.y * 0.5f);
-        
-        float minimapX = normalizedX * (minimapSize * 0.5f);   
-        float minimapY = normalizedZ * (minimapSize * 0.5f);
-        
+        // Clamp to minimap bounds
         if (clampArrowToEdge)
         {
             float maxOffset = (minimapSize * 0.5f) - (arrowSize * 0.5f);
             minimapX = Mathf.Clamp(minimapX, -maxOffset, maxOffset);
-            minimapY = Mathf.Clamp(minimapY, -maxOffset, maxOffset);
+            minimapZ = Mathf.Clamp(minimapZ, -maxOffset, maxOffset);
         }
         
-        arrow.anchoredPosition = new Vector2(minimapX, minimapY);
+        arrow.anchoredPosition = new Vector2(minimapX, minimapZ);
     }
 
     private void UpdateArrowRotation()
     {
         float playerYaw = player.eulerAngles.y;
-        
         arrow.localEulerAngles = new Vector3(0f, 0f, -playerYaw);
+    }
+
+    // Context menu options for easy setup
+    [ContextMenu("1. Set Map Center to Current Player Position")]
+    public void SetMapCenterToCurrentPlayerPosition()
+    {
+        if (player != null)
+        {
+            mapCenter = new Vector2(player.position.x, player.position.z);
+            useManualBounds = true;
+            manualCenter = mapCenter;
+            Debug.Log($"Map center set to current player position: {mapCenter}");
+        }
+    }
+
+    [ContextMenu("2. Auto-Size Map for Current Area")]
+    public void AutoSizeForCurrentArea()
+    {
+        // Set a reasonable size based on your factory building needs
+        mapWorldSize = new Vector2(200f, 200f); // 200x200 world units should be plenty
+        manualSize = mapWorldSize;
+        mapScale = mapWorldSize.x / minimapSize;
+        useManualBounds = true;
+        
+        Debug.Log($"Map sized for building area: {mapWorldSize} world units");
+        Debug.Log($"Map scale: 1 minimap pixel = {mapScale:F2} world units");
+    }
+
+    [ContextMenu("3. Reset to Player Start Position")]
+    public void ResetToPlayerStart()
+    {
+        usePlayerStartAsCenter = true;
+        useManualBounds = false;
+        initialized = false;
+        Start();
     }
 
     private void DebugInfo()
     {
+        if (player == null || arrow == null) return;
+        
         Vector3 playerPos = player.position;
         Vector2 arrowPos = arrow.anchoredPosition;
         float playerRotation = player.eulerAngles.y;
         
-        Debug.Log($"Player World: ({playerPos.x:F1}, {playerPos.z:F1}) | " +
-                  $"Arrow Minimap: ({arrowPos.x:F1}, {arrowPos.y:F1}) | " +
-                  $"Player Rotation: {playerRotation:F1}°");
-    }
-
-    [ContextMenu("Set World Center to Player")]
-    public void SetWorldCenterToPlayer()
-    {
-        if (player != null)
-        {
-            worldCenter = new Vector2(player.position.x, player.position.z);
-            Debug.Log($"World center set to player position: {worldCenter}");
-        }
-    }
-
-    [ContextMenu("Auto Detect World Size")]
-    public void AutoDetectWorldSize()
-    {
-        GameObject plane = GameObject.FindWithTag("Ground");
-        if (plane == null)
-        {
-            plane = GameObject.Find("Plane");
-        }
+        // Calculate distance from map center
+        float distanceFromCenter = Vector2.Distance(
+            new Vector2(playerPos.x, playerPos.z), 
+            mapCenter
+        );
         
-        if (plane != null)
-        {
-            Vector3 planeScale = plane.transform.localScale;
-            worldSize = new Vector2(planeScale.x * 10f, planeScale.z * 10f); 
-            Debug.Log($"Auto-detected world size: {worldSize}");
-        }
-        else
-        {
-            Debug.LogWarning("Could not find plane. Make sure it's tagged 'Ground' or named 'Plane'");
-        }
+        Debug.Log($"Player: ({playerPos.x:F1}, {playerPos.z:F1}) | " +
+                  $"Arrow: ({arrowPos.x:F1}, {arrowPos.y:F1}) | " +
+                  $"Distance from center: {distanceFromCenter:F1} | " +
+                  $"Map scale: {mapScale:F2}");
     }
 
-    
+    // Gizmos to visualize the minimap area in scene view
     private void OnDrawGizmosSelected()
     {
+        if (!initialized && Application.isPlaying) return;
         
-        Vector3 worldCenterPos = new Vector3(worldCenter.x, 0f, worldCenter.y);
-        Vector3 worldSizeVector = new Vector3(worldSize.x, 0.1f, worldSize.y);
+        Vector2 centerToUse = useManualBounds ? manualCenter : mapCenter;
+        Vector2 sizeToUse = useManualBounds ? manualSize : mapWorldSize;
         
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(worldCenterPos, worldSizeVector);
+        // Draw map bounds
+        Vector3 center3D = new Vector3(centerToUse.x, 0f, centerToUse.y);
+        Vector3 size3D = new Vector3(sizeToUse.x, 0.1f, sizeToUse.y);
         
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireCube(center3D, size3D);
         
+        // Draw map center
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(center3D, 2f);
+        
+        // Draw player
         if (player != null)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawSphere(player.position, 1f);
+            Gizmos.DrawSphere(player.position, 3f);
             
-            
-            Gizmos.color = Color.blue;
-            Gizmos.DrawRay(player.position, player.forward * 5f);
+            // Draw line from center to player
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(center3D, player.position);
         }
-        
-        
-        Gizmos.color = Color.green;
-        Gizmos.DrawSphere(worldCenterPos, 0.5f);
     }
 }
