@@ -371,8 +371,8 @@ private void HandlePickupHighlighting()
 {
     Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
 
-    // Debug ray - you can see this in Scene view
-    Debug.DrawRay(cameraTransform.position, cameraTransform.forward * pickupRange, Color.green, 0.1f);
+    
+    //Debug.DrawRay(cameraTransform.position, cameraTransform.forward * pickupRange, Color.green, 0.1f);
 
     if (Physics.Raycast(ray, out RaycastHit hit, pickupRange))
     {
@@ -382,7 +382,6 @@ private void HandlePickupHighlighting()
         {
             HighlightableObject highlightable = hit.collider.GetComponent<HighlightableObject>();
 
-            // If we're looking at a new object, unhighlight the old one
             if (highlightable != currentHighlightedObject)
             {
                 if (currentHighlightedObject != null)
@@ -390,7 +389,6 @@ private void HandlePickupHighlighting()
                     currentHighlightedObject.HighlightOff();
                 }
 
-                // Highlight the new object
                 currentHighlightedObject = highlightable;
                 if (currentHighlightedObject != null)
                 {
@@ -400,7 +398,6 @@ private void HandlePickupHighlighting()
         }
         else
         {
-            // Not looking at a pickup object, turn off highlighting
             if (currentHighlightedObject != null)
             {
                 currentHighlightedObject.HighlightOff();
@@ -410,7 +407,6 @@ private void HandlePickupHighlighting()
     }
     else
     {
-        // Not looking at anything, turn off highlighting
         if (currentHighlightedObject != null)
         {
             currentHighlightedObject.HighlightOff();
