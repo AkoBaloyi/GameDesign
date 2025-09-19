@@ -44,23 +44,19 @@ public class MinimapController : MonoBehaviour
 
         if (useManualBounds)
         {
-            // Use manual settings
             mapCenter = manualCenter;
             mapWorldSize = manualSize;
             Debug.Log($"Using manual bounds - Center: {mapCenter}, Size: {mapWorldSize}");
         }
         else if (usePlayerStartAsCenter)
         {
-            // Use player's starting position as center
             mapCenter = new Vector2(player.position.x, player.position.z);
             mapWorldSize = new Vector2(initialMapRange * 2f, initialMapRange * 2f);
             Debug.Log($"Minimap centered on player start: {mapCenter}, Size: {mapWorldSize}");
         }
 
-        // FORCE map scale to always be 2 (since that's accurate for your setup)
         mapScale = 2f;
         
-        // Calculate what world size this scale represents
         mapWorldSize = new Vector2(minimapSize * mapScale, minimapSize * mapScale);
         
         Debug.Log($"Map scale LOCKED to: {mapScale} (covers {mapWorldSize.x}x{mapWorldSize.y} world units)");
