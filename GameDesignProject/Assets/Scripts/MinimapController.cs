@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MinimapController : MonoBehaviour
 {
-    [Header("References")]
+   [Header("References")]
     public Transform player;
     public RectTransform arrow;
     public RectTransform minimapBackground;
@@ -18,11 +18,12 @@ public class MinimapController : MonoBehaviour
     
     [Header("Manual Override")]
     public bool useManualBounds = true;
-    public Vector2 manualCenter = new Vector2(-181.4f, 96.7f); // Player's X and Z position
+    public Vector2 manualCenter = new Vector2(0f, 0f); // CENTER of your game world (adjust this!)
     public Vector2 manualSize = new Vector2(500f, 500f); // Locked scale 2 = 250*2 = 500
 
     [Header("Debug")]
-    public bool showDebugInfo = true;
+    public bool showDebugInfo = false; // Changed to false by default
+    public bool showDebugGizmos = false; // New option to control gizmos
     public bool clampArrowToEdge = true;
 
     private Vector2 mapCenter;
@@ -70,7 +71,15 @@ public class MinimapController : MonoBehaviour
 
     private void Update()
     {
-        if (!initialized || player == null || arrow == null) return;
+        if (!initialized || player == null || arrow == null) 
+        {
+            // Try to initialize if not done yet
+            if (!initialized)
+            {
+                InitializeMinimap();
+            }
+            return;
+        }
 
         UpdateArrowPosition();
         UpdateArrowRotation();
@@ -109,28 +118,22 @@ public class MinimapController : MonoBehaviour
     }
 
     // Context menu options for easy setup
-    [ContextMenu("QUICK SETUP: Set Map Center to World Center (Not Player)")]
-    public void SetMapCenterToWorldCenter()
+    [ContextMenu("DEBUG: Show Current Values")]
+    public void ShowCurrentValues()
     {
-        // We need to find the CENTER of your actual game world
-        // Since player starts at (-181.4, 96.7) and is at the edge,
-        // we need to determine where the center of your world actually is
-        
-        // For now, let's use a reasonable guess - you can adjust these values
-        mapCenter = new Vector2(0f, 0f); // Try world center at origin first
-        mapScale = 2f; // Keep locked to 2 for accuracy
-        mapWorldSize = new Vector2(500f, 500f); // Covers 500x500 world units
-        
-        // Update manual bounds
-        useManualBounds = true;
-        manualCenter = mapCenter;
-        manualSize = mapWorldSize;
-        
-        Debug.Log($"Map center set to world center: {mapCenter}");
-        Debug.Log($"If player appears at wrong position, adjust Manual Center in inspector");
-        Debug.Log($"Player at (-181.4, 96.7) should appear at minimap position: ({(-181.4f - mapCenter.x) / mapScale:F1}, {(96.7f - mapCenter.y) / mapScale:F1})");
-        
-        initialized = true;
+        if (player != null && arrow != null)
+        {
+            Vector3 playerPos = player.position;
+            Vector2 arrowPos = arrow.anchoredPosition;
+            
+            Debug.Log("=== MINIMAP DEBUG ===");
+            Debug.Log($"Player World Position: ({playerPos.x:F1}, {playerPos.z:F1})");
+            Debug.Log($"Map Center: ({mapCenter.x:F1}, {mapCenter.y:F1})");
+            Debug.Log($"Arrow Minimap Position: ({arrowPos.x:F1}, {arrowPos.y:F1})");
+            Debug.Log($"Map Scale: {mapScale}");
+            Debug.Log($"Distance from center: {Vector2.Distance(new Vector2(playerPos.x, playerPos.z), mapCenter):F1} world units");
+            Debug.Log("Arrow should be at: " + ((new Vector2(playerPos.x, playerPos.z) - mapCenter) / mapScale));
+        }
     }
 
     [ContextMenu("2. Auto-Size Map for Current Area")]
@@ -181,6 +184,8 @@ public class MinimapController : MonoBehaviour
     // Gizmos to visualize the minimap area in scene view
     private void OnDrawGizmosSelected()
     {
+        if (!showDebugGizmos) return; // Only show if enabled
+        
         if (!initialized && Application.isPlaying) return;
         
         Vector2 centerToUse = useManualBounds ? manualCenter : mapCenter;
