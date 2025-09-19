@@ -10,11 +10,11 @@ public class MinimapController : MonoBehaviour
     [Header("Minimap Settings")]
     public float minimapSize = 250f;
     public float arrowSize = 12f;
-    public float mapScale = 1f; // How much world space per minimap pixel
+    public float mapScale = 2f; 
 
     [Header("Dynamic Bounds")]
     public bool usePlayerStartAsCenter = true;
-    public float initialMapRange = 50f; // Initial range around player start position
+    public float initialMapRange = 50f; 
     
     [Header("Manual Override")]
     public bool useManualBounds = false;
@@ -44,20 +44,17 @@ public class MinimapController : MonoBehaviour
 
         if (useManualBounds)
         {
-            // Use manual settings
             mapCenter = manualCenter;
             mapWorldSize = manualSize;
             Debug.Log($"Using manual bounds - Center: {mapCenter}, Size: {mapWorldSize}");
         }
         else if (usePlayerStartAsCenter)
         {
-            // Use player's starting position as center
             mapCenter = new Vector2(player.position.x, player.position.z);
             mapWorldSize = new Vector2(initialMapRange * 2f, initialMapRange * 2f);
             Debug.Log($"Minimap centered on player start: {mapCenter}, Size: {mapWorldSize}");
         }
 
-        // Calculate scale: how many world units per minimap pixel
         mapScale = mapWorldSize.x / minimapSize;
         
         initialized = true;
@@ -78,15 +75,12 @@ public class MinimapController : MonoBehaviour
 
     private void UpdateArrowPosition()
     {
-        // Get player position relative to map center
         float worldX = player.position.x - mapCenter.x;
         float worldZ = player.position.z - mapCenter.y;
         
-        // Convert to minimap coordinates
         float minimapX = worldX / mapScale;
         float minimapZ = worldZ / mapScale;
         
-        // Clamp to minimap bounds
         if (clampArrowToEdge)
         {
             float maxOffset = (minimapSize * 0.5f) - (arrowSize * 0.5f);
@@ -103,7 +97,6 @@ public class MinimapController : MonoBehaviour
         arrow.localEulerAngles = new Vector3(0f, 0f, -playerYaw);
     }
 
-    // Context menu options for easy setup
     [ContextMenu("1. Set Map Center to Current Player Position")]
     public void SetMapCenterToCurrentPlayerPosition()
     {
@@ -119,8 +112,7 @@ public class MinimapController : MonoBehaviour
     [ContextMenu("2. Auto-Size Map for Current Area")]
     public void AutoSizeForCurrentArea()
     {
-        // Set a reasonable size based on your factory building needs
-        mapWorldSize = new Vector2(200f, 200f); // 200x200 world units should be plenty
+        mapWorldSize = new Vector2(200f, 200f); 
         manualSize = mapWorldSize;
         mapScale = mapWorldSize.x / minimapSize;
         useManualBounds = true;
@@ -146,7 +138,6 @@ public class MinimapController : MonoBehaviour
         Vector2 arrowPos = arrow.anchoredPosition;
         float playerRotation = player.eulerAngles.y;
         
-        // Calculate distance from map center
         float distanceFromCenter = Vector2.Distance(
             new Vector2(playerPos.x, playerPos.z), 
             mapCenter
@@ -158,7 +149,6 @@ public class MinimapController : MonoBehaviour
                   $"Map scale: {mapScale:F2}");
     }
 
-    // Gizmos to visualize the minimap area in scene view
     private void OnDrawGizmosSelected()
     {
         if (!initialized && Application.isPlaying) return;
@@ -166,24 +156,20 @@ public class MinimapController : MonoBehaviour
         Vector2 centerToUse = useManualBounds ? manualCenter : mapCenter;
         Vector2 sizeToUse = useManualBounds ? manualSize : mapWorldSize;
         
-        // Draw map bounds
         Vector3 center3D = new Vector3(centerToUse.x, 0f, centerToUse.y);
         Vector3 size3D = new Vector3(sizeToUse.x, 0.1f, sizeToUse.y);
         
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireCube(center3D, size3D);
         
-        // Draw map center
         Gizmos.color = Color.green;
         Gizmos.DrawSphere(center3D, 2f);
         
-        // Draw player
         if (player != null)
         {
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(player.position, 3f);
             
-            // Draw line from center to player
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(center3D, player.position);
         }
