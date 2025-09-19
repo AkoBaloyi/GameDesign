@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MinimapController : MonoBehaviour
 {
-     [Header("References")]
+    [Header("References")]
     public Transform player;
     public RectTransform arrow;
     public RectTransform minimapBackground;
@@ -109,22 +109,26 @@ public class MinimapController : MonoBehaviour
     }
 
     // Context menu options for easy setup
-    [ContextMenu("QUICK SETUP: Calibrate for New Player Position")]
-    public void QuickCalibrateForNewPosition()
+    [ContextMenu("QUICK SETUP: Set Map Center to World Center (Not Player)")]
+    public void SetMapCenterToWorldCenter()
     {
-        // Set for your new player starting position: (-181.4, -51.2, 96.7)
-        mapCenter = new Vector2(-181.4f, 96.7f); // X and Z coordinates
-        mapScale = 2f; // Locked to 2 for accuracy
-        mapWorldSize = new Vector2(500f, 500f); // 250 pixels * 2 scale = 500 world units
+        // We need to find the CENTER of your actual game world
+        // Since player starts at (-181.4, 96.7) and is at the edge,
+        // we need to determine where the center of your world actually is
+        
+        // For now, let's use a reasonable guess - you can adjust these values
+        mapCenter = new Vector2(0f, 0f); // Try world center at origin first
+        mapScale = 2f; // Keep locked to 2 for accuracy
+        mapWorldSize = new Vector2(500f, 500f); // Covers 500x500 world units
         
         // Update manual bounds
         useManualBounds = true;
         manualCenter = mapCenter;
         manualSize = mapWorldSize;
         
-        Debug.Log($"Minimap calibrated for player start position: {mapCenter}");
-        Debug.Log($"Map scale: {mapScale} (covers {mapWorldSize.x}x{mapWorldSize.y} world units)");
-        Debug.Log($"Minimap shows 250 world units in each direction from center");
+        Debug.Log($"Map center set to world center: {mapCenter}");
+        Debug.Log($"If player appears at wrong position, adjust Manual Center in inspector");
+        Debug.Log($"Player at (-181.4, 96.7) should appear at minimap position: ({(-181.4f - mapCenter.x) / mapScale:F1}, {(96.7f - mapCenter.y) / mapScale:F1})");
         
         initialized = true;
     }
@@ -174,6 +178,7 @@ public class MinimapController : MonoBehaviour
                   $"Map scale: {mapScale:F2}");
     }
 
+    // Gizmos to visualize the minimap area in scene view
     private void OnDrawGizmosSelected()
     {
         if (!initialized && Application.isPlaying) return;
@@ -198,6 +203,7 @@ public class MinimapController : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(player.position, 3f);
             
+            // Draw line from center to player
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(center3D, player.position);
         }
