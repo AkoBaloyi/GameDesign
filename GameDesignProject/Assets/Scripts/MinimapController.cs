@@ -10,20 +10,19 @@ public class MinimapController : MonoBehaviour
     [Header("Minimap Settings")]
     public float minimapSize = 250f;
     public float arrowSize = 12f;
-    public float mapScale = 2f; // LOCKED: How much world space per minimap pixel
+    public float mapScale = 2f; 
 
     [Header("Dynamic Bounds")]
     public bool usePlayerStartAsCenter = true;
-    public float initialMapRange = 50f; // Initial range around player start position
+    public float initialMapRange = 50f; 
     
     [Header("Manual Override")]
     public bool useManualBounds = true;
-    public Vector2 manualCenter = new Vector2(0f, 0f); // CENTER of your game world (adjust this!)
-    public Vector2 manualSize = new Vector2(500f, 500f); // Locked scale 2 = 250*2 = 500
-
+    public Vector2 manualCenter = new Vector2(0f, 0f); 
+    public Vector2 manualSize = new Vector2(500f, 500f); 
     [Header("Debug")]
-    public bool showDebugInfo = false; // Changed to false by default
-    public bool showDebugGizmos = false; // New option to control gizmos
+    public bool showDebugInfo = false; 
+    public bool showDebugGizmos = false; 
     public bool clampArrowToEdge = true;
 
     private Vector2 mapCenter;
@@ -45,23 +44,19 @@ public class MinimapController : MonoBehaviour
 
         if (useManualBounds)
         {
-            // Use manual settings
             mapCenter = manualCenter;
             mapWorldSize = manualSize;
             Debug.Log($"Using manual bounds - Center: {mapCenter}, Size: {mapWorldSize}");
         }
         else if (usePlayerStartAsCenter)
         {
-            // Use player's starting position as center
             mapCenter = new Vector2(player.position.x, player.position.z);
             mapWorldSize = new Vector2(initialMapRange * 2f, initialMapRange * 2f);
             Debug.Log($"Minimap centered on player start: {mapCenter}, Size: {mapWorldSize}");
         }
 
-        // FORCE map scale to always be 2 (since that's accurate for your setup)
         mapScale = 2f;
         
-        // Calculate what world size this scale represents
         mapWorldSize = new Vector2(minimapSize * mapScale, minimapSize * mapScale);
         
         Debug.Log($"Map scale LOCKED to: {mapScale} (covers {mapWorldSize.x}x{mapWorldSize.y} world units)");
@@ -73,7 +68,6 @@ public class MinimapController : MonoBehaviour
     {
         if (!initialized || player == null || arrow == null) 
         {
-            // Try to initialize if not done yet
             if (!initialized)
             {
                 InitializeMinimap();
@@ -92,15 +86,12 @@ public class MinimapController : MonoBehaviour
 
     private void UpdateArrowPosition()
     {
-        // Get player position relative to map center
         float worldX = player.position.x - mapCenter.x;
         float worldZ = player.position.z - mapCenter.y;
         
-        // Convert to minimap coordinates
         float minimapX = worldX / mapScale;
         float minimapZ = worldZ / mapScale;
         
-        // Clamp to minimap bounds
         if (clampArrowToEdge)
         {
             float maxOffset = (minimapSize * 0.5f) - (arrowSize * 0.5f);
@@ -117,7 +108,6 @@ public class MinimapController : MonoBehaviour
         arrow.localEulerAngles = new Vector3(0f, 0f, -playerYaw);
     }
 
-    // Context menu options for easy setup
     [ContextMenu("DEBUG: Show Current Values")]
     public void ShowCurrentValues()
     {
@@ -139,10 +129,8 @@ public class MinimapController : MonoBehaviour
     [ContextMenu("2. Auto-Size Map for Current Area")]
     public void AutoSizeForCurrentArea()
     {
-        // ALWAYS use scale of 2 (since that's accurate for your setup)
         mapScale = 2f;
         
-        // Calculate world size based on locked scale
         mapWorldSize = new Vector2(minimapSize * mapScale, minimapSize * mapScale);
         manualSize = mapWorldSize;
         useManualBounds = true;
@@ -169,7 +157,6 @@ public class MinimapController : MonoBehaviour
         Vector2 arrowPos = arrow.anchoredPosition;
         float playerRotation = player.eulerAngles.y;
         
-        // Calculate distance from map center
         float distanceFromCenter = Vector2.Distance(
             new Vector2(playerPos.x, playerPos.z), 
             mapCenter
@@ -181,34 +168,29 @@ public class MinimapController : MonoBehaviour
                   $"Map scale: {mapScale:F2}");
     }
 
-    // Gizmos to visualize the minimap area in scene view
     private void OnDrawGizmosSelected()
     {
-        if (!showDebugGizmos) return; // Only show if enabled
+        if (!showDebugGizmos) return; 
         
         if (!initialized && Application.isPlaying) return;
         
         Vector2 centerToUse = useManualBounds ? manualCenter : mapCenter;
         Vector2 sizeToUse = useManualBounds ? manualSize : mapWorldSize;
         
-        // Draw map bounds
         Vector3 center3D = new Vector3(centerToUse.x, 0f, centerToUse.y);
         Vector3 size3D = new Vector3(sizeToUse.x, 0.1f, sizeToUse.y);
         
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireCube(center3D, size3D);
         
-        // Draw map center
         Gizmos.color = Color.green;
         Gizmos.DrawSphere(center3D, 2f);
         
-        // Draw player
         if (player != null)
         {
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(player.position, 3f);
             
-            // Draw line from center to player
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(center3D, player.position);
         }
