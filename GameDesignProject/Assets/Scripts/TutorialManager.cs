@@ -24,8 +24,10 @@ public class TutorialManager : MonoBehaviour
     public Transform cameraTransform;
     
     [Header("Tutorial Objects")]
+    public GameObject orangeCube; // The orange cube to pick up
     public GameObject nailgun; // The nailgun to pick up
     public GameObject nailCrate; // The crate with nails
+    public HighlightableObject cubeHighlight;
     public HighlightableObject nailgunHighlight;
     public HighlightableObject crateHighlight;
     
@@ -48,6 +50,7 @@ public class TutorialManager : MonoBehaviour
         Detecting,
         LookAround,
         Movement,
+        PickupCube,
         PickupNailgun,
         LoadNails,
         Shooting,
@@ -70,6 +73,7 @@ public class TutorialManager : MonoBehaviour
     private float lookMovement = 0f;
     private Vector2 lastMousePosition;
     private Vector2 movementInput;
+    private bool hasPickedUpCube = false;
     private bool hasPickedUpNailgun = false;
     private bool hasLoadedNails = false;
     private int shotsCount = 0;
@@ -191,6 +195,9 @@ public class TutorialManager : MonoBehaviour
             case TutorialStep.Movement:
                 HandleMovementStep();
                 break;
+            case TutorialStep.PickupCube:
+                HandleCubePickupStep();
+                break;
             case TutorialStep.PickupNailgun:
                 HandlePickupStep();
                 break;
@@ -261,6 +268,16 @@ public class TutorialManager : MonoBehaviour
         }
     }
     
+    void HandleCubePickupStep()
+    {
+        // This will be completed by the pickup system
+        if (hasPickedUpCube)
+        {
+            stepCompleted = true;
+            StartCoroutine(DelayedNextStep());
+        }
+    }
+    
     void HandlePickupStep()
     {
         // This will be completed by the pickup system
@@ -307,6 +324,9 @@ public class TutorialManager : MonoBehaviour
             case TutorialStep.Movement:
                 StartMovementStep();
                 break;
+            case TutorialStep.PickupCube:
+                StartCubePickupStep();
+                break;
             case TutorialStep.PickupNailgun:
                 StartPickupStep();
                 break;
@@ -348,6 +368,23 @@ public class TutorialManager : MonoBehaviour
         
         UpdateTutorialText(mainText, inputText);
         textDisplayed = true;
+    }
+    
+    void StartCubePickupStep()
+    {
+        string mainText = "Great! Now let's learn to pick up objects.";
+        string inputText = detectedDevice == InputDevice.KeyboardMouse ? 
+            "Look at the glowing orange cube and press E to pick it up" : 
+            "Look at the glowing orange cube and press X to pick it up";
+        
+        UpdateTutorialText(mainText, inputText);
+        textDisplayed = true;
+        
+        // Highlight the orange cube
+        if (cubeHighlight != null)
+        {
+            cubeHighlight.HighlightOn();
+        }
     }
     
     void StartPickupStep()
@@ -418,6 +455,7 @@ public class TutorialManager : MonoBehaviour
         }
         
         // Turn off all highlights
+        if (cubeHighlight != null) cubeHighlight.HighlightOff();
         if (nailgunHighlight != null) nailgunHighlight.HighlightOff();
         if (crateHighlight != null) crateHighlight.HighlightOff();
         
@@ -440,6 +478,12 @@ public class TutorialManager : MonoBehaviour
     }
     
     // Public methods for other systems to call
+    public void OnCubePickedUp()
+    {
+        hasPickedUpCube = true;
+        PlayPickupEffect();
+    }
+    
     public void OnNailgunPickedUp()
     {
         hasPickedUpNailgun = true;

@@ -133,13 +133,16 @@ public class TutorialPickupObject : MonoBehaviour
     
     void PickupNailgun()
     {
-        // Enable the nailgun weapon
+        // Enable the nailgun weapon (it's already a gun slot weapon, not a pickup)
         if (nailgunWeapon != null)
         {
             nailgunWeapon.EquipWeapon();
         }
         
-        Debug.Log("Nailgun picked up and equipped!");
+        // Hide this pickup object since the nailgun is now equipped
+        gameObject.SetActive(false);
+        
+        Debug.Log("Nailgun picked up and equipped to gun slot!");
     }
     
     void PickupAmmo()
