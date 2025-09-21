@@ -163,45 +163,34 @@ public class MinimapController : MonoBehaviour
     [ContextMenu("4. Calibrate for Player Start Position")]
     public void CalibrateForPlayerStart()
     {
-        // Set the map center to the player start position
-        manualCenter = new Vector2(playerStartWorldPos.x, playerStartWorldPos.z);
+        // Simple approach: Set the map center so that the player start position
+        // maps to the desired UI position
         
-        // Calculate the map scale based on the desired UI position
-        // We want player at (-181.4, 96.7) to show at (-82, 75) on the minimap
+        // Current formula: UI = (World - Center) / Scale
+        // We want: UI = playerStartUIPos when World = playerStartWorldPos
+        // So: playerStartUIPos = (playerStartWorldPos - Center) / Scale
+        // Therefore: Center = playerStartWorldPos - playerStartUIPos * Scale
         
-        // Calculate how far the player is from the center (should be 0,0)
-        float distanceFromCenterX = playerStartWorldPos.x - manualCenter.x; // Should be 0
-        float distanceFromCenterZ = playerStartWorldPos.z - manualCenter.y; // Should be 0
-        
-        // The UI position should be (0, 0) when player is at center
-        // But we want it to be at (-82, 75), so we need to adjust the center
-        // Let's calculate what the center should be to achieve this
-        
-        // If player at (-181.4, 96.7) should show at (-82, 75)
-        // Then: UI_X = (World_X - Center_X) / Scale
-        // -82 = (-181.4 - Center_X) / Scale
-        // -82 * Scale = -181.4 - Center_X
-        // Center_X = -181.4 + 82 * Scale
-        
-        // For now, let's use a simple approach: adjust the center to account for the offset
-        float uiOffsetX = playerStartUIPos.x;
-        float uiOffsetZ = playerStartUIPos.y;
-        
-        // Calculate what the center should be to get the desired UI position
-        // This is a simplified calculation - you may need to fine-tune
-        manualCenter = new Vector2(
-            playerStartWorldPos.x - uiOffsetX * (mapWorldSize.x / minimapSize),
-            playerStartWorldPos.z - uiOffsetZ * (mapWorldSize.y / minimapSize)
-        );
-        
-        Debug.Log($"Calibrated center: {manualCenter}");
-        Debug.Log($"Player start: {playerStartWorldPos}");
-        Debug.Log($"Expected UI pos: {playerStartUIPos}");
-        
-        // Recalculate map scale
+        // Calculate scale first
         mapScale = mapWorldSize.x / minimapSize;
         
-        Debug.Log($"Calibration complete! Map center: {manualCenter}, Scale: {mapScale:F2}");
+        // Calculate the center that will give us the desired mapping
+        manualCenter = new Vector2(
+            playerStartWorldPos.x - playerStartUIPos.x * mapScale,
+            playerStartWorldPos.z - playerStartUIPos.y * mapScale
+        );
+        
+        Debug.Log($"=== CALIBRATION RESULTS ===");
+        Debug.Log($"Player start world: ({playerStartWorldPos.x}, {playerStartWorldPos.z})");
+        Debug.Log($"Desired UI position: ({playerStartUIPos.x}, {playerStartUIPos.y})");
+        Debug.Log($"Calculated map center: ({manualCenter.x}, {manualCenter.y})");
+        Debug.Log($"Map scale: {mapScale:F2}");
+        Debug.Log($"Map world size: {mapWorldSize}");
+        
+        // Test the calculation
+        float testUIX = (playerStartWorldPos.x - manualCenter.x) / mapScale;
+        float testUIZ = (playerStartWorldPos.z - manualCenter.y) / mapScale;
+        Debug.Log($"Test calculation: Player at ({playerStartWorldPos.x}, {playerStartWorldPos.z}) should map to UI ({testUIX:F1}, {testUIZ:F1})");
     }
 
     private void DebugInfo()

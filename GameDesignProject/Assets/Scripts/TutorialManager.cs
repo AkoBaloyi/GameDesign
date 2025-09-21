@@ -39,7 +39,8 @@ public class TutorialManager : MonoBehaviour
     [Header("Tutorial Settings")]
     public float textFadeSpeed = 2f;
     public float stepDelay = 1f;
-    public float textDisplayDuration = 3f; // How long to show tutorial text
+    public float textDisplayDuration = 5f; // Increased from 3f to 5f for better readability
+    public float lookSensitivity = 200f; // Reduced sensitivity for look detection
     public bool skipTutorial = false;
     
     // Tutorial state
@@ -108,11 +109,8 @@ public class TutorialManager : MonoBehaviour
             tutorialPanel.SetActive(true);
         }
         
-        // Hide game HUD initially
-        if (gameHUDCanvas != null)
-        {
-            gameHUDCanvas.SetActive(false);
-        }
+        // Hide game HUD initially - THIS IS CRITICAL
+        HideGameHUD();
         
         // Disable player input initially
         if (playerController != null)
@@ -120,9 +118,15 @@ public class TutorialManager : MonoBehaviour
             playerController.SetInputEnabled(false);
         }
         
-        // Start with device detection
+        // Reset all tutorial state
         currentStep = TutorialStep.Detecting;
-        UpdateTutorialText("Welcome! Move your mouse or gamepad to begin...", "");
+        stepCompleted = false;
+        textDisplayed = false;
+        textDisplayTimer = 0f;
+        detectionTimer = 0f;
+        
+        // Start with device detection
+        UpdateTutorialText("Welcome to the Tutorial!", "Move your mouse or gamepad to begin...");
         textDisplayed = true;
         
         // Highlight objects that will be needed later
@@ -138,9 +142,12 @@ public class TutorialManager : MonoBehaviour
         
         detectionTimer += Time.deltaTime;
         
+        // Only check for input after the initial delay
+        if (detectionTimer < 1f) return;
+        
         // Check for mouse movement (only if mouse delta is significant)
         Vector2 mouseDelta = Mouse.current.delta.ReadValue();
-        if (mouseDelta.magnitude > 5f) // Increased threshold to avoid accidental detection
+        if (mouseDelta.magnitude > 10f) // Increased threshold to avoid accidental detection
         {
             mouseDetected = true;
         }
@@ -151,38 +158,38 @@ public class TutorialManager : MonoBehaviour
             Vector2 rightStick = Gamepad.current.rightStick.ReadValue();
             Vector2 leftStick = Gamepad.current.leftStick.ReadValue();
             
-            if (rightStick.magnitude > 0.3f || leftStick.magnitude > 0.3f)
+            if (rightStick.magnitude > 0.5f || leftStick.magnitude > 0.5f)
             {
                 gamepadDetected = true;
             }
         }
         
         // Only advance after minimum detection time to ensure user sees the message
-        if (detectionTimer < 2f) return;
+        if (detectionTimer < 3f) return; // Increased from 2f
         
         // Determine primary input device
         if (mouseDetected && !gamepadDetected)
         {
             detectedDevice = InputDevice.KeyboardMouse;
-            NextStep();
+            StartCoroutine(DelayedNextStep(1f)); // Add delay before next step
         }
         else if (gamepadDetected && !mouseDetected)
         {
             detectedDevice = InputDevice.Gamepad;
-            NextStep();
+            StartCoroutine(DelayedNextStep(1f)); // Add delay before next step
         }
         else if (mouseDetected && gamepadDetected)
         {
             // Both detected, prefer the one used most recently
             detectedDevice = InputDevice.KeyboardMouse; // Default to KB+M
-            NextStep();
+            StartCoroutine(DelayedNextStep(1f)); // Add delay before next step
         }
         
-        // Auto-advance after 8 seconds if no input detected (increased from 5)
-        if (detectionTimer > 8f)
+        // Auto-advance after 10 seconds if no input detected (increased from 8)
+        if (detectionTimer > 10f)
         {
             detectedDevice = InputDevice.KeyboardMouse;
-            NextStep();
+            StartCoroutine(DelayedNextStep(1f));
         }
     }
     
@@ -219,26 +226,26 @@ public class TutorialManager : MonoBehaviour
         // Only start tracking after text has been displayed for minimum time
         if (textDisplayTimer < textDisplayDuration) return;
         
-        // Track mouse/stick movement
+        // Track mouse/stick movement with reduced sensitivity
         if (detectedDevice == InputDevice.KeyboardMouse)
         {
             Vector2 mouseDelta = Mouse.current.delta.ReadValue();
-            lookMovement += mouseDelta.magnitude;
+            lookMovement += mouseDelta.magnitude * 0.5f; // Reduced sensitivity
         }
         else
         {
             if (Gamepad.current != null)
             {
                 Vector2 stickDelta = Gamepad.current.rightStick.ReadValue();
-                lookMovement += stickDelta.magnitude * 100f; // Scale up for comparison
+                lookMovement += stickDelta.magnitude * 50f; // Reduced from 100f
             }
         }
         
-        // Complete when enough look movement detected
-        if (lookMovement > 500f)
+        // Only allow completion after minimum time has passed
+        if (textDisplayTimer > textDisplayDuration + 2f && lookMovement > 300f)
         {
             stepCompleted = true;
-            StartCoroutine(DelayedNextStep());
+            StartCoroutine(DelayedNextStep(0.5f));
         }
     }
     
@@ -417,10 +424,7 @@ public class TutorialManager : MonoBehaviour
         }
         
         // Show game HUD
-        if (gameHUDCanvas != null)
-        {
-            gameHUDCanvas.SetActive(true);
-        }
+        ShowGameHUD();
         
         // Ensure player has full control
         if (playerController != null)
@@ -434,8 +438,9 @@ public class TutorialManager : MonoBehaviour
         
         Debug.Log("Tutorial completed! Game HUD activated.");
         
-        // Optional: Save tutorial completion
+        // Save tutorial completion
         PlayerPrefs.SetInt("TutorialCompleted", 1);
+        PlayerPrefs.Save();
     }
     
     void UpdateTutorialText(string main, string input)
@@ -444,9 +449,10 @@ public class TutorialManager : MonoBehaviour
         if (inputPromptText != null) inputPromptText.text = input;
     }
     
-    IEnumerator DelayedNextStep()
+    IEnumerator DelayedNextStep(float delay = -1f)
     {
-        yield return new WaitForSeconds(stepDelay);
+        if (delay < 0) delay = stepDelay;
+        yield return new WaitForSeconds(delay);
         NextStep();
     }
     
@@ -456,8 +462,11 @@ public class TutorialManager : MonoBehaviour
         hasPickedUpNailgun = true;
         PlayPickupEffect();
         
-        // Show Game HUD when nailgun is equipped
-        ShowGameHUD();
+        // Only show Game HUD if we're in the shooting step or tutorial is complete
+        if (currentStep >= TutorialStep.Shooting || !tutorialActive)
+        {
+            ShowGameHUD();
+        }
     }
     
     public void OnNailsLoaded()
