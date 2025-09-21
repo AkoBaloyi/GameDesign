@@ -277,7 +277,7 @@ public class TutorialManager : MonoBehaviour
             StartCoroutine(DelayedNextStep());
         }
     }
-    {
+    
     void HandlePickupStep()
     {
         // This will be completed by the pickup system
