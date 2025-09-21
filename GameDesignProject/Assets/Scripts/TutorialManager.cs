@@ -34,6 +34,7 @@ public class TutorialManager : MonoBehaviour
     [Header("Tutorial Settings")]
     public float textFadeSpeed = 2f;
     public float stepDelay = 1f;
+    public float textDisplayDuration = 3f; // How long to show tutorial text
     public bool skipTutorial = false;
     
     // Tutorial state
@@ -72,6 +73,8 @@ public class TutorialManager : MonoBehaviour
     private bool mouseDetected = false;
     private bool gamepadDetected = false;
     private float detectionTimer = 0f;
+    private float textDisplayTimer = 0f;
+    private bool textDisplayed = false;
     
     void Start()
     {
@@ -106,6 +109,7 @@ public class TutorialManager : MonoBehaviour
         // Start with device detection
         currentStep = TutorialStep.Detecting;
         UpdateTutorialText("Welcome! Move your mouse or gamepad to begin...", "");
+        textDisplayed = true;
         
         // Highlight objects that will be needed later
         if (nailgunHighlight != null)
@@ -120,12 +124,11 @@ public class TutorialManager : MonoBehaviour
         
         detectionTimer += Time.deltaTime;
         
-        // Check for mouse movement
-        Vector2 currentMousePos = Mouse.current.position.ReadValue();
-        if (Vector2.Distance(currentMousePos, lastMousePosition) > 10f)
+        // Check for mouse movement (only if mouse delta is significant)
+        Vector2 mouseDelta = Mouse.current.delta.ReadValue();
+        if (mouseDelta.magnitude > 5f) // Increased threshold to avoid accidental detection
         {
             mouseDetected = true;
-            lastMousePosition = currentMousePos;
         }
         
         // Check for gamepad input
@@ -139,6 +142,9 @@ public class TutorialManager : MonoBehaviour
                 gamepadDetected = true;
             }
         }
+        
+        // Only advance after minimum detection time to ensure user sees the message
+        if (detectionTimer < 2f) return;
         
         // Determine primary input device
         if (mouseDetected && !gamepadDetected)
@@ -158,8 +164,8 @@ public class TutorialManager : MonoBehaviour
             NextStep();
         }
         
-        // Auto-advance after 5 seconds if no input detected
-        if (detectionTimer > 5f)
+        // Auto-advance after 8 seconds if no input detected (increased from 5)
+        if (detectionTimer > 8f)
         {
             detectedDevice = InputDevice.KeyboardMouse;
             NextStep();
@@ -168,6 +174,12 @@ public class TutorialManager : MonoBehaviour
     
     void UpdateCurrentStep()
     {
+        // Handle text display timing
+        if (textDisplayed)
+        {
+            textDisplayTimer += Time.deltaTime;
+        }
+        
         switch (currentStep)
         {
             case TutorialStep.LookAround:
@@ -190,6 +202,9 @@ public class TutorialManager : MonoBehaviour
     
     void HandleLookAroundStep()
     {
+        // Only start tracking after text has been displayed for minimum time
+        if (textDisplayTimer < textDisplayDuration) return;
+        
         // Track mouse/stick movement
         if (detectedDevice == InputDevice.KeyboardMouse)
         {
@@ -215,6 +230,9 @@ public class TutorialManager : MonoBehaviour
     
     void HandleMovementStep()
     {
+        // Only start tracking after text has been displayed for minimum time
+        if (textDisplayTimer < textDisplayDuration) return;
+        
         // Track movement input
         if (detectedDevice == InputDevice.KeyboardMouse)
         {
@@ -275,6 +293,8 @@ public class TutorialManager : MonoBehaviour
         currentStep++;
         stepCompleted = false;
         lookMovement = 0f;
+        textDisplayTimer = 0f;
+        textDisplayed = false;
         
         switch (currentStep)
         {
@@ -313,6 +333,7 @@ public class TutorialManager : MonoBehaviour
             "Use the right stick to look around";
         
         UpdateTutorialText(mainText, inputText);
+        textDisplayed = true;
     }
     
     void StartMovementStep()
@@ -323,6 +344,7 @@ public class TutorialManager : MonoBehaviour
             "Use the left stick to move around";
         
         UpdateTutorialText(mainText, inputText);
+        textDisplayed = true;
     }
     
     void StartPickupStep()
@@ -333,6 +355,7 @@ public class TutorialManager : MonoBehaviour
             "Look at the glowing Nailgun and press X to pick it up";
         
         UpdateTutorialText(mainText, inputText);
+        textDisplayed = true;
         
         // Make sure nailgun is highlighted
         if (nailgunHighlight != null)
@@ -349,6 +372,7 @@ public class TutorialManager : MonoBehaviour
             "Look at the crate and press X to load nails (50 nails per magazine)";
         
         UpdateTutorialText(mainText, inputText);
+        textDisplayed = true;
         
         // Highlight the crate
         if (crateHighlight != null)
@@ -365,6 +389,7 @@ public class TutorialManager : MonoBehaviour
             "Pull the right trigger to fire the Nailgun (fire 3 times to continue)";
         
         UpdateTutorialText(mainText, inputText);
+        textDisplayed = true;
     }
     
     void CompleteTutorial()
