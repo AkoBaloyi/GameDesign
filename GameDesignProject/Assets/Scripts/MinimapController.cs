@@ -10,7 +10,7 @@ public class MinimapController : MonoBehaviour
     [Header("Minimap Settings")]
     public float minimapSize = 250f;
     public float arrowSize = 12f;
-    public float mapScale = 2f; 
+    public float mapScale = 2f; // This value now directly controls the arrow speed. Higher value = slower arrow. 
 
     [Header("Dynamic Bounds")]
     public bool usePlayerStartAsCenter = true;
@@ -19,7 +19,7 @@ public class MinimapController : MonoBehaviour
     [Header("Manual Override")]
     public bool useManualBounds = true;
     public Vector2 manualCenter = new Vector2(-181.4f, 96.7f); // Player start position (X, Z)
-    public Vector2 manualSize = new Vector2(1500f, 1500f); // Increased from 500 to make the arrow move slower
+    public Vector2 manualSize = new Vector2(5000f, 5000f); // Drastically increased to slow down arrow movement
     
     [Header("Calibration Settings")]
     public Vector2 uiOffset = new Vector2(0f, 0f); // The offset to apply to the arrow's UI position
@@ -48,20 +48,18 @@ public class MinimapController : MonoBehaviour
             return;
         }
 
-        // Set the world size of the map
-        mapWorldSize = useManualBounds ? manualSize : new Vector2(initialMapRange * 2f, initialMapRange * 2f);
+        // The mapScale is now the primary setting for speed and is NOT calculated from world size.
+        // We calculate mapWorldSize from it for debug purposes only.
+        mapWorldSize = new Vector2(minimapSize * mapScale, minimapSize * mapScale);
 
-        // Calculate the map scale
-        mapScale = mapWorldSize.x / minimapSize;
-
-        // Auto-calibrate if enabled
+        // Auto-calibrate to set the correct starting position and offset
         if (autoCalibrateOnStart)
         {
             CalibrateForPlayerStart();
         }
         else
         {
-            // Default behavior: center the map on the player's starting world position
+            // Fallback if calibration is off: center on player, no offset.
             mapCenter = new Vector2(player.position.x, player.position.z);
             uiOffset = Vector2.zero;
         }
@@ -163,20 +161,21 @@ public class MinimapController : MonoBehaviour
     [ContextMenu("4. Calibrate for Player Start Position")]
     public void CalibrateForPlayerStart()
     {
-        // Center the map on the player's starting world position.
+        // Center the map's reference point on the player's starting world position.
         mapCenter = new Vector2(playerStartWorldPos.x, playerStartWorldPos.z);
 
-        // The UI offset is simply the desired starting UI position on the minimap.
+        // The UI offset is the desired starting UI position on the minimap.
         uiOffset = playerStartUIPos;
 
         Debug.Log($"=== CALIBRATION COMPLETE ===");
         Debug.Log($"Map Center set to Player Start: ({mapCenter.x:F1}, {mapCenter.y:F1})");
         Debug.Log($"UI Offset set to: ({uiOffset.x:F1}, {uiOffset.y:F1})");
+        Debug.Log($"Using Map Scale: {mapScale}");
 
-        // Test the calculation for verification
-        float testUIX = (playerStartWorldPos.x - mapCenter.x) / mapScale + uiOffset.x;
-        float testUIZ = (playerStartWorldPos.z - mapCenter.y) / mapScale + uiOffset.y;
-        Debug.Log($"Verification: Player at start should be at UI ({testUIX:F1}, {testUIZ:F1})");
+        // Verification calculation
+        float testUIX = ((playerStartWorldPos.x - mapCenter.x) / mapScale) + uiOffset.x;
+        float testUIZ = ((playerStartWorldPos.z - mapCenter.y) / mapScale) + uiOffset.y;
+        Debug.Log($"Verification: Player at start should map to UI ({testUIX:F1}, {testUIZ:F1}). This should match your desired start UI position.");
     }
 
     private void DebugInfo()
