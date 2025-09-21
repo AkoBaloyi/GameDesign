@@ -77,17 +77,33 @@ public class FPController : MonoBehaviour
 
     private void Update()
     {
+        if (isPaused) 
+        {
+            UpdatePauseInput();
+            return; // Stop all other updates when paused
+        }
 
-        if (!isPaused && inputEnabled)
+        if (inputEnabled)
         {
             HandleMovement();
             HandleLook();
             HandlePickupHighlighting();
         }
-
+        else
+        {
+            // If input is disabled (e.g., during tutorial), ensure velocity doesn't build up
+            if (controller.isGrounded)
+            {
+                velocity.y = -2f; // Apply a small constant downward force to keep the player grounded
+            }
+            else
+            {
+                velocity.y += gravity * Time.deltaTime; // Apply gravity if in the air
+            }
+            controller.Move(velocity * Time.deltaTime); // Apply the movement
+        }
 
         UpdatePauseInput();
-
 
         if (heldObject != null)
         {
@@ -101,10 +117,16 @@ public class FPController : MonoBehaviour
         inputEnabled = enabled;
         if (!enabled)
         {
-
+            // Reset movement inputs to prevent unwanted sliding
             moveInput = Vector2.zero;
             lookInput = Vector2.zero;
             isSprinting = false;
+
+            // Crucially, reset vertical velocity to prevent falling through the floor
+            if (controller.isGrounded)
+            {
+                velocity.y = -2f;
+            }
         }
     }
 

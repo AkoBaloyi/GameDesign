@@ -14,14 +14,15 @@ public class MinimapController : MonoBehaviour
 
     [Header("Dynamic Bounds")]
     public bool usePlayerStartAsCenter = true;
-    public float initialMapRange = 50f; 
+    public float initialMapRange = 750f; // Increased to cover a larger area by default 
     
     [Header("Manual Override")]
     public bool useManualBounds = true;
     public Vector2 manualCenter = new Vector2(-181.4f, 96.7f); // Player start position (X, Z)
-    public Vector2 manualSize = new Vector2(500f, 500f);
+    public Vector2 manualSize = new Vector2(1500f, 1500f); // Increased from 500 to make the arrow move slower
     
     [Header("Calibration Settings")]
+    public Vector2 uiOffset = new Vector2(0f, 0f); // The offset to apply to the arrow's UI position
     public Vector3 playerStartWorldPos = new Vector3(-181.4f, -51.2f, 96.7f);
     public Vector2 playerStartUIPos = new Vector2(-82f, 75f);
     public bool autoCalibrateOnStart = true; 
@@ -47,31 +48,25 @@ public class MinimapController : MonoBehaviour
             return;
         }
 
-        if (useManualBounds)
+        // Set the world size of the map
+        mapWorldSize = useManualBounds ? manualSize : new Vector2(initialMapRange * 2f, initialMapRange * 2f);
+
+        // Calculate the map scale
+        mapScale = mapWorldSize.x / minimapSize;
+
+        // Auto-calibrate if enabled
+        if (autoCalibrateOnStart)
         {
-            mapCenter = manualCenter;
-            mapWorldSize = manualSize;
-            
-            // Auto-calibrate if enabled
-            if (autoCalibrateOnStart)
-            {
-                CalibrateForPlayerStart();
-            }
-            
-            Debug.Log($"Using manual bounds - Center: {mapCenter}, Size: {mapWorldSize}");
+            CalibrateForPlayerStart();
         }
-        else if (usePlayerStartAsCenter)
+        else
         {
+            // Default behavior: center the map on the player's starting world position
             mapCenter = new Vector2(player.position.x, player.position.z);
-            mapWorldSize = new Vector2(initialMapRange * 2f, initialMapRange * 2f);
-            Debug.Log($"Minimap centered on player start: {mapCenter}, Size: {mapWorldSize}");
+            uiOffset = Vector2.zero;
         }
 
-        // Calculate map scale based on minimap size and world size
-        mapScale = mapWorldSize.x / minimapSize;
-        
-        Debug.Log($"Map scale calculated: {mapScale:F2} (covers {mapWorldSize.x}x{mapWorldSize.y} world units)");
-        
+        Debug.Log($"Minimap Initialized - Center: {mapCenter}, UI Offset: {uiOffset}, Scale: {mapScale:F2}");
         initialized = true;
     }
 
@@ -97,20 +92,25 @@ public class MinimapController : MonoBehaviour
 
     private void UpdateArrowPosition()
     {
+        // Calculate player's position relative to the map's world center
         float worldX = player.position.x - mapCenter.x;
         float worldZ = player.position.z - mapCenter.y;
         
+        // Scale the world position to the minimap's UI coordinates
         float minimapX = worldX / mapScale;
         float minimapZ = worldZ / mapScale;
         
+        // Apply the UI offset to correctly position the arrow
+        Vector2 finalPosition = new Vector2(minimapX, minimapZ) + uiOffset;
+
         if (clampArrowToEdge)
         {
             float maxOffset = (minimapSize * 0.5f) - (arrowSize * 0.5f);
-            minimapX = Mathf.Clamp(minimapX, -maxOffset, maxOffset);
-            minimapZ = Mathf.Clamp(minimapZ, -maxOffset, maxOffset);
+            finalPosition.x = Mathf.Clamp(finalPosition.x, -maxOffset, maxOffset);
+            finalPosition.y = Mathf.Clamp(finalPosition.y, -maxOffset, maxOffset);
         }
         
-        arrow.anchoredPosition = new Vector2(minimapX, minimapZ);
+        arrow.anchoredPosition = finalPosition;
     }
 
     private void UpdateArrowRotation()
@@ -163,34 +163,20 @@ public class MinimapController : MonoBehaviour
     [ContextMenu("4. Calibrate for Player Start Position")]
     public void CalibrateForPlayerStart()
     {
-        // Simple approach: Set the map center so that the player start position
-        // maps to the desired UI position
-        
-        // Current formula: UI = (World - Center) / Scale
-        // We want: UI = playerStartUIPos when World = playerStartWorldPos
-        // So: playerStartUIPos = (playerStartWorldPos - Center) / Scale
-        // Therefore: Center = playerStartWorldPos - playerStartUIPos * Scale
-        
-        // Calculate scale first
-        mapScale = mapWorldSize.x / minimapSize;
-        
-        // Calculate the center that will give us the desired mapping
-        manualCenter = new Vector2(
-            playerStartWorldPos.x - playerStartUIPos.x * mapScale,
-            playerStartWorldPos.z - playerStartUIPos.y * mapScale
-        );
-        
-        Debug.Log($"=== CALIBRATION RESULTS ===");
-        Debug.Log($"Player start world: ({playerStartWorldPos.x}, {playerStartWorldPos.z})");
-        Debug.Log($"Desired UI position: ({playerStartUIPos.x}, {playerStartUIPos.y})");
-        Debug.Log($"Calculated map center: ({manualCenter.x}, {manualCenter.y})");
-        Debug.Log($"Map scale: {mapScale:F2}");
-        Debug.Log($"Map world size: {mapWorldSize}");
-        
-        // Test the calculation
-        float testUIX = (playerStartWorldPos.x - manualCenter.x) / mapScale;
-        float testUIZ = (playerStartWorldPos.z - manualCenter.y) / mapScale;
-        Debug.Log($"Test calculation: Player at ({playerStartWorldPos.x}, {playerStartWorldPos.z}) should map to UI ({testUIX:F1}, {testUIZ:F1})");
+        // Center the map on the player's starting world position.
+        mapCenter = new Vector2(playerStartWorldPos.x, playerStartWorldPos.z);
+
+        // The UI offset is simply the desired starting UI position on the minimap.
+        uiOffset = playerStartUIPos;
+
+        Debug.Log($"=== CALIBRATION COMPLETE ===");
+        Debug.Log($"Map Center set to Player Start: ({mapCenter.x:F1}, {mapCenter.y:F1})");
+        Debug.Log($"UI Offset set to: ({uiOffset.x:F1}, {uiOffset.y:F1})");
+
+        // Test the calculation for verification
+        float testUIX = (playerStartWorldPos.x - mapCenter.x) / mapScale + uiOffset.x;
+        float testUIZ = (playerStartWorldPos.z - mapCenter.y) / mapScale + uiOffset.y;
+        Debug.Log($"Verification: Player at start should be at UI ({testUIX:F1}, {testUIZ:F1})");
     }
 
     private void DebugInfo()
