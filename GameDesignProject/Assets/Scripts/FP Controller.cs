@@ -208,62 +208,83 @@ public class FPController : MonoBehaviour
     }
 
     public void OnPickUp(InputAction.CallbackContext context)
+{
+    if (!inputEnabled || isPaused) return;
+    if (!context.performed) return;
+
+    Debug.Log("Pickup input detected!"); // Debug line
+
+    if (heldObject == null)
     {
-        if (!inputEnabled || isPaused) return;
-        if (!context.performed) return;
-
-        Debug.Log("Pickup input detected!");
-
-        if (heldObject == null)
+        // Try to pick up an object
+        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
+        
+        if (Physics.Raycast(ray, out RaycastHit hit, pickupRange))
         {
+            Debug.Log($"Raycast hit: {hit.collider.name}"); // Debug what we hit
+            
+            PickUpObject pickUp = hit.collider.GetComponent<PickUpObject>();
 
-            Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
-
-            Debug.DrawRay(cameraTransform.position, cameraTransform.forward * pickupRange, Color.red, 1f);
-
-            if (Physics.Raycast(ray, out RaycastHit hit, pickupRange))
+            if (pickUp != null)
             {
-                Debug.Log($"Raycast hit: {hit.collider.name}");
-
-                PickUpObject pickUp = hit.collider.GetComponent<PickUpObject>();
-
-                if (pickUp != null)
+                Debug.Log($"Picking up: {hit.collider.name}");
+                pickUp.PickUp(holdPoint);
+                heldObject = pickUp;
+                
+                // Notify tutorial if it's a cube
+                TutorialManager tutorial = FindObjectOfType<TutorialManager>();
+                if (tutorial != null && hit.collider.name.ToLower().Contains("cube"))
                 {
-                    Debug.Log($"Picking up: {hit.collider.name}");
-                    pickUp.PickUp(holdPoint);
-                    heldObject = pickUp;
-                }
-                else
-                {
-                    Debug.Log($"Object {hit.collider.name} doesn't have PickUpObject component");
+                    tutorial.OnCubePickedUp();
                 }
             }
             else
             {
-                Debug.Log("Raycast didn't hit anything within pickup range");
+                Debug.Log($"Object {hit.collider.name} doesn't have PickUpObject component");
             }
         }
         else
         {
-            Debug.Log($"Dropping: {heldObject.name}");
-            heldObject.Drop();
-            heldObject = null;
+            Debug.Log("Raycast didn't hit anything within pickup range");
         }
     }
-
-
-    public void OnThrow(InputAction.CallbackContext context)
+    else
     {
-        if (!inputEnabled || isPaused) return;
-        if (!context.performed) return;
-        if (heldObject == null) return;
-
-        Vector3 dir = cameraTransform.forward;
-        Vector3 impulse = dir * throwForce + Vector3.up * throwUpwardBoost;
-
-        heldObject.Throw(impulse);
+        // Drop the current object
+        Debug.Log($"Dropping: {heldObject.name}");
+        heldObject.Drop();
+        
+        // Notify tutorial
+        TutorialManager tutorial = FindObjectOfType<TutorialManager>();
+        if (tutorial != null)
+        {
+            tutorial.OnCubeDroppedOrThrown();
+        }
+        
         heldObject = null;
     }
+}
+
+public void OnThrow(InputAction.CallbackContext context)
+{
+    if (!inputEnabled || isPaused) return;
+    if (!context.performed) return;
+    if (heldObject == null) return;
+
+    Vector3 dir = cameraTransform.forward;
+    Vector3 impulse = dir * throwForce + Vector3.up * throwUpwardBoost;
+
+    heldObject.Throw(impulse);
+    
+    // Notify tutorial
+    TutorialManager tutorial = FindObjectOfType<TutorialManager>();
+    if (tutorial != null)
+    {
+        tutorial.OnCubeDroppedOrThrown();
+    }
+    
+    heldObject = null;
+}
 
     private void UpdatePauseInput()
     {

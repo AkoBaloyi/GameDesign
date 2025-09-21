@@ -13,11 +13,6 @@ public class TutorialManager : MonoBehaviour
     public Image tutorialBackground;
     public GameObject tutorialArrow; // Optional pointing arrow
     
-    [Header("Game HUD References")]
-    public GameObject gameHUDCanvas; // Main game HUD canvas
-    public GameObject ammoDisplay; // Ammo counter display
-    public GameObject crosshair; // Crosshair display
-    
     [Header("Player References")]
     public FPController playerController;
     public Transform player;
@@ -41,7 +36,6 @@ public class TutorialManager : MonoBehaviour
     [Header("Tutorial Settings")]
     public float textFadeSpeed = 2f;
     public float stepDelay = 1f;
-    public float textDisplayDuration = 3f; // How long to show tutorial text
     public bool skipTutorial = false;
     
     // Tutorial state
@@ -51,6 +45,7 @@ public class TutorialManager : MonoBehaviour
         LookAround,
         Movement,
         PickupCube,
+        ThrowCube,
         PickupNailgun,
         LoadNails,
         Shooting,
@@ -74,6 +69,7 @@ public class TutorialManager : MonoBehaviour
     private Vector2 lastMousePosition;
     private Vector2 movementInput;
     private bool hasPickedUpCube = false;
+    private bool hasThrownCube = false;
     private bool hasPickedUpNailgun = false;
     private bool hasLoadedNails = false;
     private int shotsCount = 0;
@@ -82,8 +78,6 @@ public class TutorialManager : MonoBehaviour
     private bool mouseDetected = false;
     private bool gamepadDetected = false;
     private float detectionTimer = 0f;
-    private float textDisplayTimer = 0f;
-    private bool textDisplayed = false;
     
     void Start()
     {
@@ -107,16 +101,7 @@ public class TutorialManager : MonoBehaviour
     void InitializeTutorial()
     {
         // Show tutorial UI
-        if (tutorialPanel != null)
-        {
-            tutorialPanel.SetActive(true);
-        }
-        
-        // Hide game HUD initially - THIS IS CRITICAL
-        if (gameHUDCanvas != null)
-        {
-            gameHUDCanvas.SetActive(false);
-        }
+        tutorialPanel.SetActive(true);
         
         // Disable player input initially
         if (playerController != null)
@@ -127,66 +112,68 @@ public class TutorialManager : MonoBehaviour
         // Start with device detection
         currentStep = TutorialStep.Detecting;
         UpdateTutorialText("Welcome! Move your mouse or gamepad to begin...", "");
-        textDisplayed = true;
         
         // Highlight objects that will be needed later
-        if (nailgunHighlight != null)
+        if (cubeHighlight != null)
         {
-            nailgunHighlight.HighlightOn();
+            cubeHighlight.HighlightOn();
         }
     }
     
     void DetectInputDevice()
     {
         if (currentStep != TutorialStep.Detecting) return;
-
-        // Prevent advancing if a step was just completed
-        if (stepCompleted) return;
-
+        
         detectionTimer += Time.deltaTime;
-
-        // Wait for the player to read the initial message
-        if (detectionTimer < textDisplayDuration) return;
-
+        
         // Check for mouse movement
-        Vector2 mouseDelta = Mouse.current.delta.ReadValue();
-        if (mouseDelta.magnitude > 5f)
+        Vector2 currentMousePos = Mouse.current.position.ReadValue();
+        if (Vector2.Distance(currentMousePos, lastMousePosition) > 10f)
         {
             mouseDetected = true;
+            lastMousePosition = currentMousePos;
         }
-
+        
         // Check for gamepad input
-        if (Gamepad.current != null && (Gamepad.current.rightStick.ReadValue().magnitude > 0.3f || Gamepad.current.leftStick.ReadValue().magnitude > 0.3f))
+        if (Gamepad.current != null)
         {
-            gamepadDetected = true;
+            Vector2 rightStick = Gamepad.current.rightStick.ReadValue();
+            Vector2 leftStick = Gamepad.current.leftStick.ReadValue();
+            
+            if (rightStick.magnitude > 0.3f || leftStick.magnitude > 0.3f)
+            {
+                gamepadDetected = true;
+            }
         }
-
-        // Determine primary input device and advance
-        if (mouseDetected || gamepadDetected)
-        {
-            detectedDevice = (gamepadDetected && !mouseDetected) ? InputDevice.Gamepad : InputDevice.KeyboardMouse;
-            UpdateTutorialText("Input Detected!", "Get ready to start.");
-            stepCompleted = true; // Mark as completed to prevent re-triggering
-            StartCoroutine(DelayedNextStep());
-        }
-        // Auto-advance after 10 seconds if no input is detected
-        else if (detectionTimer > 10f)
+        
+        // Determine primary input device
+        if (mouseDetected && !gamepadDetected)
         {
             detectedDevice = InputDevice.KeyboardMouse;
-            UpdateTutorialText("Starting Tutorial...", "");
-            stepCompleted = true;
-            StartCoroutine(DelayedNextStep());
+            NextStep();
+        }
+        else if (gamepadDetected && !mouseDetected)
+        {
+            detectedDevice = InputDevice.Gamepad;
+            NextStep();
+        }
+        else if (mouseDetected && gamepadDetected)
+        {
+            // Both detected, prefer the one used most recently
+            detectedDevice = InputDevice.KeyboardMouse; // Default to KB+M
+            NextStep();
+        }
+        
+        // Auto-advance after 5 seconds if no input detected
+        if (detectionTimer > 5f)
+        {
+            detectedDevice = InputDevice.KeyboardMouse;
+            NextStep();
         }
     }
     
     void UpdateCurrentStep()
     {
-        // Handle text display timing
-        if (textDisplayed)
-        {
-            textDisplayTimer += Time.deltaTime;
-        }
-        
         switch (currentStep)
         {
             case TutorialStep.LookAround:
@@ -196,10 +183,19 @@ public class TutorialManager : MonoBehaviour
                 HandleMovementStep();
                 break;
             case TutorialStep.PickupCube:
-                HandleCubePickupStep();
+                HandlePickupCubeStep();
                 break;
-            case TutorialStep.PickupNailgun:
+            case TutorialStep.ThrowCube:
+                HandleThrowCubeStep();
+                break;
+            case TutorialStep.PickupCube:
+                StartPickupCubeStep();
+                break;
+            case TutorialStep.ThrowCube:
+                StartThrowCubeStep();
+                break;
                 HandlePickupStep();
+                break;
                 break;
             case TutorialStep.LoadNails:
                 HandleLoadingStep();
@@ -212,26 +208,23 @@ public class TutorialManager : MonoBehaviour
     
     void HandleLookAroundStep()
     {
-        // Prevent re-completion
-        if (stepCompleted) return;
-
-        // Only start tracking after text has been displayed for minimum time
-        if (textDisplayTimer < textDisplayDuration) return;
-        
         // Track mouse/stick movement
         if (detectedDevice == InputDevice.KeyboardMouse)
         {
             Vector2 mouseDelta = Mouse.current.delta.ReadValue();
             lookMovement += mouseDelta.magnitude;
         }
-        else if (Gamepad.current != null)
+        else
         {
-            Vector2 stickDelta = Gamepad.current.rightStick.ReadValue();
-            lookMovement += stickDelta.magnitude * 100f; // Scale up for comparison
+            if (Gamepad.current != null)
+            {
+                Vector2 stickDelta = Gamepad.current.rightStick.ReadValue();
+                lookMovement += stickDelta.magnitude * 100f; // Scale up for comparison
+            }
         }
         
-        // Complete when enough look movement is detected over a short period
-        if (lookMovement > 800f) // Increased threshold from 500f
+        // Complete when enough look movement detected
+        if (lookMovement > 500f)
         {
             stepCompleted = true;
             StartCoroutine(DelayedNextStep());
@@ -240,9 +233,6 @@ public class TutorialManager : MonoBehaviour
     
     void HandleMovementStep()
     {
-        // Only start tracking after text has been displayed for minimum time
-        if (textDisplayTimer < textDisplayDuration) return;
-        
         // Track movement input
         if (detectedDevice == InputDevice.KeyboardMouse)
         {
@@ -268,7 +258,7 @@ public class TutorialManager : MonoBehaviour
         }
     }
     
-    void HandleCubePickupStep()
+    void HandlePickupCubeStep()
     {
         // This will be completed by the pickup system
         if (hasPickedUpCube)
@@ -278,6 +268,16 @@ public class TutorialManager : MonoBehaviour
         }
     }
     
+    void HandleThrowCubeStep()
+    {
+        // This will be completed when cube is thrown or dropped
+        if (hasThrownCube)
+        {
+            stepCompleted = true;
+            StartCoroutine(DelayedNextStep());
+        }
+    }
+    {
     void HandlePickupStep()
     {
         // This will be completed by the pickup system
@@ -313,8 +313,6 @@ public class TutorialManager : MonoBehaviour
         currentStep++;
         stepCompleted = false;
         lookMovement = 0f;
-        textDisplayTimer = 0f;
-        textDisplayed = false;
         
         switch (currentStep)
         {
@@ -324,11 +322,10 @@ public class TutorialManager : MonoBehaviour
             case TutorialStep.Movement:
                 StartMovementStep();
                 break;
-            case TutorialStep.PickupCube:
-                StartCubePickupStep();
-                break;
+            case TutorialStep.PickupNailgun:
             case TutorialStep.PickupNailgun:
                 StartPickupStep();
+                break;
                 break;
             case TutorialStep.LoadNails:
                 StartLoadingStep();
@@ -356,7 +353,6 @@ public class TutorialManager : MonoBehaviour
             "Use the right stick to look around";
         
         UpdateTutorialText(mainText, inputText);
-        textDisplayed = true;
     }
     
     void StartMovementStep()
@@ -367,24 +363,32 @@ public class TutorialManager : MonoBehaviour
             "Use the left stick to move around";
         
         UpdateTutorialText(mainText, inputText);
-        textDisplayed = true;
     }
     
-    void StartCubePickupStep()
+    void StartPickupCubeStep()
     {
-        string mainText = "Great! Now let's learn to pick up objects.";
+        string mainText = "Now let's learn to interact with objects!";
         string inputText = detectedDevice == InputDevice.KeyboardMouse ? 
             "Look at the glowing orange cube and press E to pick it up" : 
             "Look at the glowing orange cube and press X to pick it up";
         
         UpdateTutorialText(mainText, inputText);
-        textDisplayed = true;
         
-        // Highlight the orange cube
+        // Make sure cube is highlighted
         if (cubeHighlight != null)
         {
             cubeHighlight.HighlightOn();
         }
+    }
+    
+    void StartThrowCubeStep()
+    {
+        string mainText = "Great! Now you can drop or throw objects.";
+        string inputText = detectedDevice == InputDevice.KeyboardMouse ? 
+            "Press E to drop the cube, or G to throw it" : 
+            "Press X to drop the cube, or Y to throw it";
+        
+        UpdateTutorialText(mainText, inputText);
     }
     
     void StartPickupStep()
@@ -395,7 +399,6 @@ public class TutorialManager : MonoBehaviour
             "Look at the glowing Nailgun and press X to pick it up";
         
         UpdateTutorialText(mainText, inputText);
-        textDisplayed = true;
         
         // Make sure nailgun is highlighted
         if (nailgunHighlight != null)
@@ -412,7 +415,6 @@ public class TutorialManager : MonoBehaviour
             "Look at the crate and press X to load nails (50 nails per magazine)";
         
         UpdateTutorialText(mainText, inputText);
-        textDisplayed = true;
         
         // Highlight the crate
         if (crateHighlight != null)
@@ -429,7 +431,6 @@ public class TutorialManager : MonoBehaviour
             "Pull the right trigger to fire the Nailgun (fire 3 times to continue)";
         
         UpdateTutorialText(mainText, inputText);
-        textDisplayed = true;
     }
     
     void CompleteTutorial()
@@ -437,16 +438,7 @@ public class TutorialManager : MonoBehaviour
         tutorialActive = false;
         
         // Hide tutorial UI
-        if (tutorialPanel != null)
-        {
-            tutorialPanel.SetActive(false);
-        }
-        
-        // Show game HUD
-        if (gameHUDCanvas != null)
-        {
-            gameHUDCanvas.SetActive(true);
-        }
+        tutorialPanel.SetActive(false);
         
         // Ensure player has full control
         if (playerController != null)
@@ -459,7 +451,7 @@ public class TutorialManager : MonoBehaviour
         if (nailgunHighlight != null) nailgunHighlight.HighlightOff();
         if (crateHighlight != null) crateHighlight.HighlightOff();
         
-        Debug.Log("Tutorial completed! Game HUD activated.");
+        Debug.Log("Tutorial completed!");
         
         // Optional: Save tutorial completion
         PlayerPrefs.SetInt("TutorialCompleted", 1);
@@ -484,13 +476,15 @@ public class TutorialManager : MonoBehaviour
         PlayPickupEffect();
     }
     
+    public void OnCubeDroppedOrThrown()
+    {
+        hasThrownCube = true;
+    }
+    
     public void OnNailgunPickedUp()
     {
         hasPickedUpNailgun = true;
         PlayPickupEffect();
-        
-        // Show the Game HUD (crosshair, etc.) when the nailgun is picked up
-        ShowGameHUD();
     }
     
     public void OnNailsLoaded()
@@ -519,47 +513,6 @@ public class TutorialManager : MonoBehaviour
         if (tutorialAudio != null && loadingSound != null)
         {
             tutorialAudio.PlayOneShot(loadingSound);
-        }
-    }
-    
-    // Show Game HUD method
-    public void ShowGameHUD()
-    {
-        if (gameHUDCanvas != null)
-        {
-            gameHUDCanvas.SetActive(true);
-        }
-        
-        // Show ammo display and crosshair
-        if (ammoDisplay != null)
-        {
-            ammoDisplay.SetActive(true);
-        }
-        
-        if (crosshair != null)
-        {
-            crosshair.SetActive(true);
-        }
-        
-        Debug.Log("Game HUD activated - Nailgun equipped!");
-    }
-    
-    // Hide Game HUD method
-    public void HideGameHUD()
-    {
-        if (gameHUDCanvas != null)
-        {
-            gameHUDCanvas.SetActive(false);
-        }
-        
-        if (ammoDisplay != null)
-        {
-            ammoDisplay.SetActive(false);
-        }
-        
-        if (crosshair != null)
-        {
-            crosshair.SetActive(false);
         }
     }
     

@@ -1,69 +1,107 @@
+// Fixed PickUpObject.cs that properly handles gravity and physics:
+
 using UnityEngine;
 
 public class PickUpObject : MonoBehaviour
 {
     private Rigidbody rb;
+    private Collider col;
+    private Transform originalParent;
+    private bool isBeingHeld = false;
+    
+    [Header("Pickup Settings")]
+    public bool canBePickedUp = true;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        col = GetComponent<Collider>();
+        originalParent = transform.parent;
+        
+        // Make sure we have required components
+        if (rb == null)
+        {
+            Debug.LogError($"PickUpObject on {gameObject.name} needs a Rigidbody!");
+        }
+        if (col == null)
+        {
+            Debug.LogError($"PickUpObject on {gameObject.name} needs a Collider!");
+        }
     }
 
     public void PickUp(Transform holdPoint)
     {
-        // Make the rigidbody kinematic to disable physics and allow manual control
-        rb.isKinematic = true;
-        rb.useGravity = false; // Also disable gravity explicitly
-
-        // Reset velocities to prevent weird spinning on pickup
-        rb.linearVelocity = Vector3.zero;
+        if (!canBePickedUp) return;
+        
+        Debug.Log($"Picking up {gameObject.name}");
+        
+        isBeingHeld = true;
+        
+        // Store physics state
+        rb.useGravity = false;
+        rb.isKinematic = true; // Make kinematic to prevent physics interference
+        rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+        
+        // Disable collision while held
+        col.isTrigger = true;
 
-        // Parent the object to the hold point and snap it into position
+        // Parent to hold point
         transform.SetParent(holdPoint);
         transform.localPosition = Vector3.zero;
-        transform.localRotation = Quaternion.identity; // Reset rotation as well
+        transform.localRotation = Quaternion.identity;
     }
 
     public void Drop()
     {
-        // Unparent the object
-        transform.SetParent(null);
-
-        // Make the rigidbody dynamic again so it's affected by physics
-        rb.isKinematic = false;
-        rb.useGravity = true;
+        if (!isBeingHeld) return;
         
-        // Reset velocities to prevent weird behavior
-        rb.linearVelocity = Vector3.zero;
+        Debug.Log($"Dropping {gameObject.name}");
+        
+        isBeingHeld = false;
+        
+        // Restore physics - THIS IS THE KEY FIX!
+        transform.SetParent(originalParent);
+        
+        // Re-enable physics AFTER unparenting
+        rb.isKinematic = false; // Allow physics again
+        rb.useGravity = true;   // Enable gravity
+        col.isTrigger = false;  // Re-enable collision
+        
+        // Clear any residual velocity
+        rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        
-        // Add a small downward force to help it fall naturally
-        rb.AddForce(Vector3.down * 2f, ForceMode.Impulse);
     }
 
     public void Throw(Vector3 impulse)
     {
-        // Unparent the object
-        transform.SetParent(null);
-
-        // Make the rigidbody dynamic so it can be thrown
-        rb.isKinematic = false;
-        rb.useGravity = true;
-
-        // Reset velocities before applying new force
-        rb.linearVelocity = Vector3.zero;
+        if (!isBeingHeld) return;
+        
+        Debug.Log($"Throwing {gameObject.name}");
+        
+        isBeingHeld = false;
+        
+        // Restore physics
+        transform.SetParent(originalParent);
+        rb.isKinematic = false; // Allow physics
+        rb.useGravity = true;   // Enable gravity
+        col.isTrigger = false;  // Re-enable collision
+        
+        // Apply throw force
+        rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         rb.AddForce(impulse, ForceMode.Impulse);
     }
 
     public void MoveToHoldPoint(Vector3 targetPosition)
     {
-        // When kinematic, we can just move the transform directly.
-        // This is smoother than using MovePosition for held objects.
-        if (rb.isKinematic)
+        // Only move if we're being held and parented
+        if (isBeingHeld && transform.parent != null)
         {
             transform.position = targetPosition;
         }
     }
+    
+    // Public getters
+    public bool IsBeingHeld() { return isBeingHeld; }
 }
