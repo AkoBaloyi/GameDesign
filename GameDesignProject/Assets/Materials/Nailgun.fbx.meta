@@ -3,7 +3,12 @@ guid: b8b03e03e20964144a6ba2f1333f9264
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: NailGun material
+    second: {fileID: 2100000, guid: a3d9037ddb8a8234aa9a35f38e38bb1b, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
