@@ -12,9 +12,9 @@ public class NailProjectile : MonoBehaviour
     public AudioClip[] impactSounds;
     
     [Header("Surface Materials")]
-    public PhysicMaterial woodMaterial;
-    public PhysicMaterial metalMaterial;
-    public PhysicMaterial concreteMaterial;
+    public PhysicsMaterial woodMaterial;
+    public PhysicsMaterial metalMaterial;
+    public PhysicsMaterial concreteMaterial;
     
     private Rigidbody rb;
     private bool hasHit = false;
@@ -70,7 +70,7 @@ public class NailProjectile : MonoBehaviour
         // Stop the nail
         if (rb != null)
         {
-            rb.velocity = Vector3.zero;
+            rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             rb.isKinematic = true;
         }
