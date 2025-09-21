@@ -13,6 +13,11 @@ public class TutorialManager : MonoBehaviour
     public Image tutorialBackground;
     public GameObject tutorialArrow; // Optional pointing arrow
     
+    [Header("Game HUD References")]
+    public GameObject gameHUDCanvas; // Main game HUD canvas
+    public GameObject ammoDisplay; // Ammo counter display
+    public GameObject crosshair; // Crosshair display
+    
     [Header("Player References")]
     public FPController playerController;
     public Transform player;
@@ -98,7 +103,16 @@ public class TutorialManager : MonoBehaviour
     void InitializeTutorial()
     {
         // Show tutorial UI
-        tutorialPanel.SetActive(true);
+        if (tutorialPanel != null)
+        {
+            tutorialPanel.SetActive(true);
+        }
+        
+        // Hide game HUD initially
+        if (gameHUDCanvas != null)
+        {
+            gameHUDCanvas.SetActive(false);
+        }
         
         // Disable player input initially
         if (playerController != null)
@@ -397,7 +411,16 @@ public class TutorialManager : MonoBehaviour
         tutorialActive = false;
         
         // Hide tutorial UI
-        tutorialPanel.SetActive(false);
+        if (tutorialPanel != null)
+        {
+            tutorialPanel.SetActive(false);
+        }
+        
+        // Show game HUD
+        if (gameHUDCanvas != null)
+        {
+            gameHUDCanvas.SetActive(true);
+        }
         
         // Ensure player has full control
         if (playerController != null)
@@ -409,7 +432,7 @@ public class TutorialManager : MonoBehaviour
         if (nailgunHighlight != null) nailgunHighlight.HighlightOff();
         if (crateHighlight != null) crateHighlight.HighlightOff();
         
-        Debug.Log("Tutorial completed!");
+        Debug.Log("Tutorial completed! Game HUD activated.");
         
         // Optional: Save tutorial completion
         PlayerPrefs.SetInt("TutorialCompleted", 1);
@@ -432,6 +455,9 @@ public class TutorialManager : MonoBehaviour
     {
         hasPickedUpNailgun = true;
         PlayPickupEffect();
+        
+        // Show Game HUD when nailgun is equipped
+        ShowGameHUD();
     }
     
     public void OnNailsLoaded()
@@ -460,6 +486,47 @@ public class TutorialManager : MonoBehaviour
         if (tutorialAudio != null && loadingSound != null)
         {
             tutorialAudio.PlayOneShot(loadingSound);
+        }
+    }
+    
+    // Show Game HUD method
+    public void ShowGameHUD()
+    {
+        if (gameHUDCanvas != null)
+        {
+            gameHUDCanvas.SetActive(true);
+        }
+        
+        // Show ammo display and crosshair
+        if (ammoDisplay != null)
+        {
+            ammoDisplay.SetActive(true);
+        }
+        
+        if (crosshair != null)
+        {
+            crosshair.SetActive(true);
+        }
+        
+        Debug.Log("Game HUD activated - Nailgun equipped!");
+    }
+    
+    // Hide Game HUD method
+    public void HideGameHUD()
+    {
+        if (gameHUDCanvas != null)
+        {
+            gameHUDCanvas.SetActive(false);
+        }
+        
+        if (ammoDisplay != null)
+        {
+            ammoDisplay.SetActive(false);
+        }
+        
+        if (crosshair != null)
+        {
+            crosshair.SetActive(false);
         }
     }
     
