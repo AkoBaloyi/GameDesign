@@ -9,6 +9,15 @@ public class MinimapCalibrator : MonoBehaviour
     public Transform[] worldAnchors = new Transform[3];      // world points (use X = world.x, Y = world.z)
     public RectTransform[] uiAnchors = new RectTransform[3]; // corresponding UI anchoredPositions (anchored to minimap parent)
     
+    [Header("Quick Calibration - Player Start Position")]
+    public Vector3 playerStartWorldPos = new Vector3(-181.4f, -51.2f, 96.7f);
+    public Vector2 playerStartUIPos = new Vector2(-82f, 75f);
+    public bool useQuickCalibration = true;
+    
+    [Header("Scale Factors (adjust these for fine-tuning)")]
+    public float scaleX = 1f;
+    public float scaleY = 1f;
+    
     [Header("Minimap & Arrow")]
     public RectTransform minimapBG;  // Minimap background RectTransform (pivot = 0.5,0.5)
     public RectTransform arrow;      // Player arrow UI RectTransform (child of minimapBG)
@@ -22,6 +31,12 @@ public class MinimapCalibrator : MonoBehaviour
     [ContextMenu("Calibrate")]
     public void Calibrate()
     {
+        if (useQuickCalibration)
+        {
+            QuickCalibrate();
+            return;
+        }
+        
         if (worldAnchors == null || uiAnchors == null || worldAnchors.Length < 3 || uiAnchors.Length < 3)
         {
             Debug.LogError("Assign exactly 3 anchors in the inspector.");
@@ -62,6 +77,67 @@ public class MinimapCalibrator : MonoBehaviour
 
         calibrated = true;
         Debug.Log("Minimap calibrated successfully.");
+    }
+    
+    [ContextMenu("Quick Calibrate - Player Start Position")]
+    public void QuickCalibrate()
+    {
+        // Create 3 virtual anchor points based on player start position
+        // This creates a simple 1:1 mapping with offset
+        
+        // Calculate the scale factor based on your specific values
+        // Player world: (-181.4, 96.7) -> UI: (-82, 75)
+        // We need to determine the scale and offset
+        
+        // Use the scale factors from the inspector
+        // This allows you to fine-tune the calibration
+        
+        // Calculate offset: UI = (World - WorldOffset) * Scale + UIOffset
+        // -82 = (-181.4 - WorldOffsetX) * ScaleX + UIOffsetX
+        // 75 = (96.7 - WorldOffsetY) * ScaleY + UIOffsetY
+        
+        // For now, let's use a simple offset calculation
+        float worldOffsetX = playerStartWorldPos.x;
+        float worldOffsetY = playerStartWorldPos.z;
+        float uiOffsetX = playerStartUIPos.x;
+        float uiOffsetY = playerStartUIPos.y;
+        
+        // Set up the transformation: UI = (World - WorldOffset) + UIOffset
+        a = scaleX; b = 0f; tx = uiOffsetX - worldOffsetX * scaleX;
+        c = 0f; d = scaleY; ty = uiOffsetY - worldOffsetY * scaleY;
+        
+        calibrated = true;
+        Debug.Log($"Quick calibration complete! Player start: {playerStartWorldPos} -> UI: {playerStartUIPos}");
+        Debug.Log($"Transformation: UI = ({a:F2}*X + {b:F2}*Z + {tx:F2}, {c:F2}*X + {d:F2}*Z + {ty:F2})");
+    }
+    
+    [ContextMenu("Test Calibration - Show Current Mapping")]
+    public void TestCalibration()
+    {
+        if (!calibrated)
+        {
+            Debug.LogWarning("Not calibrated yet! Run calibration first.");
+            return;
+        }
+        
+        if (player != null)
+        {
+            Vector3 worldPos = player.position;
+            Vector2 calculatedUIPos = new Vector2(
+                a * worldPos.x + b * worldPos.z + tx,
+                c * worldPos.x + d * worldPos.z + ty
+            );
+            
+            Debug.Log($"=== CALIBRATION TEST ===");
+            Debug.Log($"Player World Position: ({worldPos.x:F2}, {worldPos.z:F2})");
+            Debug.Log($"Calculated UI Position: ({calculatedUIPos.x:F2}, {calculatedUIPos.y:F2})");
+            Debug.Log($"Expected UI Position: ({playerStartUIPos.x:F2}, {playerStartUIPos.y:F2})");
+            
+            if (arrow != null)
+            {
+                Debug.Log($"Actual Arrow Position: ({arrow.anchoredPosition.x:F2}, {arrow.anchoredPosition.y:F2})");
+            }
+        }
     }
 
     void Update()

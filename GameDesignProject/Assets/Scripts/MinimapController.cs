@@ -18,8 +18,13 @@ public class MinimapController : MonoBehaviour
     
     [Header("Manual Override")]
     public bool useManualBounds = true;
-    public Vector2 manualCenter = new Vector2(0f, 0f); 
-    public Vector2 manualSize = new Vector2(500f, 500f); 
+    public Vector2 manualCenter = new Vector2(-181.4f, 96.7f); // Player start position (X, Z)
+    public Vector2 manualSize = new Vector2(500f, 500f);
+    
+    [Header("Calibration Settings")]
+    public Vector3 playerStartWorldPos = new Vector3(-181.4f, -51.2f, 96.7f);
+    public Vector2 playerStartUIPos = new Vector2(-82f, 75f);
+    public bool autoCalibrateOnStart = true; 
     [Header("Debug")]
     public bool showDebugInfo = false; 
     public bool showDebugGizmos = false; 
@@ -46,6 +51,13 @@ public class MinimapController : MonoBehaviour
         {
             mapCenter = manualCenter;
             mapWorldSize = manualSize;
+            
+            // Auto-calibrate if enabled
+            if (autoCalibrateOnStart)
+            {
+                CalibrateForPlayerStart();
+            }
+            
             Debug.Log($"Using manual bounds - Center: {mapCenter}, Size: {mapWorldSize}");
         }
         else if (usePlayerStartAsCenter)
@@ -55,11 +67,10 @@ public class MinimapController : MonoBehaviour
             Debug.Log($"Minimap centered on player start: {mapCenter}, Size: {mapWorldSize}");
         }
 
-        mapScale = 2f;
+        // Calculate map scale based on minimap size and world size
+        mapScale = mapWorldSize.x / minimapSize;
         
-        mapWorldSize = new Vector2(minimapSize * mapScale, minimapSize * mapScale);
-        
-        Debug.Log($"Map scale LOCKED to: {mapScale} (covers {mapWorldSize.x}x{mapWorldSize.y} world units)");
+        Debug.Log($"Map scale calculated: {mapScale:F2} (covers {mapWorldSize.x}x{mapWorldSize.y} world units)");
         
         initialized = true;
     }
@@ -147,6 +158,50 @@ public class MinimapController : MonoBehaviour
         useManualBounds = false;
         initialized = false;
         Start();
+    }
+    
+    [ContextMenu("4. Calibrate for Player Start Position")]
+    public void CalibrateForPlayerStart()
+    {
+        // Set the map center to the player start position
+        manualCenter = new Vector2(playerStartWorldPos.x, playerStartWorldPos.z);
+        
+        // Calculate the map scale based on the desired UI position
+        // We want player at (-181.4, 96.7) to show at (-82, 75) on the minimap
+        
+        // Calculate how far the player is from the center (should be 0,0)
+        float distanceFromCenterX = playerStartWorldPos.x - manualCenter.x; // Should be 0
+        float distanceFromCenterZ = playerStartWorldPos.z - manualCenter.y; // Should be 0
+        
+        // The UI position should be (0, 0) when player is at center
+        // But we want it to be at (-82, 75), so we need to adjust the center
+        // Let's calculate what the center should be to achieve this
+        
+        // If player at (-181.4, 96.7) should show at (-82, 75)
+        // Then: UI_X = (World_X - Center_X) / Scale
+        // -82 = (-181.4 - Center_X) / Scale
+        // -82 * Scale = -181.4 - Center_X
+        // Center_X = -181.4 + 82 * Scale
+        
+        // For now, let's use a simple approach: adjust the center to account for the offset
+        float uiOffsetX = playerStartUIPos.x;
+        float uiOffsetZ = playerStartUIPos.y;
+        
+        // Calculate what the center should be to get the desired UI position
+        // This is a simplified calculation - you may need to fine-tune
+        manualCenter = new Vector2(
+            playerStartWorldPos.x - uiOffsetX * (mapWorldSize.x / minimapSize),
+            playerStartWorldPos.z - uiOffsetZ * (mapWorldSize.y / minimapSize)
+        );
+        
+        Debug.Log($"Calibrated center: {manualCenter}");
+        Debug.Log($"Player start: {playerStartWorldPos}");
+        Debug.Log($"Expected UI pos: {playerStartUIPos}");
+        
+        // Recalculate map scale
+        mapScale = mapWorldSize.x / minimapSize;
+        
+        Debug.Log($"Calibration complete! Map center: {manualCenter}, Scale: {mapScale:F2}");
     }
 
     private void DebugInfo()
