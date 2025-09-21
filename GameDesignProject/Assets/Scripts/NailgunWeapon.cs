@@ -142,21 +142,23 @@ public class NailgunWeapon : MonoBehaviour
         {
             GameObject nail = Instantiate(nailPrefab, firePoint.position, firePoint.rotation);
             
-            // Add velocity to nail
-            Rigidbody nailRb = nail.GetComponent<Rigidbody>();
-            if (nailRb != null)
-            {
-                nailRb.linearVelocity = firePoint.forward * nailSpeed;
-            }
-            
-            // Add nail script for impact effects
+            // Get nail projectile component and fire it
             NailProjectile nailScript = nail.GetComponent<NailProjectile>();
-            if (nailScript == null)
+            if (nailScript != null)
             {
-                nailScript = nail.AddComponent<NailProjectile>();
+                nailScript.damage = damage;
+                nailScript.impactEffectPrefab = sparksEffect;
+                nailScript.FireNail(firePoint.forward, nailSpeed);
             }
-            nailScript.damage = damage;
-            nailScript.impactEffectPrefab = sparksEffect;
+            else
+            {
+                // Fallback: directly set Rigidbody velocity
+                Rigidbody nailRb = nail.GetComponent<Rigidbody>();
+                if (nailRb != null)
+                {
+                    nailRb.velocity = firePoint.forward * nailSpeed;
+                }
+            }
         }
         
         // Visual effects

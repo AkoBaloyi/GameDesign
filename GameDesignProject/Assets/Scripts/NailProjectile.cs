@@ -1,40 +1,95 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Collider))]
 public class NailProjectile : MonoBehaviour
 {
     [Header("Projectile Settings")]
     public float damage = 10f;
     public float lifetime = 5f;
-    public float stickForce = 100f;
+    public float gravity = 1f; // Gravity multiplier
+    public bool useGravity = true;
     
     [Header("Effects")]
     public GameObject impactEffectPrefab;
     public AudioClip[] impactSounds;
     
     [Header("Surface Materials")]
-    public PhysicsMaterial woodMaterial;
-    public PhysicsMaterial metalMaterial;
-    public PhysicsMaterial concreteMaterial;
+    public PhysicMaterial woodMaterial;
+    public PhysicMaterial metalMaterial;
+    public PhysicMaterial concreteMaterial;
     
     private Rigidbody rb;
+    private Collider col;
     private bool hasHit = false;
     private AudioSource audioSource;
     
-    void Start()
+    void Awake()
     {
+        // Get required components
         rb = GetComponent<Rigidbody>();
+        col = GetComponent<Collider>();
         audioSource = GetComponent<AudioSource>();
         
+        // Configure Rigidbody for projectile behavior
+        SetupRigidbody();
+        
+        // Configure Collider
+        SetupCollider();
+    void Start()
+    {
         // Destroy after lifetime
         Destroy(gameObject, lifetime);
-        
-        // Ensure the nail has a collider
-        if (GetComponent<Collider>() == null)
+    }
+    
+    // Method to fire the nail with initial velocity
+    public void FireNail(Vector3 direction, float speed)
+    {
+        if (rb != null)
         {
-            CapsuleCollider collider = gameObject.AddComponent<CapsuleCollider>();
-            collider.radius = 0.01f;
-            collider.height = 0.1f;
+            rb.velocity = direction * speed;
         }
+    }
+    
+    void SetupRigidbody()
+    {
+        if (rb == null) return;
+        
+        // Projectile physics settings
+        rb.mass = 0.01f; // Very light
+        rb.drag = 0.1f; // Slight air resistance
+        rb.angularDrag = 0.5f;
+        rb.useGravity = useGravity;
+        
+        // Adjust gravity if needed
+        if (useGravity && gravity != 1f)
+        {
+            rb.gravityScale = gravity; // If using newer Unity version
+            // For older versions, you'd apply gravity manually in FixedUpdate
+        }
+        
+        // Prevent rotation on impact (nails should stick straight)
+        rb.freezeRotation = true;
+    }
+    
+    void SetupCollider()
+    {
+        if (col == null)
+        {
+            // Add collider if none exists
+            col = gameObject.AddComponent<CapsuleCollider>();
+        }
+        
+        // Configure for nail shape
+        if (col is CapsuleCollider capsule)
+        {
+            capsule.radius = 0.005f; // Very thin
+            capsule.height = 0.08f; // Nail length
+            capsule.direction = 2; // Z-axis (forward)
+        }
+        
+        // Ensure it's not a trigger initially
+        col.isTrigger = false;
     }
     
     void OnCollisionEnter(Collision collision)
@@ -70,7 +125,7 @@ public class NailProjectile : MonoBehaviour
         // Stop the nail
         if (rb != null)
         {
-            rb.linearVelocity = Vector3.zero;
+            rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             rb.isKinematic = true;
         }
