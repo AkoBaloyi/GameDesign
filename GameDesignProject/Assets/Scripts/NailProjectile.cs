@@ -15,9 +15,9 @@ public class NailProjectile : MonoBehaviour
     public AudioClip[] impactSounds;
     
     [Header("Surface Materials")]
-    public PhysicMaterial woodMaterial;
-    public PhysicMaterial metalMaterial;
-    public PhysicMaterial concreteMaterial;
+    public PhysicsMaterial woodMaterial;
+    public PhysicsMaterial metalMaterial;
+    public PhysicsMaterial concreteMaterial;
     
     private Rigidbody rb;
     private Collider col;
@@ -48,7 +48,7 @@ public class NailProjectile : MonoBehaviour
     {
         if (rb != null)
         {
-            rb.velocity = direction * speed;
+            rb.linearVelocity = direction * speed;
         }
     }
     
@@ -58,19 +58,22 @@ public class NailProjectile : MonoBehaviour
         
         // Projectile physics settings
         rb.mass = 0.01f; // Very light
-        rb.drag = 0.1f; // Slight air resistance
-        rb.angularDrag = 0.5f;
+        rb.linearDamping = 0.1f; // Slight air resistance
+        rb.angularDamping = 0.5f;
         rb.useGravity = useGravity;
-        
-        // Adjust gravity if needed
-        if (useGravity && gravity != 1f)
-        {
-            rb.gravityScale = gravity; // If using newer Unity version
-            // For older versions, you'd apply gravity manually in FixedUpdate
-        }
         
         // Prevent rotation on impact (nails should stick straight)
         rb.freezeRotation = true;
+    }
+    
+    void FixedUpdate()
+    {
+        // Apply custom gravity if different from default
+        if (useGravity && gravity != 1f && rb != null && !hasHit)
+        {
+            Vector3 customGravity = Physics.gravity * (gravity - 1f);
+            rb.AddForce(customGravity, ForceMode.Acceleration);
+        }
     }
     
     void SetupCollider()
@@ -126,7 +129,7 @@ public class NailProjectile : MonoBehaviour
         // Stop the nail
         if (rb != null)
         {
-            rb.velocity = Vector3.zero;
+            rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             rb.isKinematic = true;
         }
