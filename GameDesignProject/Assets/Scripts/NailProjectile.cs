@@ -23,23 +23,24 @@ public class NailProjectile : MonoBehaviour
     private Collider col;
     private bool hasHit = false;
     private AudioSource audioSource;
-    
+
     void Awake()
     {
         // Get required components
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
         audioSource = GetComponent<AudioSource>();
-        
+
         // Configure Rigidbody for projectile behavior
         SetupRigidbody();
-        
+
         // Configure Collider
         SetupCollider();
-    void Start()
-    {
-        // Destroy after lifetime
-        Destroy(gameObject, lifetime);
+        void Start()
+        {
+            // Destroy after lifetime
+            Destroy(gameObject, lifetime);
+        }
     }
     
     // Method to fire the nail with initial velocity
