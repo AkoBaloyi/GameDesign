@@ -146,7 +146,7 @@ public class NailgunWeapon : MonoBehaviour
             Rigidbody nailRb = nail.GetComponent<Rigidbody>();
             if (nailRb != null)
             {
-                nailRb.velocity = firePoint.forward * nailSpeed;
+                nailRb.linearVelocity = firePoint.forward * nailSpeed;
             }
             
             // Add nail script for impact effects
