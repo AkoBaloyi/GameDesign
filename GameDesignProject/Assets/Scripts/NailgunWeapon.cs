@@ -94,9 +94,6 @@ public class NailgunWeapon : MonoBehaviour
             crosshair.SetActive(true);
         }
         
-        // Show ammo UI
-        UpdateAmmoUI();
-        
         // Notify tutorial
         if (tutorialManager != null)
         {
@@ -115,17 +112,6 @@ public class NailgunWeapon : MonoBehaviour
         if (crosshair != null)
         {
             crosshair.SetActive(false);
-        }
-        
-        // Hide ammo UI
-        if (ammoText != null)
-        {
-            ammoText.gameObject.SetActive(false);
-        }
-        
-        if (ammoBar != null)
-        {
-            ammoBar.gameObject.SetActive(false);
         }
     }
     
@@ -224,21 +210,11 @@ public class NailgunWeapon : MonoBehaviour
         if (ammoText != null)
         {
             ammoText.text = $"{currentAmmo}/{maxAmmo}";
-            // Make sure ammo text is visible when weapon is equipped
-            if (isEquipped)
-            {
-                ammoText.gameObject.SetActive(true);
-            }
         }
         
         if (ammoBar != null)
         {
             ammoBar.fillAmount = (float)currentAmmo / maxAmmo;
-            // Make sure ammo bar is visible when weapon is equipped
-            if (isEquipped)
-            {
-                ammoBar.gameObject.SetActive(true);
-            }
         }
     }
     
