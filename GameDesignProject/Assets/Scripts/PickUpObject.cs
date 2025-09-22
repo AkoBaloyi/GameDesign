@@ -40,7 +40,7 @@ public class PickUpObject : MonoBehaviour
         // Store physics state
         rb.useGravity = false;
         rb.isKinematic = true; // Make kinematic to prevent physics interference
-        rb.velocity = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         
         // Disable collision while held
@@ -69,7 +69,7 @@ public class PickUpObject : MonoBehaviour
         col.isTrigger = false;  // Re-enable collision
         
         // Clear any residual velocity
-        rb.velocity = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
 
@@ -88,7 +88,7 @@ public class PickUpObject : MonoBehaviour
         col.isTrigger = false;  // Re-enable collision
         
         // Apply throw force
-        rb.velocity = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         rb.AddForce(impulse, ForceMode.Impulse);
     }

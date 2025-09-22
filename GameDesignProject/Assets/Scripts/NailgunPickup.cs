@@ -1,3 +1,5 @@
+using UnityEngine;
+
 [RequireComponent(typeof(HighlightableObject))]
 public class NailgunPickup : MonoBehaviour
 {
@@ -6,9 +8,11 @@ public class NailgunPickup : MonoBehaviour
     public GunSlotManager gunSlotManager;
     public TutorialManager tutorialManager;
     
+    [Header("Settings")]
+    public float pickupRange = 3f;
+    
     private HighlightableObject highlightable;
     private bool isPickedUp = false;
-    private float pickupRange = 3f;
     
     void Start()
     {
@@ -28,6 +32,11 @@ public class NailgunPickup : MonoBehaviour
         if (nailgunWeapon == null)
         {
             nailgunWeapon = GetComponent<NailgunWeapon>();
+        }
+        
+        if (highlightable == null)
+        {
+            Debug.LogError($"NailgunPickup on {gameObject.name} needs HighlightableObject component!");
         }
     }
     
@@ -103,6 +112,10 @@ public class NailgunPickup : MonoBehaviour
         {
             gunSlotManager.EquipNailgun(nailgunWeapon);
         }
+        else
+        {
+            Debug.LogError("GunSlotManager or NailgunWeapon not found!");
+        }
         
         // Turn off highlight
         if (highlightable != null)
@@ -111,5 +124,23 @@ public class NailgunPickup : MonoBehaviour
         }
         
         Debug.Log("Nailgun picked up and equipped in gun slot!");
+    }
+    
+    // Public method to force pickup (for testing)
+    [ContextMenu("Force Pickup Nailgun")]
+    public void ForcePickup()
+    {
+        PickupNailgun();
+    }
+    
+    // Reset method for testing
+    [ContextMenu("Reset Pickup")]
+    public void ResetPickup()
+    {
+        isPickedUp = false;
+        if (highlightable != null)
+        {
+            highlightable.HighlightOff();
+        }
     }
 }
