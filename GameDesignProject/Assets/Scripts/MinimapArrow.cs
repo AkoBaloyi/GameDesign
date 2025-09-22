@@ -1,112 +1,67 @@
 using UnityEngine;
+using UnityEngine.UI;
 
+/// <summary>
+/// This script controls a UI arrow on a minimap to point towards a specific target.
+/// It should be attached to the UI Image object of the arrow.
+/// </summary>
 public class MinimapArrow : MonoBehaviour
 {
     [Header("References")]
-    public Transform player;         
-    public RectTransform arrow;      
-    public RectTransform minimapBG;  
+    [Tooltip("The target object the arrow should point to (e.g., a quest objective, exit, etc.).")]
+    public Transform target;
 
-    [Header("Map Settings")]
-    public Vector2 mapWorldSize = new Vector2(50, 50); 
-    public Vector2 mapCenter = Vector2.zero;          
-    
-    [Header("Clamping")]
-    public bool clampToMinimapBounds = true;          
-    public float edgePadding = 5f;                    
-    
-    [Header("Debug")]
-    public bool showDebugInfo = false;
+    [Tooltip("The player's transform. The arrow's direction is relative to this.")]
+    public Transform player;
 
-    void Update()
+    [Tooltip("The RectTransform of the arrow's UI Image.")]
+    public RectTransform arrowRectTransform;
+
+    void LateUpdate()
     {
-        if (player == null || arrow == null || minimapBG == null) return;
-
-        UpdateArrowRotation();
-        UpdateArrowPosition();
-        
-        if (showDebugInfo) LogDebugInfo();
-    }
-
-    void UpdateArrowRotation()
-    {
-        float yRot = player.eulerAngles.y;
-        arrow.localEulerAngles = new Vector3(0, 0, -yRot);
-    }
-
-    void UpdateArrowPosition()
-    {
-        Vector3 worldPos = player.position;
-        
-        Vector2 relativePos = new Vector2(
-            worldPos.x - mapCenter.x,
-            worldPos.z - mapCenter.y
-        );
-
-        Vector2 normalizedPos = new Vector2(
-            Mathf.InverseLerp(-mapWorldSize.x/2, mapWorldSize.x/2, relativePos.x),
-            Mathf.InverseLerp(-mapWorldSize.y/2, mapWorldSize.y/2, relativePos.y)
-        );
-
-        Rect minimapRect = minimapBG.rect;
-        float mapWidth = minimapRect.width;
-        float mapHeight = minimapRect.height;
-
-        Vector2 minimapPos = new Vector2(
-            (normalizedPos.x - 0.5f) * mapWidth,
-            (normalizedPos.y - 0.5f) * mapHeight
-        );
-
-        if (clampToMinimapBounds)
+        if (target == null || player == null || arrowRectTransform == null)
         {
-            float halfWidth = mapWidth / 2f - edgePadding;
-            float halfHeight = mapHeight / 2f - edgePadding;
-            
-            minimapPos.x = Mathf.Clamp(minimapPos.x, -halfWidth, halfWidth);
-            minimapPos.y = Mathf.Clamp(minimapPos.y, -halfHeight, halfHeight);
+            // Disable the arrow if references are not set
+            if (arrowRectTransform != null && arrowRectTransform.gameObject.activeSelf)
+            {
+                arrowRectTransform.gameObject.SetActive(false);
+            }
+            return;
         }
 
-        arrow.anchoredPosition = minimapPos;
-    }
-
-    void LogDebugInfo()
-    {
-        Vector3 worldPos = player.position;
-        Debug.Log($"Player World Pos: {worldPos}, Arrow Pos: {arrow.anchoredPosition}, Map Size: {minimapBG.rect.size}");
-    }
-
-    [ContextMenu("Set Map Center to Player Position")]
-    void SetMapCenterToPlayer()
-    {
-        if (player != null)
+        // Ensure the arrow is active if references are set
+        if (!arrowRectTransform.gameObject.activeSelf)
         {
-            mapCenter = new Vector2(player.position.x, player.position.z);
-            Debug.Log($"Map center set to: {mapCenter}");
+            arrowRectTransform.gameObject.SetActive(true);
         }
+
+        // 1. Get the direction vector from the player to the target
+        Vector3 directionToTarget = target.position - player.position;
+
+        // 2. We only care about the horizontal direction (X and Z axes)
+        directionToTarget.y = 0;
+
+        // 3. Get the player's forward direction, also only on the horizontal plane
+        Vector3 playerForward = player.forward;
+        playerForward.y = 0;
+
+        // 4. Calculate the angle between the player's forward direction and the direction to the target
+        // The result is in degrees, and SignedAngle gives a positive or negative value
+        // depending on whether the target is to the left or right.
+        float angle = Vector3.SignedAngle(playerForward, directionToTarget, Vector3.up);
+
+        // 5. Apply the rotation to the arrow's RectTransform.
+        // We rotate around the Z-axis for UI elements. The angle is negated because UI rotation
+        // is typically clockwise for positive values.
+        arrowRectTransform.localEulerAngles = new Vector3(0, 0, -angle);
     }
 
-    void OnValidate()
+    /// <summary>
+    /// Public method to change the target the arrow points to at runtime.
+    /// </summary>
+    /// <param name="newTarget">The new transform to point towards.</param>
+    public void SetTarget(Transform newTarget)
     {
-        if (mapWorldSize.x <= 0) mapWorldSize.x = 50;
-        if (mapWorldSize.y <= 0) mapWorldSize.y = 50;
-        if (edgePadding < 0) edgePadding = 0;
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        if (!Application.isPlaying) return;
-
-        
-        Vector3 center = new Vector3(mapCenter.x, 0, mapCenter.y);
-        Vector3 size = new Vector3(mapWorldSize.x, 0.1f, mapWorldSize.y);
-        
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(center, size);
-        
-        if (player != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(player.position, 0.5f);
-        }
+        target = newTarget;
     }
 }

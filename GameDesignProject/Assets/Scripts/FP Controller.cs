@@ -77,33 +77,17 @@ public class FPController : MonoBehaviour
 
     private void Update()
     {
-        if (isPaused) 
-        {
-            UpdatePauseInput();
-            return; // Stop all other updates when paused
-        }
 
-        if (inputEnabled)
+        if (!isPaused && inputEnabled)
         {
             HandleMovement();
             HandleLook();
             HandlePickupHighlighting();
         }
-        else
-        {
-            // If input is disabled (e.g., during tutorial), ensure velocity doesn't build up
-            if (controller.isGrounded)
-            {
-                velocity.y = -2f; // Apply a small constant downward force to keep the player grounded
-            }
-            else
-            {
-                velocity.y += gravity * Time.deltaTime; // Apply gravity if in the air
-            }
-            controller.Move(velocity * Time.deltaTime); // Apply the movement
-        }
+
 
         UpdatePauseInput();
+
 
         if (heldObject != null)
         {
@@ -117,16 +101,10 @@ public class FPController : MonoBehaviour
         inputEnabled = enabled;
         if (!enabled)
         {
-            // Reset movement inputs to prevent unwanted sliding
+
             moveInput = Vector2.zero;
             lookInput = Vector2.zero;
             isSprinting = false;
-
-            // Crucially, reset vertical velocity to prevent falling through the floor
-            if (controller.isGrounded)
-            {
-                velocity.y = -2f;
-            }
         }
     }
 
@@ -208,83 +186,62 @@ public class FPController : MonoBehaviour
     }
 
     public void OnPickUp(InputAction.CallbackContext context)
-{
-    if (!inputEnabled || isPaused) return;
-    if (!context.performed) return;
-
-    Debug.Log("Pickup input detected!"); // Debug line
-
-    if (heldObject == null)
     {
-        // Try to pick up an object
-        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
-        
-        if (Physics.Raycast(ray, out RaycastHit hit, pickupRange))
-        {
-            Debug.Log($"Raycast hit: {hit.collider.name}"); // Debug what we hit
-            
-            PickUpObject pickUp = hit.collider.GetComponent<PickUpObject>();
+        if (!inputEnabled || isPaused) return;
+        if (!context.performed) return;
 
-            if (pickUp != null)
+        Debug.Log("Pickup input detected!");
+
+        if (heldObject == null)
+        {
+
+            Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
+
+            Debug.DrawRay(cameraTransform.position, cameraTransform.forward * pickupRange, Color.red, 1f);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, pickupRange))
             {
-                Debug.Log($"Picking up: {hit.collider.name}");
-                pickUp.PickUp(holdPoint);
-                heldObject = pickUp;
-                
-                // Notify tutorial if it's a cube
-                TutorialManager tutorial = FindObjectOfType<TutorialManager>();
-                if (tutorial != null && hit.collider.name.ToLower().Contains("cube"))
+                Debug.Log($"Raycast hit: {hit.collider.name}");
+
+                PickUpObject pickUp = hit.collider.GetComponent<PickUpObject>();
+
+                if (pickUp != null)
                 {
-                    tutorial.OnCubePickedUp();
+                    Debug.Log($"Picking up: {hit.collider.name}");
+                    pickUp.PickUp(holdPoint);
+                    heldObject = pickUp;
+                }
+                else
+                {
+                    Debug.Log($"Object {hit.collider.name} doesn't have PickUpObject component");
                 }
             }
             else
             {
-                Debug.Log($"Object {hit.collider.name} doesn't have PickUpObject component");
+                Debug.Log("Raycast didn't hit anything within pickup range");
             }
         }
         else
         {
-            Debug.Log("Raycast didn't hit anything within pickup range");
+            Debug.Log($"Dropping: {heldObject.name}");
+            heldObject.Drop();
+            heldObject = null;
         }
     }
-    else
+
+
+    public void OnThrow(InputAction.CallbackContext context)
     {
-        // Drop the current object
-        Debug.Log($"Dropping: {heldObject.name}");
-        heldObject.Drop();
-        
-        // Notify tutorial
-        TutorialManager tutorial = FindObjectOfType<TutorialManager>();
-        if (tutorial != null)
-        {
-            tutorial.OnCubeDroppedOrThrown();
-        }
-        
+        if (!inputEnabled || isPaused) return;
+        if (!context.performed) return;
+        if (heldObject == null) return;
+
+        Vector3 dir = cameraTransform.forward;
+        Vector3 impulse = dir * throwForce + Vector3.up * throwUpwardBoost;
+
+        heldObject.Throw(impulse);
         heldObject = null;
     }
-}
-
-public void OnThrow(InputAction.CallbackContext context)
-{
-    if (!inputEnabled || isPaused) return;
-    if (!context.performed) return;
-    if (heldObject == null) return;
-
-    Vector3 dir = cameraTransform.forward;
-    Vector3 impulse = dir * throwForce + Vector3.up * throwUpwardBoost;
-
-    heldObject.Throw(impulse);
-    
-    // Notify tutorial
-    TutorialManager tutorial = FindObjectOfType<TutorialManager>();
-    if (tutorial != null)
-    {
-        tutorial.OnCubeDroppedOrThrown();
-    }
-    
-    heldObject = null;
-}
 
     private void UpdatePauseInput()
     {
