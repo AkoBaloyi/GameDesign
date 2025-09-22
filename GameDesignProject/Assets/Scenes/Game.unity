@@ -62451,6 +62451,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 067f18390d89ba4469e20732f001a76e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tutorialManager: {fileID: 2108869803}
   moveSpeed: 22
   gravity: -9.81
   jumpHeight: 7
@@ -62462,13 +62463,13 @@ MonoBehaviour:
   crouchHeight: 1
   standHeight: 2
   crouchSpeed: 2.5
-  sprintSpeed: 12
-  sprintAcceleration: 10
-  sprintDeceleration: 8
+  sprintSpeed: 80
+  sprintAcceleration: 20
+  sprintDeceleration: 40
   pickupRange: 15
   holdPoint: {fileID: 63590552}
   heldObject: {fileID: 0}
-  throwForce: 50
+  throwForce: 500
   throwUpwardBoost: 1
   pauseMenuPanel: {fileID: 3629329249984155605, guid: 3f14af9e73db6844f834929ee21d10da, type: 3}
   brightnessOverlay: {fileID: 0}
@@ -81716,6 +81717,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b8b03e03e20964144a6ba2f1333f9264, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1942977016}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b8b03e03e20964144a6ba2f1333f9264, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1942977018}
   m_SourcePrefab: {fileID: 100100000, guid: b8b03e03e20964144a6ba2f1333f9264, type: 3}
 --- !u!1 &1850287127
 GameObject:
@@ -84696,6 +84700,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53163b03c9f19224596d64c3f65af785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!64 &1942977018
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1942977014}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!1 &1945253928
 GameObject:
   m_ObjectHideFlags: 0
@@ -92992,6 +93018,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2108869804}
   - component: {fileID: 2108869803}
+  - component: {fileID: 2108869807}
+  - component: {fileID: 2108869806}
+  - component: {fileID: 2108869805}
   m_Layer: 0
   m_Name: TutorialManager
   m_TagString: Untagged
@@ -93016,14 +93045,16 @@ MonoBehaviour:
   inputPromptText: {fileID: 1038588713}
   tutorialBackground: {fileID: 0}
   tutorialArrow: {fileID: 0}
-  gameHUDCanvas: {fileID: 0}
-  ammoDisplay: {fileID: 0}
-  crosshair: {fileID: 0}
+  gameHUDCanvas: {fileID: 1138376967}
+  ammoDisplay: {fileID: 309228610}
+  crosshair: {fileID: 2043818062}
   playerController: {fileID: 1331565400}
   player: {fileID: 1331565396}
   cameraTransform: {fileID: 168109837}
+  orangeCube: {fileID: 1303957923}
   nailgun: {fileID: 0}
   nailCrate: {fileID: 678124257}
+  cubeHighlight: {fileID: 0}
   nailgunHighlight: {fileID: 0}
   crateHighlight: {fileID: 678124261}
   pickupEffect: {fileID: 0}
@@ -93032,9 +93063,9 @@ MonoBehaviour:
   pickupSound: {fileID: 8300000, guid: 7b6cae696888696409f38985cc05c00b, type: 3}
   loadingSound: {fileID: 8300000, guid: 501f1d8625384e244a9ede5953b9734d, type: 3}
   textFadeSpeed: 5
-  stepDelay: 5
+  stepDelay: 3
   textDisplayDuration: 3
-  skipTutorial: 1
+  skipTutorial: 0
   currentStep: 0
   detectedDevice: 0
 --- !u!4 &2108869804
@@ -93052,6 +93083,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2108869805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108869802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e3a0fe48af98f845884024864bcace3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectType: 0
+  pickupEffect: {fileID: 0}
+  pickupSound: {fileID: 0}
+  pickupRange: 3
+  tutorialManager: {fileID: 2108869803}
+  nailgunWeapon: {fileID: 0}
+--- !u!114 &2108869806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108869802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 096282d18af6f8b41bdec4a943a9d3c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightColor: {r: 0.9716981, g: 0.9716981, b: 0.9716981, a: 1}
+  highlightIntensity: 0.2
+--- !u!114 &2108869807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108869802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53163b03c9f19224596d64c3f65af785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2110114110
 GameObject:
   m_ObjectHideFlags: 0

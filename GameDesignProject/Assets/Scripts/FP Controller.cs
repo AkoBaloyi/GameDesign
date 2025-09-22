@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 
 public class FPController : MonoBehaviour
 {
+    [Header("Tutorial References")]
+    public TutorialManager tutorialManager;
     [Header("Movement Settings")]
     public float moveSpeed = 8f;
     public float gravity = -9.81f;
@@ -120,31 +122,56 @@ public class FPController : MonoBehaviour
         lookInput = context.ReadValue<Vector2>();
     }
 
-    public void OnJump(InputAction.CallbackContext context)
+public void OnJump(InputAction.CallbackContext context)
+{
+    if (!inputEnabled || isPaused) return;
+    
+    Debug.Log($"Jump input detected - Context: {context.phase}"); // Debug line
+    
+    if (context.performed && controller.isGrounded)
     {
-        if (!inputEnabled || isPaused) return;
-        if (context.performed && controller.isGrounded)
+        velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        Debug.Log("Jump executed!"); // Debug line
+        
+        // Notify tutorial
+        if (tutorialManager != null)
         {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            tutorialManager.OnJump();
+            Debug.Log("Tutorial notified of jump!"); // Debug line
         }
     }
+    else if (context.performed && !controller.isGrounded)
+    {
+        Debug.Log("Jump attempted but not grounded!"); // Debug line
+        
+        // Still notify tutorial even if not grounded (player tried to jump)
+        if (tutorialManager != null)
+        {
+            tutorialManager.OnJump();
+        }
+    }
+}
 
     public void OnSprint(InputAction.CallbackContext context)
+{
+    if (!inputEnabled || isPaused) return;
+    
+    // Sprint while button is held down
+    if (context.performed)
     {
-        if (!inputEnabled || isPaused) return;
-
-        if (context.performed)
+        isSprinting = true;
+        
+        // Notify tutorial when sprint starts
+        if (tutorialManager != null)
         {
-            if (!isCrouching && moveInput.magnitude > 0.1f)
-            {
-                isSprinting = true;
-            }
-        }
-        else if (context.canceled)
-        {
-            isSprinting = false;
+            tutorialManager.OnSprint();
         }
     }
+    else if (context.canceled)
+    {
+        isSprinting = false;
+    }
+}
 
     public void onShoot(InputAction.CallbackContext context)
     {
@@ -185,63 +212,91 @@ public class FPController : MonoBehaviour
         }
     }
 
-    public void OnPickUp(InputAction.CallbackContext context)
+   public void OnPickUp(InputAction.CallbackContext context)
+{
+    if (!inputEnabled || isPaused) return;
+    if (!context.performed) return;
+
+    Debug.Log("Pickup input detected!");
+
+    if (heldObject == null)
     {
-        if (!inputEnabled || isPaused) return;
-        if (!context.performed) return;
+        // Try to pick up an object
+        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
 
-        Debug.Log("Pickup input detected!");
-
-        if (heldObject == null)
+        if (Physics.Raycast(ray, out RaycastHit hit, pickupRange))
         {
+            Debug.Log($"Raycast hit: {hit.collider.name}");
 
-            Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
+            PickUpObject pickUp = hit.collider.GetComponent<PickUpObject>();
 
-            Debug.DrawRay(cameraTransform.position, cameraTransform.forward * pickupRange, Color.red, 1f);
-
-            if (Physics.Raycast(ray, out RaycastHit hit, pickupRange))
+            if (pickUp != null)
             {
-                Debug.Log($"Raycast hit: {hit.collider.name}");
-
-                PickUpObject pickUp = hit.collider.GetComponent<PickUpObject>();
-
-                if (pickUp != null)
+                Debug.Log($"Picking up: {hit.collider.name}");
+                pickUp.PickUp(holdPoint);
+                heldObject = pickUp;
+                
+                // Notify tutorial - check if it's the orange cube
+                if (tutorialManager != null)
                 {
-                    Debug.Log($"Picking up: {hit.collider.name}");
-                    pickUp.PickUp(holdPoint);
-                    heldObject = pickUp;
-                }
-                else
-                {
-                    Debug.Log($"Object {hit.collider.name} doesn't have PickUpObject component");
+                    if (hit.collider.name.ToLower().Contains("orange") || 
+                        hit.collider.name.ToLower().Contains("cube"))
+                    {
+                        tutorialManager.OnObjectPickedUp();
+                    }
+                    else
+                    {
+                        // For other objects like tools
+                        tutorialManager.OnObjectPickedUp(); 
+                    }
                 }
             }
             else
             {
-                Debug.Log("Raycast didn't hit anything within pickup range");
+                Debug.Log($"Object {hit.collider.name} doesn't have PickUpObject component");
             }
         }
         else
         {
-            Debug.Log($"Dropping: {heldObject.name}");
-            heldObject.Drop();
-            heldObject = null;
+            Debug.Log("Raycast didn't hit anything within pickup range");
         }
     }
+    else
+    {
+        // Drop the current object
+        Debug.Log($"Dropping: {heldObject.name}");
+        heldObject.Drop();
+        heldObject = null;
+        
+        // Notify tutorial
+        if (tutorialManager != null)
+        {
+            tutorialManager.OnObjectDroppedOrThrown();
+        }
+    }
+}
+
+
 
 
     public void OnThrow(InputAction.CallbackContext context)
+{
+    if (!inputEnabled || isPaused) return;
+    if (!context.performed) return;
+    if (heldObject == null) return;
+
+    Vector3 dir = cameraTransform.forward;
+    Vector3 impulse = dir * throwForce + Vector3.up * throwUpwardBoost;
+
+    heldObject.Throw(impulse);
+    heldObject = null;
+    
+    // Notify tutorial
+    if (tutorialManager != null)
     {
-        if (!inputEnabled || isPaused) return;
-        if (!context.performed) return;
-        if (heldObject == null) return;
-
-        Vector3 dir = cameraTransform.forward;
-        Vector3 impulse = dir * throwForce + Vector3.up * throwUpwardBoost;
-
-        heldObject.Throw(impulse);
-        heldObject = null;
+        tutorialManager.OnObjectDroppedOrThrown();
     }
+}
 
     private void UpdatePauseInput()
     {
@@ -289,37 +344,38 @@ public class FPController : MonoBehaviour
         isPaused = false;
     }
 
-    public void HandleMovement()
+  public void HandleMovement()
+{
+    if (!inputEnabled) return;
+
+    // Stop sprinting if not moving or crouching
+    if (moveInput.magnitude < 0.1f || isCrouching)
     {
-        if (!inputEnabled) return;
-
-        float targetSpeed = GetTargetSpeed();
-        currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, GetSpeedTransitionRate() * Time.deltaTime);
-
-        if (moveInput.magnitude < 0.1f)
-        {
-            isSprinting = false;
-        }
-
-        Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
-        controller.Move(move * currentSpeed * Time.deltaTime);
-
-        if (controller.isGrounded && velocity.y < 0)
-            velocity.y = -2f;
-
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        isSprinting = false;
     }
 
-    private float GetTargetSpeed()
-    {
-        if (isCrouching)
-            return crouchSpeed;
-        else if (isSprinting && moveInput.magnitude > 0.1f)
-            return sprintSpeed;
-        else
-            return originalMoveSpeed;
-    }
+    float targetSpeed = GetTargetSpeed();
+    currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, GetSpeedTransitionRate() * Time.deltaTime);
+
+    Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
+    controller.Move(move * currentSpeed * Time.deltaTime);
+
+    if (controller.isGrounded && velocity.y < 0)
+        velocity.y = -2f;
+
+    velocity.y += gravity * Time.deltaTime;
+    controller.Move(velocity * Time.deltaTime);
+}
+
+   private float GetTargetSpeed()
+{
+    if (isCrouching)
+        return crouchSpeed;
+    else if (isSprinting && moveInput.magnitude > 0.1f && !isCrouching)
+        return sprintSpeed;
+    else
+        return originalMoveSpeed;
+}
 
     private float GetSpeedTransitionRate()
     {
