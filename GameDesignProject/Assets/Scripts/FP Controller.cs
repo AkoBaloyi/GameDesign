@@ -61,6 +61,7 @@ public class FPController : MonoBehaviour
 
 
     private bool inputEnabled = true;
+    private float pickupBlockUntil = 0f;
 
     private void Awake()
     {
@@ -212,69 +213,74 @@ public void OnJump(InputAction.CallbackContext context)
         }
     }
 
-   public void OnPickUp(InputAction.CallbackContext context)
-{
-    if (!inputEnabled || isPaused) return;
-    if (!context.performed) return;
-
-    Debug.Log("Pickup input detected!");
-
-    if (heldObject == null)
+    public void OnPickUp(InputAction.CallbackContext context)
     {
-        // Try to pick up an object
-        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
+        if (!inputEnabled || isPaused) return;
+        if (Time.time < pickupBlockUntil) return; // prevent E from double-acting after other interactions
+        if (!context.performed) return;
 
-        if (Physics.Raycast(ray, out RaycastHit hit, pickupRange))
+        Debug.Log("Pickup input detected!");
+
+        if (heldObject == null)
         {
-            Debug.Log($"Raycast hit: {hit.collider.name}");
+            // Try to pick up an object
+            Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
 
-            PickUpObject pickUp = hit.collider.GetComponent<PickUpObject>();
-
-            if (pickUp != null)
+            if (Physics.Raycast(ray, out RaycastHit hit, pickupRange))
             {
-                Debug.Log($"Picking up: {hit.collider.name}");
-                pickUp.PickUp(holdPoint);
-                heldObject = pickUp;
-                
-                // Notify tutorial - check if it's the orange cube
-                if (tutorialManager != null)
+                Debug.Log($"Raycast hit: {hit.collider.name}");
+
+                PickUpObject pickUp = hit.collider.GetComponent<PickUpObject>();
+
+                if (pickUp != null)
                 {
-                    if (hit.collider.name.ToLower().Contains("orange") || 
-                        hit.collider.name.ToLower().Contains("cube"))
+                    Debug.Log($"Picking up: {hit.collider.name}");
+                    pickUp.PickUp(holdPoint);
+                    heldObject = pickUp;
+                    
+                    // Notify tutorial - check if it's the orange cube
+                    if (tutorialManager != null)
                     {
-                        tutorialManager.OnObjectPickedUp();
+                        if (hit.collider.name.ToLower().Contains("orange") || 
+                            hit.collider.name.ToLower().Contains("cube"))
+                        {
+                            tutorialManager.OnObjectPickedUp();
+                        }
+                        else
+                        {
+                            tutorialManager.OnObjectPickedUp(); 
+                        }
                     }
-                    else
-                    {
-                        // For other objects like tools
-                        tutorialManager.OnObjectPickedUp(); 
-                    }
+                }
+                else
+                {
+                    Debug.Log($"Object {hit.collider.name} doesn't have PickUpObject component");
                 }
             }
             else
             {
-                Debug.Log($"Object {hit.collider.name} doesn't have PickUpObject component");
+                Debug.Log("Raycast didn't hit anything within pickup range");
             }
         }
         else
         {
-            Debug.Log("Raycast didn't hit anything within pickup range");
+            // Drop the current object
+            Debug.Log($"Dropping: {heldObject.name}");
+            heldObject.Drop();
+            heldObject = null;
+            
+            // Notify tutorial
+            if (tutorialManager != null)
+            {
+                tutorialManager.OnObjectDroppedOrThrown();
+            }
         }
     }
-    else
+
+    public void BlockPickupFor(float seconds)
     {
-        // Drop the current object
-        Debug.Log($"Dropping: {heldObject.name}");
-        heldObject.Drop();
-        heldObject = null;
-        
-        // Notify tutorial
-        if (tutorialManager != null)
-        {
-            tutorialManager.OnObjectDroppedOrThrown();
-        }
+        pickupBlockUntil = Mathf.Max(pickupBlockUntil, Time.time + Mathf.Max(0f, seconds));
     }
-}
 
 
 
