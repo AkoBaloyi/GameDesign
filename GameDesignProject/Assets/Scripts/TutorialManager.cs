@@ -618,6 +618,13 @@ public class TutorialManager : MonoBehaviour
         
         Debug.Log("Tutorial Complete! You're ready for the factory.");
         PlayerPrefs.SetInt("TutorialCompleted", 1);
+
+        // Notify ObjectiveManager to start core objectives
+        ObjectiveManager objectiveManager = FindObjectOfType<ObjectiveManager>();
+        if (objectiveManager != null)
+        {
+            objectiveManager.OnTutorialCompleted();
+        }
     }
     
     void UpdateTutorialText(string main, string input)
