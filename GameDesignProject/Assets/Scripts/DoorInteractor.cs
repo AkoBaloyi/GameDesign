@@ -95,15 +95,25 @@ public class DoorInteractor : MonoBehaviour
 
 		// Display prompt while in range
 		SetPromptVisible(true);
+	}
 
-		// Input (Unity Input System)
-		if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+	// New Input System callback - wire this to your "Interact" or "PickUp" action in Input Actions
+	public void OnDoorInteract(InputAction.CallbackContext context)
+	{
+		if (!context.performed) return;
+		if (!playerInRange || isOpen) return;
+
+		// Optional LoS check
+		if (requireLineOfSight && rayOrigin != null)
 		{
-			OpenDoor();
-			if (playerController != null)
-			{
-				playerController.BlockPickupFor(pickupBlockSeconds);
-			}
+			if (!HasLineOfSight()) return;
+		}
+
+		Debug.Log("Door interaction triggered!");
+		OpenDoor();
+		if (playerController != null)
+		{
+			playerController.BlockPickupFor(pickupBlockSeconds);
 		}
 	}
 
