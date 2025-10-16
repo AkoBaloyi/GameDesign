@@ -50,6 +50,16 @@ public class DoorInteractor : MonoBehaviour
 
 	private void Start()
 	{
+		// If animator is not assigned, try to find it in children
+		if (doorAnimator == null)
+		{
+			doorAnimator = GetComponentInChildren<Animator>();
+			if (doorAnimator != null)
+			{
+				Debug.Log($"[DoorInteractor] Found Animator in child: {doorAnimator.gameObject.name}");
+			}
+		}
+
 		// Safety: ensure door starts closed and param is reset
 		if (doorAnimator != null && resetAnimatorOnStart)
 		{
@@ -101,17 +111,37 @@ public class DoorInteractor : MonoBehaviour
 	// New Input System callback - wire this to the "Interact" action (F key)
 	public void OnInteract(InputAction.CallbackContext context)
 	{
-		if (!context.performed) return;
-		if (!playerInRange || isOpen) return;
+		Debug.Log($"[DoorInteractor] OnInteract called on {gameObject.name}");
+		Debug.Log($"  - Context performed: {context.performed}");
+		Debug.Log($"  - Player in range: {playerInRange}");
+		Debug.Log($"  - Door is open: {isOpen}");
+
+		// Allow interaction even if context.performed is false (for manual calls)
+		if (isOpen)
+		{
+			Debug.Log("  - Door already open, ignoring");
+			return;
+		}
+
+		if (!playerInRange)
+		{
+			Debug.Log("  - Player not in range, ignoring");
+			return;
+		}
 
 		// Optional LoS check
 		if (requireLineOfSight && rayOrigin != null)
 		{
-			if (!HasLineOfSight()) return;
+			if (!HasLineOfSight())
+			{
+				Debug.Log("  - No line of sight, ignoring");
+				return;
+			}
 		}
 
-		Debug.Log("Door interaction triggered with F key!");
+		Debug.Log("  - All checks passed, opening door!");
 		OpenDoor();
+		
 		if (playerController != null)
 		{
 			playerController.BlockPickupFor(pickupBlockSeconds);
@@ -120,26 +150,60 @@ public class DoorInteractor : MonoBehaviour
 
 	private void OpenDoor()
 	{
+		Debug.Log($"[DoorInteractor] OpenDoor() called");
+		Debug.Log($"  - doorAnimator: {(doorAnimator != null ? doorAnimator.gameObject.name : "NULL")}");
+		Debug.Log($"  - useBoolToOpen: {useBoolToOpen}");
+		Debug.Log($"  - animatorOpenTrigger: {animatorOpenTrigger}");
+
 		if (doorAnimator != null)
 		{
-			if (useBoolToOpen)
+			// Try to play the animation directly by state name
+			try
 			{
-				doorAnimator.SetBool(animatorOpenTrigger, true);
+				if (useBoolToOpen)
+				{
+					Debug.Log($"  - Setting Bool '{animatorOpenTrigger}' to TRUE");
+					doorAnimator.SetBool(animatorOpenTrigger, true);
+				}
+				else
+				{
+					Debug.Log($"  - Setting Trigger '{animatorOpenTrigger}'");
+					doorAnimator.SetTrigger(animatorOpenTrigger);
+				}
 			}
-			else
+			catch (System.Exception e)
 			{
-				doorAnimator.SetTrigger(animatorOpenTrigger);
+				Debug.LogWarning($"  - Parameter '{animatorOpenTrigger}' not found, trying to play animation directly");
+				Debug.LogWarning($"  - Error: {e.Message}");
+				
+				// Fallback: Try to play the animation clip directly
+				try
+				{
+					doorAnimator.Play("Door", 0, 0f);
+					Debug.Log("  - Playing 'Door' animation directly");
+				}
+				catch
+				{
+					Debug.LogError("  - Could not play animation!");
+				}
 			}
 		}
 		else if (doorPivot != null)
 		{
+			Debug.Log("  - Using pivot rotation (no animator)");
 			// Rotate door open over time
 			startRot = doorPivot.localRotation;
 			targetRot = Quaternion.Euler(openLocalEuler);
 			StartCoroutine(OpenLerp());
 		}
+		else
+		{
+			Debug.LogError("  - NO ANIMATOR OR PIVOT FOUND!");
+		}
+
 		isOpen = true;
 		SetPromptVisible(false);
+		Debug.Log("  - Door marked as open");
 	}
 
 	private System.Collections.IEnumerator OpenLerp()
