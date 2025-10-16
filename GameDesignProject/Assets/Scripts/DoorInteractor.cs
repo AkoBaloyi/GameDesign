@@ -19,7 +19,7 @@ public class DoorInteractor : MonoBehaviour
 	[Header("Prompt UI")]
 	public GameObject promptRoot;                 // World-space or screen-space UI container (shown/hidden)
 	public TextMeshProUGUI promptText;            // Optional text component for the prompt
-	public string promptMessage = "Press E to open";
+	public string promptMessage = "Press F to open";
 
 	[Header("Player Detection")]
 	public string playerTag = "Player";          // Player must carry this tag
@@ -69,6 +69,7 @@ public class DoorInteractor : MonoBehaviour
 	{
 		if (!other.CompareTag(playerTag)) return;
 		playerInRange = true;
+		Debug.Log($"[DoorInteractor] Player entered trigger zone for door: {gameObject.name}");
 		TryShowPrompt(other.transform);
 	}
 
@@ -97,8 +98,8 @@ public class DoorInteractor : MonoBehaviour
 		SetPromptVisible(true);
 	}
 
-	// New Input System callback - wire this to your "Interact" or "PickUp" action in Input Actions
-	public void OnDoorInteract(InputAction.CallbackContext context)
+	// New Input System callback - wire this to the "Interact" action (F key)
+	public void OnInteract(InputAction.CallbackContext context)
 	{
 		if (!context.performed) return;
 		if (!playerInRange || isOpen) return;
@@ -109,7 +110,7 @@ public class DoorInteractor : MonoBehaviour
 			if (!HasLineOfSight()) return;
 		}
 
-		Debug.Log("Door interaction triggered!");
+		Debug.Log("Door interaction triggered with F key!");
 		OpenDoor();
 		if (playerController != null)
 		{

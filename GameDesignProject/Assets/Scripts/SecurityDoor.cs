@@ -14,7 +14,7 @@ public class SecurityDoor : MonoBehaviour
     public float uiHeightOffset = 2f;
     public float fadeDuration = 0.3f;
     public string lockedMessage = "KEYCARD REQUIRED";
-    public string openMessage = "PRESS [E] TO OPEN";
+    public string openMessage = "PRESS [F] TO OPEN";
 
     private GameObject promptInstance;
     private TextMeshProUGUI interactionText;
