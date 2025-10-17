@@ -1,11 +1,19 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
+using System.Collections;
 
 public class ObjectiveManager : MonoBehaviour
 {
-	[Header("UI")]
+	[Header("UI - Objective Display")]
 	public TextMeshProUGUI objectiveText;
+	public GameObject objectiveBanner;
+	public CanvasGroup bannerCanvasGroup;
+	public float bannerDisplayDuration = 3f;
+	
+	[Header("UI - Tracker")]
+	public TextMeshProUGUI trackerText;
+	public GameObject trackerPanel;
 
 	[Header("Audio")]
 	public AudioSource audioSource;
@@ -33,14 +41,32 @@ public class ObjectiveManager : MonoBehaviour
 	[Header("Debug")]
 	public Step currentStep = Step.LearnControls;
 
+	private void Start()
+	{
+		// Hide banner initially
+		if (objectiveBanner != null)
+		{
+			objectiveBanner.SetActive(false);
+		}
+		
+		// Show tracker panel
+		if (trackerPanel != null)
+		{
+			trackerPanel.SetActive(true);
+		}
+	}
+
 	public void StartObjectives()
 	{
 		SetStep(Step.LearnControls, "Learn the basic controls");
+		UpdateTracker("Tutorial in progress...");
 	}
 
 	public void OnTutorialCompleted()
 	{
-		SetStep(Step.RestorePowerObjective, "Objective: Restore Power");
+		SetStep(Step.RestorePowerObjective, "OBJECTIVE: Restore Power to the Factory");
+		UpdateTracker("Power Cells: 0/1");
+		ShowBanner("OBJECTIVE: Restore Power to the Factory");
 		onObjectiveStartRestorePower?.Invoke();
 	}
 
@@ -48,17 +74,21 @@ public class ObjectiveManager : MonoBehaviour
 	{
 		// From core loop: pick up power cell → insert in Power Bay
 		SetStep(Step.InsertPowerCell, "Insert the Power Cell into the Power Bay");
+		UpdateTracker("Power Cells: 1/1 - Find Power Bay");
 	}
 
 	public void OnPowerCellInserted()
 	{
 		SetStep(Step.LightsActivate, "Activating lights...");
+		UpdateTracker("Power Cell Inserted ✓");
+		ShowBanner("Power Cell Inserted!");
 		onPowerCellInserted?.Invoke();
 	}
 
 	public void OnLightsActivated()
 	{
 		SetStep(Step.FollowPathToConsole, "Follow the glowing path to the console");
+		UpdateTracker("Follow the path");
 		onStartGlowingPath?.Invoke();
 	}
 
@@ -71,6 +101,8 @@ public class ObjectiveManager : MonoBehaviour
 	public void OnConsoleActivatedComplete()
 	{
 		SetStep(Step.Win, "Factory Power Restored!");
+		UpdateTracker("Mission Complete!");
+		ShowBanner("FACTORY POWER RESTORED!");
 		onWin?.Invoke();
 	}
 
@@ -90,6 +122,69 @@ public class ObjectiveManager : MonoBehaviour
 		{
 			audioSource.PlayOneShot(advanceObjectiveSfx);
 		}
+	}
+
+	private void UpdateTracker(string text)
+	{
+		if (trackerText != null)
+		{
+			trackerText.text = text;
+		}
+	}
+
+	public void ShowBanner(string message)
+	{
+		if (objectiveBanner != null)
+		{
+			StopAllCoroutines();
+			StartCoroutine(ShowBannerCoroutine(message));
+		}
+	}
+
+	private IEnumerator ShowBannerCoroutine(string message)
+	{
+		// Set text
+		if (objectiveText != null)
+		{
+			objectiveText.text = message;
+		}
+
+		// Show banner
+		objectiveBanner.SetActive(true);
+
+		// Fade in
+		if (bannerCanvasGroup != null)
+		{
+			float elapsed = 0f;
+			float fadeDuration = 0.5f;
+			while (elapsed < fadeDuration)
+			{
+				bannerCanvasGroup.alpha = Mathf.Lerp(0, 1, elapsed / fadeDuration);
+				elapsed += Time.deltaTime;
+				yield return null;
+			}
+			bannerCanvasGroup.alpha = 1;
+		}
+
+		// Wait
+		yield return new WaitForSeconds(bannerDisplayDuration);
+
+		// Fade out
+		if (bannerCanvasGroup != null)
+		{
+			float elapsed = 0f;
+			float fadeDuration = 0.5f;
+			while (elapsed < fadeDuration)
+			{
+				bannerCanvasGroup.alpha = Mathf.Lerp(1, 0, elapsed / fadeDuration);
+				elapsed += Time.deltaTime;
+				yield return null;
+			}
+			bannerCanvasGroup.alpha = 0;
+		}
+
+		// Hide banner
+		objectiveBanner.SetActive(false);
 	}
 }
 

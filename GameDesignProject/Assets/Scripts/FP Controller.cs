@@ -476,4 +476,19 @@ private void HandlePickupHighlighting()
         }
     }
 }
+
+    // Helper methods for Power Bay interaction
+    public GameObject GetHeldObject()
+    {
+        return heldObject != null ? heldObject.gameObject : null;
+    }
+
+    public void DropHeldObject()
+    {
+        if (heldObject != null)
+        {
+            heldObject.Drop();
+            heldObject = null;
+        }
+    }
 }
