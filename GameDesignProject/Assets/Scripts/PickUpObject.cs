@@ -17,6 +17,13 @@ public class PickUpObject : MonoBehaviour
 
         transform.SetParent(holdPoint);
         transform.localPosition = Vector3.zero;
+        
+        // Notify PowerCell if this is a power cell
+        PowerCell powerCell = GetComponent<PowerCell>();
+        if (powerCell != null)
+        {
+            powerCell.OnPickedUp();
+        }
     }
 
     public void Drop()

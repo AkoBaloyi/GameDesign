@@ -4,7 +4,6 @@ using UnityEngine;
 /// Power Cell that player picks up and inserts into Power Bay
 /// Works with E key pickup system
 /// </summary>
-[RequireComponent(typeof(HighlightableObject))]
 public class PowerCell : MonoBehaviour
 {
 	[Header("References")]
@@ -34,7 +33,6 @@ public class PowerCell : MonoBehaviour
 			
 		highlightable = GetComponent<HighlightableObject>();
 		cellRenderer = GetComponentInChildren<Renderer>();
-		startPosition = transform.position;
 		
 		// Set orange color
 		if (cellRenderer != null)
@@ -43,6 +41,12 @@ public class PowerCell : MonoBehaviour
 			cellRenderer.material.EnableKeyword("_EMISSION");
 			cellRenderer.material.SetColor("_EmissionColor", cellColor * 0.5f);
 		}
+	}
+	
+	private void Start()
+	{
+		// Store initial position for bobbing
+		startPosition = transform.position;
 	}
 
 	private void Update()
