@@ -113,7 +113,7 @@ public class PauseMenuManager : MonoBehaviour
         // Disable player input
         if (playerController != null)
         {
-            playerController.inputEnabled = false;
+            playerController.SetInputEnabled(false);
         }
         
         Debug.Log("[PauseMenu] Game paused");
@@ -134,7 +134,7 @@ public class PauseMenuManager : MonoBehaviour
         // Enable player input
         if (playerController != null)
         {
-            playerController.inputEnabled = true;
+            playerController.SetInputEnabled(true);
         }
         
         Debug.Log("[PauseMenu] Game resumed");
