@@ -43,6 +43,24 @@ public class PlayerInteractionHandler : MonoBehaviour
             // The door's own playerInRange check will handle this
             door.OnInteract(context);
         }
+
+        // Also broadcast to PowerBay components
+        PowerBay[] powerBays = FindObjectsOfType<PowerBay>();
+        Debug.Log($"[PlayerInteractionHandler] Found {powerBays.Length} power bays in scene");
+        
+        foreach (PowerBay bay in powerBays)
+        {
+            bay.OnInteract(context);
+        }
+
+        // Broadcast to FactoryConsole components
+        FactoryConsole[] consoles = FindObjectsOfType<FactoryConsole>();
+        Debug.Log($"[PlayerInteractionHandler] Found {consoles.Length} consoles in scene");
+        
+        foreach (FactoryConsole console in consoles)
+        {
+            console.OnInteract(context);
+        }
     }
 
     // Fallback: Also check for manual F key press in case Input System isn't wired up

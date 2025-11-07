@@ -71,6 +71,19 @@ public class FactoryConsole : MonoBehaviour
 		UpdatePrompt();
 	}
 
+	private void Update()
+	{
+		// Direct F-key detection as fallback (in case Input System isn't wired up)
+		if (playerInRange && !isActivated && canActivate)
+		{
+			if (Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame)
+			{
+				Debug.Log("[FactoryConsole] F key pressed! Activating console...");
+				ActivateConsole();
+			}
+		}
+	}
+
 	private void UpdatePrompt()
 	{
 		if (isActivated)

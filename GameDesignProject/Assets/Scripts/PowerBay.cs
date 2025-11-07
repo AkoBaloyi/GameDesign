@@ -71,6 +71,23 @@ public class PowerBay : MonoBehaviour
 		UpdatePrompt();
 	}
 
+	private void Update()
+	{
+		// Direct F-key detection as fallback (in case Input System isn't wired up)
+		if (playerInRange && !isActivated && PlayerHasPowerCell())
+		{
+			if (Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame)
+			{
+				Debug.Log("[PowerBay] F key pressed! Attempting to insert power cell...");
+				GameObject heldObject = playerController.GetHeldObject();
+				if (heldObject != null)
+				{
+					InsertPowerCell(heldObject);
+				}
+			}
+		}
+	}
+
 	private void UpdatePrompt()
 	{
 		if (isActivated)
