@@ -13392,6 +13392,52 @@ MonoBehaviour:
   woodMaterial: {fileID: 0}
   metalMaterial: {fileID: 0}
   concreteMaterial: {fileID: 0}
+--- !u!1 &257668594
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 257668596}
+  - component: {fileID: 257668595}
+  m_Layer: 0
+  m_Name: Diagnostic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &257668595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 257668594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0780ca036bce2084e83f12ca3e2d13ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showDiagnosticUI: 1
+  toggleKey: 293
+--- !u!4 &257668596
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 257668594}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -135.22243, y: 323.02042, z: -243.80304}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &259041875
 GameObject:
   m_ObjectHideFlags: 0
@@ -22430,7 +22476,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 442692715}
-  - component: {fileID: 442692714}
   m_Layer: 0
   m_Name: PowerBay
   m_TagString: Untagged
@@ -22438,35 +22483,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &442692714
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 442692713}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b5f5cfa14fda8c4aa25d5059bb531f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectiveManager: {fileID: 1725065131}
-  socketPoint: {fileID: 1479519608}
-  promptUI: {fileID: 606272635}
-  promptText: {fileID: 1386421173}
-  promptMessage: Press F to Insert Power Cell
-  slotIndicator: {fileID: 0}
-  inactiveMaterial: {fileID: 0}
-  activeMaterial: {fileID: 0}
-  bayRenderer: {fileID: 0}
-  insertEffect: {fileID: 0}
-  audioSource: {fileID: 0}
-  insertSound: {fileID: 0}
-  activationSound: {fileID: 0}
-  detectionRange: 6.53
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!4 &442692715
 Transform:
   m_ObjectHideFlags: 0
@@ -22481,7 +22497,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 785593620}
-  - {fileID: 1479519608}
   - {fileID: 606272636}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -41017,6 +41032,35 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.058838416, y: 0.09382023, z: 0.04833705}
   m_Center: {x: 0.000171071, y: 0.00010420011, z: 0.00026140182}
+--- !u!114 &785593625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 554301027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b5f5cfa14fda8c4aa25d5059bb531f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectiveManager: {fileID: 1725065131}
+  socketPoint: {fileID: 1479519608}
+  promptUI: {fileID: 606272635}
+  promptText: {fileID: 1386421173}
+  promptMessage: Press F to Insert Power Cell
+  slotIndicator: {fileID: 0}
+  inactiveMaterial: {fileID: 0}
+  activeMaterial: {fileID: 0}
+  bayRenderer: {fileID: 0}
+  insertEffect: {fileID: 0}
+  audioSource: {fileID: 0}
+  insertSound: {fileID: 0}
+  activationSound: {fileID: 0}
+  detectionRange: 23.6
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &787220413 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f78c95740e052414b838f04f6280a42e, type: 3}
@@ -66079,7 +66123,7 @@ MonoBehaviour:
     m_ActionName: 'Player/Sprint[/Keyboard/leftShift]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 442692714}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PowerBay, Assembly-CSharp
         m_MethodName: OnInteract
         m_Mode: 0
@@ -66091,7 +66135,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1859351293}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: FactoryConsole, Assembly-CSharp
         m_MethodName: OnInteract
         m_Mode: 0
@@ -72103,12 +72147,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1479519607}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 34.8, y: -89.6, z: 49.9}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.4985969, y: -0.5013992, z: -0.5013992, w: 0.4985969}
+  m_LocalPosition: {x: 0.013508623, y: -0.004069852, z: -0.012333573}
+  m_LocalScale: {x: 0.0019999999, y: 0.0019999996, z: 0.0019999999}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 442692715}
+  m_Father: {fileID: 785593620}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1480130237
 GameObject:
@@ -73906,7 +73950,7 @@ MonoBehaviour:
   powerOnSfx: {fileID: 0}
   pathActivationSfx: {fileID: 0}
   objectiveManager: {fileID: 1725065131}
-  factoryConsole: {fileID: 1859351293}
+  factoryConsole: {fileID: 1706487018}
 --- !u!4 &1523897534
 Transform:
   m_ObjectHideFlags: 0
@@ -79381,7 +79425,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: fcf9cebc34f8db44185a86110cc728c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1479519608}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: fcf9cebc34f8db44185a86110cc728c0, type: 3}
       insertIndex: -1
@@ -79389,6 +79436,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: fcf9cebc34f8db44185a86110cc728c0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 785593623}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: fcf9cebc34f8db44185a86110cc728c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 785593625}
   m_SourcePrefab: {fileID: 100100000, guid: fcf9cebc34f8db44185a86110cc728c0, type: 3}
 --- !u!1 &1666005453
 GameObject:
@@ -81402,6 +81452,7 @@ GameObject:
   - component: {fileID: 1706487017}
   - component: {fileID: 1706487016}
   - component: {fileID: 1706487015}
+  - component: {fileID: 1706487018}
   m_Layer: 0
   m_Name: ConsoleBody
   m_TagString: Untagged
@@ -81418,7 +81469,7 @@ Transform:
   m_GameObject: {fileID: 1706487013}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -92.2, y: -98.79, z: -177.39}
+  m_LocalPosition: {x: -92.2, y: -105.7, z: -177.39}
   m_LocalScale: {x: 6.22, y: 9.33, z: 1.866}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -81500,6 +81551,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1706487013}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1706487018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1706487013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d687869a778b994190e5fa919d2b8b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectiveManager: {fileID: 1725065131}
+  promptUI: {fileID: 1432603559}
+  promptText: {fileID: 155493978}
+  promptMessage: Press F to Activate Console
+  screenDisplay: {fileID: 0}
+  inactiveMaterial: {fileID: 0}
+  activeMaterial: {fileID: 0}
+  consoleRenderer: {fileID: 0}
+  consoleLight: {fileID: 0}
+  activationEffect: {fileID: 0}
+  audioSource: {fileID: 0}
+  activationSound: {fileID: 0}
+  successSound: {fileID: 0}
+  detectionRange: 16.58
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  activationDuration: 3
+  requiresPowerCellFirst: 1
 --- !u!4 &1706834073 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3f851e40301038340b513ddd0830f460, type: 3}
@@ -88273,7 +88355,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1859351294}
-  - component: {fileID: 1859351293}
   m_Layer: 0
   m_Name: FactoryConsole
   m_TagString: Untagged
@@ -88281,37 +88362,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1859351293
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1859351292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d687869a778b994190e5fa919d2b8b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectiveManager: {fileID: 1725065131}
-  promptUI: {fileID: 1432603559}
-  promptText: {fileID: 155493978}
-  promptMessage: Press F to Activate Console
-  screenDisplay: {fileID: 0}
-  inactiveMaterial: {fileID: 0}
-  activeMaterial: {fileID: 0}
-  consoleRenderer: {fileID: 0}
-  consoleLight: {fileID: 0}
-  activationEffect: {fileID: 0}
-  audioSource: {fileID: 0}
-  activationSound: {fileID: 0}
-  successSound: {fileID: 0}
-  detectionRange: 3
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  activationDuration: 2
-  requiresPowerCellFirst: 1
 --- !u!4 &1859351294
 Transform:
   m_ObjectHideFlags: 0
@@ -99930,7 +99980,7 @@ MonoBehaviour:
   textFadeSpeed: 5
   stepDelay: 3
   textDisplayDuration: 3
-  skipTutorial: 0
+  skipTutorial: 1
   currentStep: 0
   detectedDevice: 0
 --- !u!4 &2108869804
@@ -101845,3 +101895,4 @@ SceneRoots:
   - {fileID: 1029769576}
   - {fileID: 1859351294}
   - {fileID: 2107869408}
+  - {fileID: 257668596}

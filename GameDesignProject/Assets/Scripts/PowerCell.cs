@@ -12,10 +12,13 @@ public class PowerCell : MonoBehaviour
 	
 	[Header("Visual Feedback")]
 	public GameObject glowEffect;
+	public Light pointLight; // Add this for glow
 	public Color cellColor = new Color(1f, 0.5f, 0f); // Orange
 	public float rotationSpeed = 30f;
 	public float bobSpeed = 1f;
 	public float bobHeight = 0.2f;
+	public float pulseSpeed = 2f;
+	public float pulseAmount = 0.3f;
 	
 	[Header("Audio")]
 	public AudioSource audioSource;
@@ -58,6 +61,20 @@ public class PowerCell : MonoBehaviour
 			
 			float newY = startPosition.y + Mathf.Sin(Time.time * bobSpeed) * bobHeight;
 			transform.position = new Vector3(startPosition.x, newY, startPosition.z);
+			
+			// Pulse the light intensity
+			if (pointLight != null)
+			{
+				float pulse = Mathf.Sin(Time.time * pulseSpeed) * pulseAmount;
+				pointLight.intensity = 2f + pulse;
+			}
+			
+			// Pulse the emission
+			if (cellRenderer != null && cellRenderer.material.HasProperty("_EmissionColor"))
+			{
+				float pulse = Mathf.Sin(Time.time * pulseSpeed) * pulseAmount;
+				cellRenderer.material.SetColor("_EmissionColor", cellColor * (1f + pulse));
+			}
 		}
 	}
 

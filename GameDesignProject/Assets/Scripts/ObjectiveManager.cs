@@ -14,6 +14,12 @@ public class ObjectiveManager : MonoBehaviour
 	[Header("UI - Tracker")]
 	public TextMeshProUGUI trackerText;
 	public GameObject trackerPanel;
+	
+	[Header("Directional Display")]
+	public DirectionalObjectiveDisplay directionalDisplay;
+	public Transform powerCellTransform;
+	public Transform powerBayTransform;
+	public Transform consoleTransform;
 
 	[Header("Audio")]
 	public AudioSource audioSource;
@@ -75,6 +81,12 @@ public class ObjectiveManager : MonoBehaviour
 		// From core loop: pick up power cell → insert in Power Bay
 		SetStep(Step.InsertPowerCell, "Insert the Power Cell into the Power Bay");
 		UpdateTracker("Power Cells: 1/1 - Find Power Bay");
+		
+		// Update directional display
+		if (directionalDisplay != null && powerBayTransform != null)
+		{
+			directionalDisplay.SetTarget(powerBayTransform);
+		}
 	}
 
 	public void OnPowerCellInserted()
@@ -87,9 +99,18 @@ public class ObjectiveManager : MonoBehaviour
 
 	public void OnLightsActivated()
 	{
+		Debug.Log("[ObjectiveManager] OnLightsActivated() called!");
 		SetStep(Step.FollowPathToConsole, "Follow the glowing path to the console");
 		UpdateTracker("Follow the path");
+		Debug.Log("[ObjectiveManager] Invoking onStartGlowingPath event...");
 		onStartGlowingPath?.Invoke();
+		Debug.Log("[ObjectiveManager] onStartGlowingPath event invoked!");
+		
+		// Update directional display
+		if (directionalDisplay != null && consoleTransform != null)
+		{
+			directionalDisplay.SetTarget(consoleTransform);
+		}
 	}
 
 	public void OnConsoleInteract()

@@ -57,6 +57,7 @@ public class LightsController : MonoBehaviour
 	private IEnumerator ActivateLightsSequence()
 	{
 		Debug.Log("[LightsController] Activating lights...");
+		Debug.Log($"[LightsController] Found {lights.Length} lights to activate");
 		
 		// Play power on sound
 		if (audioSource != null && powerOnSfx != null)
@@ -65,14 +66,19 @@ public class LightsController : MonoBehaviour
 		}
 		
 		// Turn on lights one by one
+		int activatedCount = 0;
 		foreach (var light in lights)
 		{
 			if (light != null)
 			{
 				light.enabled = true;
+				activatedCount++;
+				Debug.Log($"[LightsController] Activated light {activatedCount}/{lights.Length}");
 				yield return new WaitForSeconds(lightActivationDelay);
 			}
 		}
+		
+		Debug.Log($"[LightsController] All {activatedCount} lights activated!");
 		
 		// Play activation VFX
 		foreach (var vfx in activationVfx)
@@ -83,9 +89,15 @@ public class LightsController : MonoBehaviour
 		yield return new WaitForSeconds(1f);
 		
 		// Notify objective manager
+		Debug.Log("[LightsController] Notifying ObjectiveManager...");
 		if (objectiveManager != null)
 		{
 			objectiveManager.OnLightsActivated();
+			Debug.Log("[LightsController] ObjectiveManager.OnLightsActivated() called!");
+		}
+		else
+		{
+			Debug.LogError("[LightsController] objectiveManager is NULL! Cannot notify!");
 		}
 		
 		Debug.Log("[LightsController] Lights activated!");
@@ -133,7 +145,13 @@ public class LightsController : MonoBehaviour
 		// Enable the console for interaction
 		if (factoryConsole != null)
 		{
+			Debug.Log("[LightsController] Enabling factory console...");
 			factoryConsole.EnableConsole();
+		}
+		else
+		{
+			Debug.LogError("[LightsController] factoryConsole is NULL! Cannot enable console!");
+			Debug.LogError("[LightsController] Please assign FactoryConsole GameObject in LightsController Inspector!");
 		}
 		
 		Debug.Log("[LightsController] Glowing path activated!");

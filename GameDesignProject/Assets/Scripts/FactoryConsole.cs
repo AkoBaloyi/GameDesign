@@ -73,6 +73,13 @@ public class FactoryConsole : MonoBehaviour
 
 	private void Update()
 	{
+		// TEMPORARY DEBUG: Press C to force enable console
+		if (Keyboard.current != null && Keyboard.current.cKey.wasPressedThisFrame)
+		{
+			Debug.Log("[FactoryConsole] DEBUG: Force enabling console with C key");
+			EnableConsole();
+		}
+
 		// Direct F-key detection as fallback (in case Input System isn't wired up)
 		if (playerInRange && !isActivated && canActivate)
 		{
@@ -80,6 +87,15 @@ public class FactoryConsole : MonoBehaviour
 			{
 				Debug.Log("[FactoryConsole] F key pressed! Activating console...");
 				ActivateConsole();
+			}
+		}
+		else if (playerInRange && !canActivate)
+		{
+			// DEBUG: Show why F key isn't working
+			if (Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame)
+			{
+				Debug.LogWarning("[FactoryConsole] F key pressed but console is NOT enabled yet! canActivate = false");
+				Debug.LogWarning("[FactoryConsole] Console must be enabled by LightsController first!");
 			}
 		}
 	}
@@ -162,16 +178,38 @@ public class FactoryConsole : MonoBehaviour
 
 	private IEnumerator ActivationSequence()
 	{
+		Debug.Log("[FactoryConsole] Starting activation sequence...");
+		
 		// Play activation sound
 		if (audioSource != null && activationSound != null)
 		{
 			audioSource.PlayOneShot(activationSound);
 		}
 		
-		// Change light to green
+		// Dramatic light sequence
 		if (consoleLight != null)
 		{
+			// Flash yellow
+			consoleLight.color = Color.yellow;
+			consoleLight.intensity = 3f;
+			yield return new WaitForSeconds(0.2f);
+			
+			// Flash white
+			consoleLight.color = Color.white;
+			consoleLight.intensity = 5f;
+			yield return new WaitForSeconds(0.1f);
+			
+			// Settle to green
+			float elapsed = 0f;
+			while (elapsed < 1f)
+			{
+				consoleLight.color = Color.Lerp(Color.white, Color.green, elapsed);
+				consoleLight.intensity = Mathf.Lerp(5f, 2f, elapsed);
+				elapsed += Time.deltaTime;
+				yield return null;
+			}
 			consoleLight.color = Color.green;
+			consoleLight.intensity = 2f;
 		}
 		
 		// Wait for activation duration
@@ -183,10 +221,14 @@ public class FactoryConsole : MonoBehaviour
 			activationEffect.Play();
 		}
 		
-		// Change material to active
+		// Change material to active (make it glow!)
 		if (consoleRenderer != null && activeMaterial != null)
 		{
 			consoleRenderer.material = activeMaterial;
+			
+			// Enable emission
+			activeMaterial.EnableKeyword("_EMISSION");
+			activeMaterial.SetColor("_EmissionColor", Color.green * 2f);
 		}
 		
 		// Play success sound

@@ -24,6 +24,7 @@ public class PowerBay : MonoBehaviour
 	public Material activeMaterial;
 	public Renderer bayRenderer;
 	public ParticleSystem insertEffect;
+	public ParticleSystem sparksEffect; // Sparks that stop when power restored
 	
 	[Header("Audio")]
 	public AudioSource audioSource;
@@ -193,6 +194,21 @@ public class PowerBay : MonoBehaviour
 	{
 		yield return new WaitForSeconds(0.5f);
 		
+		// DRAMATIC SPARK SURGE before stopping
+		if (sparksEffect != null)
+		{
+			var emission = sparksEffect.emission;
+			var originalRate = emission.rateOverTime;
+			
+			// Surge!
+			emission.rateOverTime = 100f;
+			yield return new WaitForSeconds(0.3f);
+			
+			// Stop sparks
+			sparksEffect.Stop();
+			Debug.Log("[PowerBay] Sparks stopped!");
+		}
+		
 		// Play particle effect
 		if (insertEffect != null)
 		{
@@ -203,6 +219,10 @@ public class PowerBay : MonoBehaviour
 		if (bayRenderer != null && activeMaterial != null)
 		{
 			bayRenderer.material = activeMaterial;
+			
+			// Make it glow!
+			activeMaterial.EnableKeyword("_EMISSION");
+			activeMaterial.SetColor("_EmissionColor", Color.cyan * 2f);
 		}
 		
 		// Play activation sound

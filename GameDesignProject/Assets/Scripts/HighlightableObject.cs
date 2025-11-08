@@ -14,10 +14,18 @@ public class HighlightableObject : MonoBehaviour
 
     void Awake()
     {
+        // Try to get Renderer on this GameObject first
         objectRenderer = GetComponent<Renderer>();
+        
+        // If not found, try to get it from children
         if (objectRenderer == null)
         {
-            Debug.LogError($"HighlightableObject on {gameObject.name} needs a Renderer component!");
+            objectRenderer = GetComponentInChildren<Renderer>();
+        }
+        
+        if (objectRenderer == null)
+        {
+            Debug.LogWarning($"HighlightableObject on {gameObject.name} couldn't find a Renderer component. Highlighting disabled.");
             return;
         }
         

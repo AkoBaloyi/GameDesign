@@ -93,26 +93,34 @@ public class ObjectiveWaypoint : MonoBehaviour
         arrowInstance.transform.position = basePosition;
         arrowInstance.transform.SetParent(transform);
 
-        // Create cone pointing down
-        GameObject cone = GameObject.CreatePrimitive(PrimitiveType.Cone);
-        cone.transform.SetParent(arrowInstance.transform);
-        cone.transform.localPosition = Vector3.zero;
-        cone.transform.localRotation = Quaternion.Euler(180, 0, 0);
-        cone.transform.localScale = new Vector3(0.5f, 1f, 0.5f);
+        // Create arrow using cylinder and sphere (since Unity doesn't have Cone primitive)
+        // Arrow shaft
+        GameObject shaft = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+        shaft.transform.SetParent(arrowInstance.transform);
+        shaft.transform.localPosition = Vector3.zero;
+        shaft.transform.localScale = new Vector3(0.2f, 0.5f, 0.2f);
 
-        // Set color
-        Renderer renderer = cone.GetComponent<Renderer>();
-        if (renderer != null)
-        {
-            Material mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-            mat.color = waypointColor;
-            mat.EnableKeyword("_EMISSION");
-            mat.SetColor("_EmissionColor", waypointColor * 2f);
-            renderer.material = mat;
-        }
+        // Arrow head (sphere)
+        GameObject head = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        head.transform.SetParent(arrowInstance.transform);
+        head.transform.localPosition = new Vector3(0, -0.7f, 0);
+        head.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 
-        // Remove collider
-        Destroy(cone.GetComponent<Collider>());
+        // Set color for both parts
+        Renderer shaftRenderer = shaft.GetComponent<Renderer>();
+        Renderer headRenderer = head.GetComponent<Renderer>();
+        
+        Material mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+        mat.color = waypointColor;
+        mat.EnableKeyword("_EMISSION");
+        mat.SetColor("_EmissionColor", waypointColor * 2f);
+        
+        if (shaftRenderer != null) shaftRenderer.material = mat;
+        if (headRenderer != null) headRenderer.material = mat;
+
+        // Remove colliders
+        Destroy(shaft.GetComponent<Collider>());
+        Destroy(head.GetComponent<Collider>());
 
         // Add light
         Light light = arrowInstance.AddComponent<Light>();
