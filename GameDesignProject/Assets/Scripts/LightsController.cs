@@ -20,6 +20,7 @@ public class LightsController : MonoBehaviour
 	public AudioSource audioSource;
 	public AudioClip powerOnSfx;
 	public AudioClip pathActivationSfx;
+	public AudioSource factoryAmbientSource; // Factory ambient that starts when power restored
 	
 	[Header("References")]
 	public ObjectiveManager objectiveManager;
@@ -84,6 +85,13 @@ public class LightsController : MonoBehaviour
 		foreach (var vfx in activationVfx)
 		{
 			if (vfx != null) vfx.Play();
+		}
+		
+		// Start factory ambient sound (factory comes alive!)
+		if (factoryAmbientSource != null)
+		{
+			factoryAmbientSource.Play();
+			Debug.Log("[LightsController] Factory ambient sound started!");
 		}
 		
 		yield return new WaitForSeconds(1f);
