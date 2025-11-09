@@ -9,7 +9,10 @@
 3. **Add Light**:
    - Add Component → Light
    - Type: Point
-   - Color: Orange (255, 128, 0)
+   - Color: **Orange**
+     - RGB: (255, 128, 0)
+     - Hex: #FF8000
+     - Unity: R=1.0, G=0.5, B=0.0
    - Range: 15
    - Intensity: 2
 4. **Assign Light**:
@@ -17,9 +20,12 @@
    - Drag Light component to `pointLight` field
 5. **Material**:
    - Select power cell's material
-   - Enable Emission
-   - Set Emission Color to bright orange
-   - Intensity: 2
+   - Enable Emission (check the box)
+   - Set Emission Color: **Bright Orange**
+     - RGB: (255, 128, 0)
+     - Hex: #FF8000
+     - Unity: R=1.0, G=0.5, B=0.0
+   - Emission Intensity: 2 (HDR slider)
 
 **Result**: Power cell is now IMPOSSIBLE to miss!
 
@@ -35,7 +41,10 @@
    - Start Lifetime: 0.5
    - Start Speed: 5
    - Start Size: 0.1
-   - Start Color: Orange/Yellow
+   - Start Color: **Orange/Yellow**
+     - RGB: (255, 200, 0)
+     - Hex: #FFC800
+     - Unity: R=1.0, G=0.78, B=0.0
    - Emission Rate: 50
    - Shape: Cone, Angle 30
 4. **Assign to Script**:
@@ -53,10 +62,13 @@
 2. **Add Light**:
    - Add Component → Light
    - Type: Spot or Point
-   - Color: Red (starts off)
+   - Color: **Red** (starts off, will change to yellow/green)
+     - RGB: (255, 0, 0)
+     - Hex: #FF0000
+     - Unity: R=1.0, G=0.0, B=0.0
    - Range: 10
    - Intensity: 0 (starts off)
-   - Disable the light initially
+   - **Disable the light initially** (uncheck the component)
 3. **Assign to Script**:
    - In FactoryConsole script
    - Drag Light to `consoleLight` field
@@ -71,11 +83,17 @@
 2. **Create Emissive Material**:
    - Right-click in Project → Create → Material
    - Name: "ConsoleScreenActive"
-   - Shader: URP/Lit
-   - Base Color: Dark green
-   - Enable Emission
-   - Emission Color: Bright green
-   - Emission Intensity: 2
+   - Shader: Universal Render Pipeline/Lit
+   - Base Color: **Dark Green**
+     - RGB: (0, 100, 0)
+     - Hex: #006400
+     - Unity: R=0.0, G=0.39, B=0.0
+   - Enable Emission (check the box)
+   - Emission Color: **Bright Green**
+     - RGB: (0, 255, 0)
+     - Hex: #00FF00
+     - Unity: R=0.0, G=1.0, B=0.0
+   - Emission Intensity: 2 (HDR slider)
 3. **Assign to Console**:
    - Select FactoryConsole
    - In script, assign to `activeMaterial`
@@ -89,11 +107,14 @@
 1. **Select Power Cell**
 2. **Add ObjectiveWaypoint script**
 3. **Configure**:
-   - `waypointColor`: Orange
+   - `waypointColor`: **Orange**
+     - RGB: (255, 128, 0)
+     - Hex: #FF8000
+     - Unity: R=1.0, G=0.5, B=0.0
    - `floatHeight`: 3
    - `bobSpeed`: 1
    - `bobAmount`: 0.5
-   - `showOnStart`: True
+   - `showOnStart`: True (checked)
    - `minDistanceToShow`: 5
    - `maxDistanceToShow`: 50
 

@@ -72,9 +72,15 @@ Pick 3-5 of these:
 
 **Lighting** (30 min):
 - [ ] Add fog (Window → Rendering → Lighting)
-- [ ] Darken directional light to 0.3
-- [ ] Add colored lights (blue for power bay, green for console)
-- [ ] Add emergency lights (red, dim)
+  - Color: Dark blue-gray #1E2838 (R=0.12, G=0.16, B=0.22)
+  - Density: 0.01
+- [ ] Darken directional light to 0.3 intensity
+- [ ] Add colored lights:
+  - Power Bay: Cyan #00FFFF (R=0.0, G=1.0, B=1.0)
+  - Console: Green #00FF00 (R=0.0, G=1.0, B=0.0)
+- [ ] Add emergency lights:
+  - Color: Red #FF0000 (R=1.0, G=0.0, B=0.0)
+  - Intensity: 0.5 (dim)
 
 **Effects** (30 min):
 - [ ] Add dust particles (AtmosphericEffects script)
@@ -129,7 +135,11 @@ Pick 3-5 of these:
 
 2. **Style the UI**:
    - Dark background with transparency
+     - Color: #1E1E1E (R=0.12, G=0.12, B=0.12)
+     - Alpha: 0.8 (80% opaque)
    - Cyan/green text (industrial feel)
+     - Cyan: #00FFFF (R=0.0, G=1.0, B=1.0)
+     - Or Soft Cyan: #64C8FF (R=0.39, G=0.78, B=1.0)
    - Add corner decorations
 
 3. **Improve prompts**:

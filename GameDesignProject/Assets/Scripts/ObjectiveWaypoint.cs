@@ -93,18 +93,19 @@ public class ObjectiveWaypoint : MonoBehaviour
         arrowInstance.transform.position = basePosition;
         arrowInstance.transform.SetParent(transform);
 
-        // Create arrow using cylinder and sphere (since Unity doesn't have Cone primitive)
-        // Arrow shaft
+        // Create arrow pointing DOWN at the object
+        // Arrow shaft (vertical cylinder)
         GameObject shaft = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
         shaft.transform.SetParent(arrowInstance.transform);
-        shaft.transform.localPosition = Vector3.zero;
-        shaft.transform.localScale = new Vector3(0.2f, 0.5f, 0.2f);
+        shaft.transform.localPosition = new Vector3(0, -1f, 0); // Center of shaft below arrow base
+        shaft.transform.localScale = new Vector3(0.3f, 1f, 0.3f); // Taller shaft
 
-        // Arrow head (sphere)
-        GameObject head = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        // Arrow head (large cube at bottom, rotated to point down)
+        GameObject head = GameObject.CreatePrimitive(PrimitiveType.Cube);
         head.transform.SetParent(arrowInstance.transform);
-        head.transform.localPosition = new Vector3(0, -0.7f, 0);
-        head.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        head.transform.localPosition = new Vector3(0, -2.2f, 0); // Well below shaft
+        head.transform.localScale = new Vector3(0.8f, 0.4f, 0.8f); // Wider, flatter
+        head.transform.localRotation = Quaternion.Euler(45, 45, 0); // Diamond pointing down
 
         // Set color for both parts
         Renderer shaftRenderer = shaft.GetComponent<Renderer>();
