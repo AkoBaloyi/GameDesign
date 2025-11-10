@@ -48,8 +48,11 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    void Die()
+    // Public method so enemies can call it directly
+    public void Die()
     {
+        if (isDead) return; // Already dead
+        
         isDead = true;
         
         Debug.Log("[PlayerHealth] Player died! Restarting...");
