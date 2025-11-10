@@ -239,6 +239,14 @@ public class PowerBay : MonoBehaviour
 			objectiveManager.OnPowerCellInserted();
 		}
 		
+		// ALSO notify ClearObjectiveManager if it exists
+		ClearObjectiveManager clearManager = FindObjectOfType<ClearObjectiveManager>();
+		if (clearManager != null)
+		{
+			clearManager.OnPowerCellInserted();
+			Debug.Log("[PowerBay] Notified ClearObjectiveManager!");
+		}
+		
 		Debug.Log("[PowerBay] Power cell inserted successfully!");
 	}
 

@@ -105,6 +105,14 @@ public class PowerCell : MonoBehaviour
 			objectiveManager.OnPowerCellPicked();
 		}
 		
+		// ALSO notify ClearObjectiveManager if it exists
+		ClearObjectiveManager clearManager = FindObjectOfType<ClearObjectiveManager>();
+		if (clearManager != null)
+		{
+			clearManager.OnPowerCellPickedUp();
+			Debug.Log("[PowerCell] Notified ClearObjectiveManager!");
+		}
+		
 		Debug.Log("[PowerCell] Picked up! Now find the Power Bay.");
 	}
 	

@@ -625,6 +625,14 @@ public class TutorialManager : MonoBehaviour
         {
             objectiveManager.OnTutorialCompleted();
         }
+        
+        // ALSO notify ClearObjectiveManager if it exists
+        ClearObjectiveManager clearManager = FindObjectOfType<ClearObjectiveManager>();
+        if (clearManager != null)
+        {
+            clearManager.OnTutorialComplete();
+            Debug.Log("[TutorialManager] Notified ClearObjectiveManager!");
+        }
     }
     
     void UpdateTutorialText(string main, string input)

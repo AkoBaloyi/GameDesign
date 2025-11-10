@@ -81,7 +81,17 @@ public class InspectableObject : MonoBehaviour
             
             if (shouldShow && promptText != null)
             {
-                promptText.text = inspectionMessage;
+                // Make it SUPER CLEAR what to do!
+                promptText.text = ">>> PRESS E TO INSPECT <<<";
+                promptText.fontSize = 36; // Big and obvious
+                promptText.color = Color.yellow; // Bright yellow
+                
+                // Add outline for visibility
+                if (promptText.outlineWidth == 0)
+                {
+                    promptText.outlineWidth = 0.2f;
+                    promptText.outlineColor = Color.black;
+                }
             }
         }
     }

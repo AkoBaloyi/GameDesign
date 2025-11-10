@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: 952faa0eb58a7ea4abeb5fe4d519fc37
+guid: 20ba1cf93d364784e82ff5c8fd0ea0f8
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SpiderBot_Mat
+    second: {fileID: 2100000, guid: fef1be1639f44a64fbea9a65318087c1, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

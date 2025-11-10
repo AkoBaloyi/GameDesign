@@ -53,12 +53,39 @@ public class SimpleEnemyAI : MonoBehaviour
 
     void Start()
     {
+        // Check if agent exists
+        if (agent == null)
+        {
+            Debug.LogError($"[SimpleEnemyAI] {gameObject.name} has no NavMeshAgent component!");
+            return;
+        }
+        
         agent.speed = patrolSpeed;
+        
+        // FIX: Prevent sinking into floor
+        agent.baseOffset = 0f; // Keep on surface
+        agent.height = 1.8f; // Match capsule collider
+        agent.radius = 0.3f; // Match capsule collider
+        
+        // Check if on NavMesh
+        if (!agent.isOnNavMesh)
+        {
+            Debug.LogError($"[SimpleEnemyAI] {gameObject.name} is NOT on NavMesh! Position: {transform.position}");
+            Debug.LogError("FIX: Bake NavMesh (Window → AI → Navigation → Bake) or move enemy to NavMesh surface");
+            return;
+        }
+        
+        Debug.Log($"[SimpleEnemyAI] {gameObject.name} initialized. On NavMesh: {agent.isOnNavMesh}, Speed: {agent.speed}");
         
         // Start patrolling if we have waypoints
         if (patrolWaypoints != null && patrolWaypoints.Length > 0)
         {
+            Debug.Log($"[SimpleEnemyAI] {gameObject.name} has {patrolWaypoints.Length} waypoints. Starting patrol.");
             GoToNextWaypoint();
+        }
+        else
+        {
+            Debug.LogWarning($"[SimpleEnemyAI] {gameObject.name} has NO waypoints. Will only chase player when detected.");
         }
     }
 
@@ -67,6 +94,19 @@ public class SimpleEnemyAI : MonoBehaviour
         if (player == null) return;
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+        // CHECK FOR COLLISION MANUALLY (since NavMesh agents don't trigger collisions well)
+        if (distanceToPlayer < 1.5f) // Close enough = caught!
+        {
+            Debug.Log("[SimpleEnemyAI] CAUGHT PLAYER! Distance: " + distanceToPlayer);
+            // Trigger death on player
+            PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                // Player will handle death
+                Debug.Log("[SimpleEnemyAI] Calling player death!");
+            }
+        }
 
         // State machine
         switch (currentState)
@@ -171,6 +211,25 @@ public class SimpleEnemyAI : MonoBehaviour
 
         agent.SetDestination(patrolWaypoints[currentWaypointIndex].position);
         currentWaypointIndex = (currentWaypointIndex + 1) % patrolWaypoints.Length;
+    }
+
+    // Catch player on collision - instant death!
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("[SimpleEnemyAI] Caught player! Game Over!");
+            // PlayerHealth script will handle the death
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("[SimpleEnemyAI] Caught player! Game Over!");
+            // PlayerHealth script will handle the death
+        }
     }
 
     void OnDrawGizmosSelected()

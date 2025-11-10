@@ -6,6 +6,10 @@ public class MinimapController : MonoBehaviour
     public Transform player;
     public RectTransform arrow;
     public RectTransform minimapBackground;
+    
+    [Header("Multiple Maps Support")]
+    public RectTransform[] allArrows; // All player arrows on different maps
+    public GameObject[] allMaps; // All map panels
 
     [Header("Minimap Settings")]
     public float minimapSize = 250f;
@@ -108,13 +112,46 @@ public class MinimapController : MonoBehaviour
             finalPosition.y = Mathf.Clamp(finalPosition.y, -maxOffset, maxOffset);
         }
 
-        arrow.anchoredPosition = finalPosition;
+        // Update main arrow
+        if (arrow != null)
+        {
+            arrow.anchoredPosition = finalPosition;
+        }
+        
+        // Update all arrows if multiple maps exist
+        if (allArrows != null && allArrows.Length > 0)
+        {
+            foreach (var arr in allArrows)
+            {
+                if (arr != null && arr.gameObject.activeInHierarchy)
+                {
+                    arr.anchoredPosition = finalPosition;
+                }
+            }
+        }
     }
 
     private void UpdateArrowRotation()
     {
         float playerYaw = player.eulerAngles.y;
-        arrow.localEulerAngles = new Vector3(0f, 0f, -playerYaw);
+        
+        // Update main arrow
+        if (arrow != null)
+        {
+            arrow.localEulerAngles = new Vector3(0f, 0f, -playerYaw);
+        }
+        
+        // Update all arrows if multiple maps exist
+        if (allArrows != null && allArrows.Length > 0)
+        {
+            foreach (var arr in allArrows)
+            {
+                if (arr != null && arr.gameObject.activeInHierarchy)
+                {
+                    arr.localEulerAngles = new Vector3(0f, 0f, -playerYaw);
+                }
+            }
+        }
     }
 
     [ContextMenu("DEBUG: Show Current Values")]

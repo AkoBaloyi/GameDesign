@@ -245,6 +245,14 @@ public class FactoryConsole : MonoBehaviour
 			objectiveManager.OnConsoleActivatedComplete();
 		}
 		
+		// ALSO notify ClearObjectiveManager if it exists
+		ClearObjectiveManager clearManager = FindObjectOfType<ClearObjectiveManager>();
+		if (clearManager != null)
+		{
+			clearManager.OnConsoleActivated();
+			Debug.Log("[FactoryConsole] Notified ClearObjectiveManager!");
+		}
+		
 		Debug.Log("[FactoryConsole] Console activated successfully!");
 	}
 
