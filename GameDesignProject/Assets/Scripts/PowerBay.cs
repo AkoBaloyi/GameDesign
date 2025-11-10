@@ -12,6 +12,7 @@ public class PowerBay : MonoBehaviour
 	[Header("References")]
 	public ObjectiveManager objectiveManager;
 	public Transform socketPoint;
+	public InspectionHintUI hintUI;
 	
 	[Header("UI")]
 	public GameObject promptUI;
@@ -109,6 +110,12 @@ public class PowerBay : MonoBehaviour
 			if (shouldShowPrompt && promptText != null)
 			{
 				promptText.text = promptMessage;
+				
+				// Show hint when player approaches with power cell
+				if (hintUI != null)
+				{
+					hintUI.ShowPowerBayHint();
+				}
 			}
 		}
 	}
@@ -245,6 +252,12 @@ public class PowerBay : MonoBehaviour
 		{
 			clearManager.OnPowerCellInserted();
 			Debug.Log("[PowerBay] Notified ClearObjectiveManager!");
+		}
+		
+		// Show enemy warning hint (3rd hint)
+		if (hintUI != null)
+		{
+			hintUI.ShowEnemyWarningHint();
 		}
 		
 		Debug.Log("[PowerBay] Power cell inserted successfully!");

@@ -50,14 +50,10 @@ public class TutorialManager : MonoBehaviour
         Detecting,
         LookAround,
         Movement,
+        Jump,
+        Sprint,
         PickupObject,
         DropThrow,
-        Sprint,
-        Crouch,
-        Jump,
-        PickupNailgun,
-        LoadNails,
-        Shooting,
         Complete
     }
     
@@ -79,11 +75,7 @@ public class TutorialManager : MonoBehaviour
     private bool hasPickedUpObject = false;
     private bool hasDroppedOrThrown = false;
     private bool hasSprinted = false;
-    private bool hasCrouched = false;
     private bool hasJumped = false;
-    private bool hasPickedUpNailgun = false;
-    private bool hasLoadedNails = false;
-    private int shotsCount = 0;
     
     // Input detection
     private bool mouseDetected = false;
@@ -196,29 +188,17 @@ public class TutorialManager : MonoBehaviour
             case TutorialStep.Movement:
                 HandleMovementStep();
                 break;
+            case TutorialStep.Jump:
+                HandleJumpStep();
+                break;
+            case TutorialStep.Sprint:
+                HandleSprintStep();
+                break;
             case TutorialStep.PickupObject:
                 HandlePickupObjectStep();
                 break;
             case TutorialStep.DropThrow:
                 HandleDropThrowStep();
-                break;
-            case TutorialStep.Sprint:
-                HandleSprintStep();
-                break;
-            case TutorialStep.Crouch:
-                HandleCrouchStep();
-                break;
-            case TutorialStep.Jump:
-                HandleJumpStep();
-                break;
-            case TutorialStep.PickupNailgun:
-                HandlePickupNailgunStep();
-                break;
-            case TutorialStep.LoadNails:
-                HandleLoadingStep();
-                break;
-            case TutorialStep.Shooting:
-                HandleShootingStep();
                 break;
         }
     }
@@ -334,39 +314,7 @@ public class TutorialManager : MonoBehaviour
         }
     }
     
-    void HandleCrouchStep()
-    {
-        if (stepCompleted) return;
-        
-        bool crouchPressed = false;
-        
-        if (detectedDevice == InputDevice.KeyboardMouse && Keyboard.current != null)
-        {
-            if (Keyboard.current.leftCtrlKey.isPressed || Keyboard.current.ctrlKey.isPressed)
-            {
-                crouchPressed = true;
-            }
-        }
-        else if (Gamepad.current != null)
-        {
-            if (Gamepad.current.rightShoulder.isPressed)
-            {
-                crouchPressed = true;
-            }
-        }
-        
-        if (crouchPressed)
-        {
-            hasCrouched = true;
-            Debug.Log("Crouch detected!");
-        }
-        
-        if (hasCrouched)
-        {
-            stepCompleted = true;
-            StartCoroutine(DelayedNextStep());
-        }
-    }
+
     
     void HandlePickupObjectStep()
     {
@@ -386,32 +334,7 @@ public class TutorialManager : MonoBehaviour
         }
     }
     
-    void HandlePickupNailgunStep()
-    {
-        if (hasPickedUpNailgun)
-        {
-            stepCompleted = true;
-            StartCoroutine(DelayedNextStep());
-        }
-    }
-    
-    void HandleLoadingStep()
-    {
-        if (hasLoadedNails)
-        {
-            stepCompleted = true;
-            StartCoroutine(DelayedNextStep());
-        }
-    }
-    
-    void HandleShootingStep()
-    {
-        if (shotsCount >= 3)
-        {
-            stepCompleted = true;
-            StartCoroutine(DelayedNextStep());
-        }
-    }
+
     
     void NextStep()
     {
@@ -431,29 +354,17 @@ public class TutorialManager : MonoBehaviour
             case TutorialStep.Movement:
                 StartMovementStep();
                 break;
+            case TutorialStep.Jump:
+                StartJumpStep();
+                break;
+            case TutorialStep.Sprint:
+                StartSprintStep();
+                break;
             case TutorialStep.PickupObject:
                 StartPickupObjectStep();
                 break;
             case TutorialStep.DropThrow:
                 StartDropThrowStep();
-                break;
-            case TutorialStep.Sprint:
-                StartSprintStep();
-                break;
-            case TutorialStep.Crouch:
-                StartCrouchStep();
-                break;
-            case TutorialStep.Jump:
-                StartJumpStep();
-                break;
-            case TutorialStep.PickupNailgun:
-                StartPickupNailgunStep();
-                break;
-            case TutorialStep.LoadNails:
-                StartLoadingStep();
-                break;
-            case TutorialStep.Shooting:
-                StartShootingStep();
                 break;
             case TutorialStep.Complete:
                 CompleteTutorial();
@@ -488,16 +399,7 @@ public class TutorialManager : MonoBehaviour
         textDisplayed = true;
     }
     
-    void StartCrouchStep()
-    {
-        string mainText = "Time to learn crouching!";
-        string inputText = detectedDevice == InputDevice.KeyboardMouse ?
-            "Press LEFT CTRL to crouch" :
-            "Press Right Bumper (RB) to crouch";
-        
-        UpdateTutorialText(mainText, inputText);
-        textDisplayed = true;
-    }
+
     
     void StartJumpStep()
     {
@@ -553,48 +455,7 @@ public class TutorialManager : MonoBehaviour
         textDisplayed = true;
     }
     
-    void StartPickupNailgunStep()
-    {
-        string mainText = "Time for your first tool!";
-        string inputText = detectedDevice == InputDevice.KeyboardMouse ? 
-            "Look at the glowing Nailgun and press E to pick it up" : 
-            "Look at the glowing Nailgun and press X to pick it up";
-        
-        UpdateTutorialText(mainText, inputText);
-        textDisplayed = true;
-        
-        if (nailgunHighlight != null)
-        {
-            nailgunHighlight.HighlightOn();
-        }
-    }
-    
-    void StartLoadingStep()
-    {
-        string mainText = "Your Nailgun needs ammunition!";
-        string inputText = detectedDevice == InputDevice.KeyboardMouse ? 
-            "Look at the crate and press E to load nails (50 per magazine)" : 
-            "Look at the crate and press X to load nails (50 per magazine)";
-        
-        UpdateTutorialText(mainText, inputText);
-        textDisplayed = true;
-        
-        if (crateHighlight != null)
-        {
-            crateHighlight.HighlightOn();
-        }
-    }
-    
-    void StartShootingStep()
-    {
-        string mainText = "Ready to fire! Practice shooting.";
-        string inputText = detectedDevice == InputDevice.KeyboardMouse ? 
-            "Left-click to fire the Nailgun (fire 3 times to complete tutorial)" : 
-            "Pull Right Trigger to fire the Nailgun (fire 3 times to complete tutorial)";
-        
-        UpdateTutorialText(mainText, inputText);
-        textDisplayed = true;
-    }
+
     
     void CompleteTutorial()
     {
@@ -633,6 +494,14 @@ public class TutorialManager : MonoBehaviour
             clearManager.OnTutorialComplete();
             Debug.Log("[TutorialManager] Notified ClearObjectiveManager!");
         }
+        
+        // Start hint system
+        InspectionHintUI hintUI = FindObjectOfType<InspectionHintUI>();
+        if (hintUI != null)
+        {
+            hintUI.OnTutorialComplete();
+            Debug.Log("[TutorialManager] Started hint system!");
+        }
     }
     
     void UpdateTutorialText(string main, string input)
@@ -660,11 +529,7 @@ public class TutorialManager : MonoBehaviour
         Debug.Log("Sprint detected!");
     }
     
-    public void OnCrouch()
-    {
-        hasCrouched = true;
-        Debug.Log("Crouch detected!");
-    }
+
     
    public void OnObjectPickedUp()
 {
@@ -686,24 +551,10 @@ public class TutorialManager : MonoBehaviour
         Debug.Log("Object dropped/thrown!");
     }
     
-    public void OnNailgunPickedUp()
-    {
-        hasPickedUpNailgun = true;
-        PlayPickupEffect();
-        ShowGameHUD();
-        Debug.Log("Nailgun equipped!");
-    }
-    
-    public void OnNailsLoaded()
-    {
-        hasLoadedNails = true;
-        PlayLoadingEffect();
-    }
-    
-    public void OnNailgunFired()
-    {
-        shotsCount++;
-    }
+    // Empty stub methods for compatibility with other scripts
+    public void OnNailgunPickedUp() { /* Tutorial no longer uses nailgun */ }
+    public void OnNailsLoaded() { /* Tutorial no longer uses nails */ }
+    public void OnNailgunFired() { /* Tutorial no longer uses shooting */ }
     
     void PlayPickupEffect()
     {

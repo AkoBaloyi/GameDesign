@@ -11,6 +11,7 @@ public class FactoryConsole : MonoBehaviour
 {
 	[Header("References")]
 	public ObjectiveManager objectiveManager;
+	public InspectionHintUI hintUI;
 	
 	[Header("UI")]
 	public GameObject promptUI;
@@ -138,6 +139,8 @@ public class FactoryConsole : MonoBehaviour
 			consoleLight.enabled = true;
 			consoleLight.color = Color.yellow;
 		}
+		
+
 	}
 
 	/// <summary>
@@ -251,6 +254,12 @@ public class FactoryConsole : MonoBehaviour
 		{
 			clearManager.OnConsoleActivated();
 			Debug.Log("[FactoryConsole] Notified ClearObjectiveManager!");
+		}
+		
+		// Hide hint after completion
+		if (hintUI != null)
+		{
+			hintUI.HideHint();
 		}
 		
 		Debug.Log("[FactoryConsole] Console activated successfully!");

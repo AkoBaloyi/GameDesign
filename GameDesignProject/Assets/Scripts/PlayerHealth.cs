@@ -17,7 +17,7 @@ public class PlayerHealth : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip deathSound;
     
-    private bool isDead = false;
+    public bool isDead = false; // Public so enemies can check
     private SpeedrunTimer timer;
 
     void Start()

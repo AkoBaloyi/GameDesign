@@ -37,6 +37,15 @@ public class SpeedrunTimer : MonoBehaviour
             currentTime += Time.deltaTime;
             UpdateTimerDisplay();
         }
+        
+        // Press ESC to close leaderboard
+        if (leaderboardPanel != null && leaderboardPanel.activeSelf)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Return))
+            {
+                HideLeaderboard();
+            }
+        }
     }
 
     public void StartTimer()
@@ -144,22 +153,26 @@ public class SpeedrunTimer : MonoBehaviour
         
         List<float> times = GetLeaderboardTimes();
         
-        string leaderboardString = "🏆 SPEEDRUN LEADERBOARD 🏆\n\n";
+        string leaderboardString = "=== SPEEDRUN LEADERBOARD ===\n\n";
         
         for (int i = 0; i < times.Count; i++)
         {
             string rank = (i + 1).ToString();
             string medal = "";
             
-            if (i == 0) medal = "🥇";
-            else if (i == 1) medal = "🥈";
-            else if (i == 2) medal = "🥉";
+            if (i == 0) medal = "[1ST]";
+            else if (i == 1) medal = "[2ND]";
+            else if (i == 2) medal = "[3RD]";
+            else medal = $"[{rank}]";
             
             bool isCurrentRun = Mathf.Abs(times[i] - currentTime) < 0.01f;
             string highlight = isCurrentRun ? ">>> " : "    ";
             
-            leaderboardString += $"{highlight}{medal} #{rank}: {FormatTime(times[i])}\n";
+            leaderboardString += $"{highlight}{medal} {FormatTime(times[i])}\n";
         }
+        
+        leaderboardString += "\n\nPress ESC to continue";
+        
         
         leaderboardText.text = leaderboardString;
     }
