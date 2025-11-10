@@ -103,8 +103,12 @@ public class SimpleEnemyAI : MonoBehaviour
             PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-                // Player will handle death
-                Debug.Log("[SimpleEnemyAI] Calling player death!");
+                playerHealth.Die(); // KILL THE PLAYER!
+                Debug.Log("[SimpleEnemyAI] Player death triggered!");
+            }
+            else
+            {
+                Debug.LogError("[SimpleEnemyAI] Player has no PlayerHealth component!");
             }
         }
 
