@@ -26,24 +26,21 @@ public class NailProjectile : MonoBehaviour
 
     void Awake()
     {
-        // Get required components
+
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
         audioSource = GetComponent<AudioSource>();
 
-        // Configure Rigidbody for projectile behavior
         SetupRigidbody();
 
-        // Configure Collider
         SetupCollider();
         void Start()
         {
-            // Destroy after lifetime
+
             Destroy(gameObject, lifetime);
         }
     }
-    
-    // Method to fire the nail with initial velocity
+
     public void FireNail(Vector3 direction, float speed)
     {
         if (rb != null)
@@ -55,20 +52,18 @@ public class NailProjectile : MonoBehaviour
     void SetupRigidbody()
     {
         if (rb == null) return;
-        
-        // Projectile physics settings
+
         rb.mass = 0.01f; // Very light
         rb.linearDamping = 0.1f; // Slight air resistance
         rb.angularDamping = 0.5f;
         rb.useGravity = useGravity;
-        
-        // Prevent rotation on impact (nails should stick straight)
+
         rb.freezeRotation = true;
     }
     
     void FixedUpdate()
     {
-        // Apply custom gravity if different from default
+
         if (useGravity && gravity != 1f && rb != null && !hasHit)
         {
             Vector3 customGravity = Physics.gravity * (gravity - 1f);
@@ -80,19 +75,17 @@ public class NailProjectile : MonoBehaviour
     {
         if (col == null)
         {
-            // Add collider if none exists
+
             col = gameObject.AddComponent<CapsuleCollider>();
         }
-        
-        // Configure for nail shape
+
         if (col is CapsuleCollider capsule)
         {
             capsule.radius = 0.005f; // Very thin
             capsule.height = 0.08f; // Nail length
             capsule.direction = 2; // Z-axis (forward)
         }
-        
-        // Ensure it's not a trigger initially
+
         col.isTrigger = false;
     }
     
@@ -101,22 +94,17 @@ public class NailProjectile : MonoBehaviour
         if (hasHit) return;
         
         hasHit = true;
-        
-        // Get impact point and normal
+
         ContactPoint contact = collision.contacts[0];
         Vector3 impactPoint = contact.point;
         Vector3 impactNormal = contact.normal;
-        
-        // Stick the nail to the surface
+
         StickToSurface(collision.transform, impactPoint, impactNormal);
-        
-        // Create impact effects
+
         CreateImpactEffects(impactPoint, impactNormal, collision.collider);
-        
-        // Play impact sound based on material
+
         PlayImpactSound(collision.collider);
-        
-        // Apply damage if target can take damage
+
         IDamageable damageable = collision.collider.GetComponent<IDamageable>();
         if (damageable != null)
         {
@@ -126,40 +114,34 @@ public class NailProjectile : MonoBehaviour
     
     void StickToSurface(Transform surface, Vector3 point, Vector3 normal)
     {
-        // Stop the nail
+
         if (rb != null)
         {
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             rb.isKinematic = true;
         }
-        
-        // Parent to the surface so it moves with it
+
         transform.SetParent(surface);
-        
-        // Position the nail at the impact point
+
         transform.position = point;
-        
-        // Align the nail with the surface normal (pointing into the surface)
+
         transform.rotation = Quaternion.LookRotation(-normal);
-        
-        // Push the nail slightly into the surface
+
         transform.position += normal * -0.02f;
     }
     
     void CreateImpactEffects(Vector3 point, Vector3 normal, Collider hitCollider)
     {
-        // Create sparks or dust based on material
+
         GameObject effectPrefab = impactEffectPrefab;
-        
-        // Try to determine material type
+
         string materialType = DetermineMaterialType(hitCollider);
         
         if (effectPrefab != null)
         {
             GameObject effect = Instantiate(effectPrefab, point, Quaternion.LookRotation(normal));
-            
-            // Customize effect based on material
+
             ParticleSystem particles = effect.GetComponent<ParticleSystem>();
             if (particles != null)
             {
@@ -181,8 +163,7 @@ public class NailProjectile : MonoBehaviour
                         break;
                 }
             }
-            
-            // Destroy effect after a short time
+
             Destroy(effect, 2f);
         }
     }
@@ -190,17 +171,14 @@ public class NailProjectile : MonoBehaviour
     void PlayImpactSound(Collider hitCollider)
     {
         if (impactSounds == null || impactSounds.Length == 0) return;
-        
-        // Determine material and play appropriate sound
+
         string materialType = DetermineMaterialType(hitCollider);
         
         AudioClip soundToPlay = impactSounds[0]; // Default
-        
-        // You could have different sound arrays for different materials
-        // For now, just use a random sound from the array
+
+
         soundToPlay = impactSounds[Random.Range(0, impactSounds.Length)];
-        
-        // Play the sound
+
         if (audioSource != null)
         {
             audioSource.PlayOneShot(soundToPlay);
@@ -213,15 +191,14 @@ public class NailProjectile : MonoBehaviour
     
     string DetermineMaterialType(Collider hitCollider)
     {
-        // Check physics material
+
         if (hitCollider.material != null)
         {
             if (hitCollider.material == metalMaterial) return "metal";
             if (hitCollider.material == woodMaterial) return "wood";
             if (hitCollider.material == concreteMaterial) return "concrete";
         }
-        
-        // Check by tag
+
         switch (hitCollider.tag)
         {
             case "Metal":
@@ -235,11 +212,10 @@ public class NailProjectile : MonoBehaviour
                 return "generic";
         }
     }
-    
-    // Method to remove the nail (for cleanup or special mechanics)
+
     public void RemoveNail()
     {
-        // Add a small pop effect
+
         if (impactEffectPrefab != null)
         {
             GameObject effect = Instantiate(impactEffectPrefab, transform.position, transform.rotation);
@@ -250,7 +226,6 @@ public class NailProjectile : MonoBehaviour
     }
 }
 
-// Interface for objects that can take damage
 public interface IDamageable
 {
     void TakeDamage(float damage);

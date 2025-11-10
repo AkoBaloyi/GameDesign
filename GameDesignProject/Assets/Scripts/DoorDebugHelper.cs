@@ -1,9 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-/// <summary>
-/// Attach this to your Door Parent GameObject to debug door interaction issues
-/// </summary>
+
+
 public class DoorDebugHelper : MonoBehaviour
 {
     [Header("Debug Settings")]
@@ -17,7 +16,7 @@ public class DoorDebugHelper : MonoBehaviour
 
     void Start()
     {
-        // Find components on this object and children
+
         doorInteractor = GetComponent<DoorInteractor>();
         triggerCollider = GetComponent<Collider>();
         doorAnimator = GetComponentInChildren<Animator>();
@@ -40,7 +39,6 @@ public class DoorDebugHelper : MonoBehaviour
                 Debug.Log($"  - Has 'Open' parameter: {HasParameter(doorAnimator, "Open")}");
             }
 
-            // Check children
             Debug.Log($"Children count: {transform.childCount}");
             for (int i = 0; i < transform.childCount; i++)
             {
@@ -56,7 +54,7 @@ public class DoorDebugHelper : MonoBehaviour
 
     void Update()
     {
-        // Check for F key press manually
+
         if (Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame)
         {
             if (showDebugLogs)

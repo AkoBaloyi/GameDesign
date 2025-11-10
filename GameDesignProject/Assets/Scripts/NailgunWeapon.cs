@@ -37,8 +37,7 @@ public class NailgunWeapon : MonoBehaviour
     
     [Header("References")]
     public TutorialManager tutorialManager;
-    
-    // Private variables
+
     private bool isEquipped = false;
     private float lastFireTime = 0f;
     private Vector3 originalCameraPos;
@@ -52,8 +51,7 @@ public class NailgunWeapon : MonoBehaviour
         }
         
         UpdateAmmoUI();
-        
-        // Start with weapon disabled
+
         gameObject.SetActive(false);
     }
     
@@ -62,11 +60,9 @@ public class NailgunWeapon : MonoBehaviour
         if (!isEquipped) return;
         
         HandleRecoil();
-        
-        // Handle firing input
+
         bool fireInput = false;
-        
-        // Check both mouse and gamepad input
+
         if (UnityEngine.InputSystem.Mouse.current != null && UnityEngine.InputSystem.Mouse.current.leftButton.wasPressedThisFrame)
         {
             fireInput = true;
@@ -87,14 +83,12 @@ public class NailgunWeapon : MonoBehaviour
     {
         isEquipped = true;
         gameObject.SetActive(true);
-        
-        // Show crosshair
+
         if (crosshair != null)
         {
             crosshair.SetActive(true);
         }
-        
-        // Notify tutorial
+
         if (tutorialManager != null)
         {
             tutorialManager.OnNailgunPickedUp();
@@ -107,8 +101,7 @@ public class NailgunWeapon : MonoBehaviour
     {
         isEquipped = false;
         gameObject.SetActive(false);
-        
-        // Hide crosshair
+
         if (crosshair != null)
         {
             crosshair.SetActive(false);
@@ -117,10 +110,9 @@ public class NailgunWeapon : MonoBehaviour
     
     void TryFire()
     {
-        // Check fire rate
+
         if (Time.time - lastFireTime < fireRate) return;
-        
-        // Check ammo
+
         if (currentAmmo <= 0)
         {
             PlayEmptySound();
@@ -133,16 +125,14 @@ public class NailgunWeapon : MonoBehaviour
     
     void Fire()
     {
-        // Consume ammo
+
         currentAmmo--;
         UpdateAmmoUI();
-        
-        // Create nail projectile
+
         if (nailPrefab != null && firePoint != null)
         {
             GameObject nail = Instantiate(nailPrefab, firePoint.position, firePoint.rotation);
-            
-            // Get nail projectile component and fire it
+
             NailProjectile nailScript = nail.GetComponent<NailProjectile>();
             if (nailScript != null)
             {
@@ -152,7 +142,7 @@ public class NailgunWeapon : MonoBehaviour
             }
             else
             {
-                // Fallback: directly set Rigidbody velocity
+
                 Rigidbody nailRb = nail.GetComponent<Rigidbody>();
                 if (nailRb != null)
                 {
@@ -160,23 +150,19 @@ public class NailgunWeapon : MonoBehaviour
                 }
             }
         }
-        
-        // Visual effects
+
         if (muzzleFlash != null)
         {
             muzzleFlash.Play();
         }
-        
-        // Audio
+
         if (weaponAudio != null && fireSound != null)
         {
             weaponAudio.PlayOneShot(fireSound);
         }
-        
-        // Camera recoil
+
         StartRecoil();
-        
-        // Notify tutorial
+
         if (tutorialManager != null)
         {
             tutorialManager.OnNailgunFired();
@@ -189,14 +175,12 @@ public class NailgunWeapon : MonoBehaviour
         currentAmmo += ammoToAdd;
         
         UpdateAmmoUI();
-        
-        // Play reload sound
+
         if (weaponAudio != null && reloadSound != null)
         {
             weaponAudio.PlayOneShot(reloadSound);
         }
-        
-        // Notify tutorial
+
         if (tutorialManager != null && ammoToAdd > 0)
         {
             tutorialManager.OnNailsLoaded();
@@ -223,8 +207,7 @@ public class NailgunWeapon : MonoBehaviour
         if (cameraTransform == null) return;
         
         isRecoiling = true;
-        
-        // Apply upward recoil
+
         Vector3 recoilOffset = new Vector3(
             Random.Range(-0.1f, 0.1f), 
             -recoilStrength, 
@@ -237,15 +220,13 @@ public class NailgunWeapon : MonoBehaviour
     void HandleRecoil()
     {
         if (!isRecoiling || cameraTransform == null) return;
-        
-        // Smoothly return camera to original position
+
         cameraTransform.localPosition = Vector3.Lerp(
             cameraTransform.localPosition, 
             originalCameraPos, 
             Time.deltaTime * 10f
         );
-        
-        // Stop recoil when close enough
+
         if (Vector3.Distance(cameraTransform.localPosition, originalCameraPos) < 0.01f)
         {
             cameraTransform.localPosition = originalCameraPos;
@@ -260,8 +241,7 @@ public class NailgunWeapon : MonoBehaviour
             weaponAudio.PlayOneShot(emptySound);
         }
     }
-    
-    // Public getters for other systems
+
     public bool IsEquipped() { return isEquipped; }
     public int GetCurrentAmmo() { return currentAmmo; }
     public int GetMaxAmmo() { return maxAmmo; }

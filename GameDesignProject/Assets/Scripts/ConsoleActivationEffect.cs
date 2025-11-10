@@ -1,9 +1,8 @@
 using UnityEngine;
 
-/// <summary>
-/// Creates visual feedback when factory console is activated
-/// Attach to FactoryConsole GameObject
-/// </summary>
+
+
+
 public class ConsoleActivationEffect : MonoBehaviour
 {
     [Header("Screen Glow")]
@@ -31,13 +30,12 @@ public class ConsoleActivationEffect : MonoBehaviour
 
     private void Awake()
     {
-        // Get screen renderer if not assigned
+
         if (screenRenderer == null)
         {
             screenRenderer = GetComponentInChildren<Renderer>();
         }
-        
-        // Setup initial state
+
         SetScreenColor(inactiveColor, 0f);
         
         if (consoleLight != null)
@@ -51,9 +49,8 @@ public class ConsoleActivationEffect : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Activate console with visual effects
-    /// </summary>
+
+
     public void ActivateConsole()
     {
         if (isActivated) return;
@@ -66,14 +63,12 @@ public class ConsoleActivationEffect : MonoBehaviour
         isActivated = true;
         
         Debug.Log("[ConsoleActivationEffect] Activating console!");
-        
-        // Play bootup sound
+
         if (audioSource != null && bootupSound != null)
         {
             audioSource.PlayOneShot(bootupSound);
         }
-        
-        // Transition screen color from black to green
+
         float elapsed = 0f;
         while (elapsed < transitionDuration)
         {
@@ -87,22 +82,19 @@ public class ConsoleActivationEffect : MonoBehaviour
         }
         
         SetScreenColor(activeColor, glowIntensity);
-        
-        // Play activation sound
+
         if (audioSource != null && activationSound != null)
         {
             audioSource.PlayOneShot(activationSound);
         }
-        
-        // Enable console light
+
         if (consoleLight != null)
         {
             consoleLight.enabled = true;
             consoleLight.color = activeColor;
             consoleLight.intensity = lightIntensity;
         }
-        
-        // Play particle effect
+
         if (activationParticles != null)
         {
             var main = activationParticles.main;
@@ -128,9 +120,8 @@ public class ConsoleActivationEffect : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Pulse the screen for attention
-    /// </summary>
+
+
     public void PulseScreen()
     {
         StartCoroutine(PulseCoroutine());

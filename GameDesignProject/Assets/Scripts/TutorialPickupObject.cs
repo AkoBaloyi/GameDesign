@@ -28,14 +28,12 @@ public class TutorialPickupObject : MonoBehaviour
     void Start()
     {
         highlightable = GetComponent<HighlightableObject>();
-        
-        // Auto-find tutorial manager if not assigned
+
         if (tutorialManager == null)
         {
             tutorialManager = FindObjectOfType<TutorialManager>();
         }
-        
-        // Auto-find nailgun if this is a nailgun pickup
+
         if (objectType == PickupType.Nailgun && nailgunWeapon == null)
         {
             nailgunWeapon = GetComponent<NailgunWeapon>();
@@ -45,26 +43,22 @@ public class TutorialPickupObject : MonoBehaviour
     void Update()
     {
         if (isPickedUp) return;
-        
-        // Check if player is looking at this object and in range
+
         if (IsPlayerLookingAt())
         {
-            // Highlight the object
+
             if (highlightable != null)
             {
                 highlightable.HighlightOn();
             }
-            
-            // Check for pickup input
+
             bool pickupPressed = false;
-            
-            // Keyboard input
+
             if (UnityEngine.InputSystem.Keyboard.current != null && UnityEngine.InputSystem.Keyboard.current.eKey.wasPressedThisFrame)
             {
                 pickupPressed = true;
             }
-            
-            // Gamepad input
+
             if (UnityEngine.InputSystem.Gamepad.current != null && UnityEngine.InputSystem.Gamepad.current.buttonSouth.wasPressedThisFrame)
             {
                 pickupPressed = true;
@@ -77,7 +71,7 @@ public class TutorialPickupObject : MonoBehaviour
         }
         else
         {
-            // Turn off highlight when not looking
+
             if (highlightable != null)
             {
                 highlightable.HighlightOff();
@@ -89,8 +83,7 @@ public class TutorialPickupObject : MonoBehaviour
     {
         Camera playerCamera = Camera.main;
         if (playerCamera == null) return false;
-        
-        // Cast ray from camera
+
         Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
         
         if (Physics.Raycast(ray, out RaycastHit hit, pickupRange))
@@ -106,8 +99,7 @@ public class TutorialPickupObject : MonoBehaviour
         if (isPickedUp) return;
         
         isPickedUp = true;
-        
-        // Handle different pickup types
+
         switch (objectType)
         {
             case PickupType.Nailgun:
@@ -120,26 +112,22 @@ public class TutorialPickupObject : MonoBehaviour
                 PickupGeneric();
                 break;
         }
-        
-        // Play effects
+
         PlayPickupEffects();
-        
-        // Notify tutorial
+
         NotifyTutorial();
-        
-        // Hide/destroy the pickup object
+
         gameObject.SetActive(false);
     }
     
     void PickupNailgun()
     {
-        // Enable the nailgun weapon (it's already a gun slot weapon, not a pickup)
+
         if (nailgunWeapon != null)
         {
             nailgunWeapon.EquipWeapon();
         }
-        
-        // Hide this pickup object since the nailgun is now equipped
+
         gameObject.SetActive(false);
         
         Debug.Log("Nailgun picked up and equipped to gun slot!");
@@ -147,7 +135,7 @@ public class TutorialPickupObject : MonoBehaviour
     
     void PickupAmmo()
     {
-        // Find and load ammo into nailgun
+
         NailgunWeapon nailgun = FindObjectOfType<NailgunWeapon>();
         if (nailgun != null && nailgun.IsEquipped())
         {
@@ -159,16 +147,16 @@ public class TutorialPickupObject : MonoBehaviour
     
     void PickupGeneric()
     {
-        // Handle generic pickups
+
         Debug.Log($"Picked up {gameObject.name}");
     }
     
     void PlayPickupEffects()
     {
-        // Particle effect
+
         if (pickupEffect != null)
         {
-            // Instantiate effect at pickup location
+
             GameObject effect = Instantiate(pickupEffect.gameObject, transform.position, transform.rotation);
             ParticleSystem particles = effect.GetComponent<ParticleSystem>();
             if (particles != null)
@@ -177,8 +165,7 @@ public class TutorialPickupObject : MonoBehaviour
                 Destroy(effect, particles.main.duration + 1f);
             }
         }
-        
-        // Sound effect
+
         if (pickupSound != null)
         {
             AudioSource.PlayClipAtPoint(pickupSound, transform.position);
@@ -188,8 +175,7 @@ public class TutorialPickupObject : MonoBehaviour
     void NotifyTutorial()
     {
         if (tutorialManager == null) return;
-        
-        // Notify tutorial based on pickup type
+
         switch (objectType)
         {
             case PickupType.Nailgun:
@@ -200,14 +186,12 @@ public class TutorialPickupObject : MonoBehaviour
                 break;
         }
     }
-    
-    // Method to force pickup (for tutorial scripting)
+
     public void ForcePickup()
     {
         PickupObject();
     }
-    
-    // Method to reset pickup (for testing)
+
     [ContextMenu("Reset Pickup")]
     public void ResetPickup()
     {

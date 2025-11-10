@@ -52,18 +52,16 @@ public class MinimapController : MonoBehaviour
             return;
         }
 
-        // The mapScale is now the primary setting for speed and is NOT calculated from world size.
-        // We calculate mapWorldSize from it for debug purposes only.
+
         mapWorldSize = new Vector2(minimapSize * mapScale, minimapSize * mapScale);
 
-        // Auto-calibrate to set the correct starting position and offset
         if (autoCalibrateOnStart)
         {
             CalibrateForPlayerStart();
         }
         else
         {
-            // Fallback if calibration is off: center on player, no offset.
+
             mapCenter = new Vector2(player.position.x, player.position.z);
             uiOffset = Vector2.zero;
         }
@@ -94,15 +92,13 @@ public class MinimapController : MonoBehaviour
 
     private void UpdateArrowPosition()
     {
-        // Calculate player's position relative to the map's world center
+
         float worldX = player.position.x - mapCenter.x;
         float worldZ = player.position.z - mapCenter.y;
 
-        // Scale the world position to the minimap's UI coordinates
         float minimapX = worldX / mapScale;
         float minimapZ = worldZ / mapScale;
 
-        // Apply the UI offset to correctly position the arrow
         Vector2 finalPosition = new Vector2(minimapX, minimapZ) + uiOffset;
 
         if (clampArrowToEdge)
@@ -112,13 +108,11 @@ public class MinimapController : MonoBehaviour
             finalPosition.y = Mathf.Clamp(finalPosition.y, -maxOffset, maxOffset);
         }
 
-        // Update main arrow
         if (arrow != null)
         {
             arrow.anchoredPosition = finalPosition;
         }
-        
-        // Update all arrows if multiple maps exist
+
         if (allArrows != null && allArrows.Length > 0)
         {
             foreach (var arr in allArrows)
@@ -134,14 +128,12 @@ public class MinimapController : MonoBehaviour
     private void UpdateArrowRotation()
     {
         float playerYaw = player.eulerAngles.y;
-        
-        // Update main arrow
+
         if (arrow != null)
         {
             arrow.localEulerAngles = new Vector3(0f, 0f, -playerYaw);
         }
-        
-        // Update all arrows if multiple maps exist
+
         if (allArrows != null && allArrows.Length > 0)
         {
             foreach (var arr in allArrows)
@@ -198,10 +190,9 @@ public class MinimapController : MonoBehaviour
     [ContextMenu("4. Calibrate for Player Start Position")]
     public void CalibrateForPlayerStart()
     {
-        // Center the map's reference point on the player's starting world position.
+
         mapCenter = new Vector2(playerStartWorldPos.x, playerStartWorldPos.z);
 
-        // The UI offset is the desired starting UI position on the minimap.
         uiOffset = playerStartUIPos;
 
         Debug.Log($"=== CALIBRATION COMPLETE ===");
@@ -209,7 +200,6 @@ public class MinimapController : MonoBehaviour
         Debug.Log($"UI Offset set to: ({uiOffset.x:F1}, {uiOffset.y:F1})");
         Debug.Log($"Using Map Scale: {mapScale}");
 
-        // Verification calculation
         float testUIX = ((playerStartWorldPos.x - mapCenter.x) / mapScale) + uiOffset.x;
         float testUIZ = ((playerStartWorldPos.z - mapCenter.y) / mapScale) + uiOffset.y;
         Debug.Log($"Verification: Player at start should map to UI ({testUIX:F1}, {testUIZ:F1}). This should match your desired start UI position.");

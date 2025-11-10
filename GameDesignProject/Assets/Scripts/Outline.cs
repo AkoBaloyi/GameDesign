@@ -16,19 +16,18 @@ public class Outline : MonoBehaviour
     {
         objectRenderer = GetComponent<Renderer>();
         originalMaterials = objectRenderer.materials;
-        
-        // Create outline materials
+
         CreateOutlineMaterials();
     }
 
     void CreateOutlineMaterials()
     {
-        // Try to find outline shader, fallback to standard shader with emission
+
         Shader outlineShader = Shader.Find("Outlined/Uniform");
         
         if (outlineShader == null)
         {
-            // Fallback: use standard shader with emission
+
             outlineShader = Shader.Find("Standard");
         }
 
@@ -40,14 +39,14 @@ public class Outline : MonoBehaviour
             
             if (outlineShader.name == "Outlined/Uniform")
             {
-                // Using outline shader
+
                 outlineMaterials[i].shader = outlineShader;
                 outlineMaterials[i].SetColor("_OutlineColor", outlineColor);
                 outlineMaterials[i].SetFloat("_Outline", outlineWidth);
             }
             else
             {
-                // Using emission as fallback
+
                 outlineMaterials[i].EnableKeyword("_EMISSION");
                 outlineMaterials[i].SetColor("_EmissionColor", outlineColor * 0.5f);
             }
@@ -74,7 +73,7 @@ public class Outline : MonoBehaviour
     
     void OnDestroy()
     {
-        // Clean up created materials
+
         if (outlineMaterials != null)
         {
             for (int i = 0; i < outlineMaterials.Length; i++)

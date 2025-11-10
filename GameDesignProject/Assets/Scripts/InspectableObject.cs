@@ -2,10 +2,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 
-/// <summary>
-/// Allows player to inspect objects and trigger story events
-/// Used for console and power bay inspection
-/// </summary>
+
+
+
 public class InspectableObject : MonoBehaviour
 {
     [Header("Inspection")]
@@ -37,14 +36,13 @@ public class InspectableObject : MonoBehaviour
 
     void Start()
     {
-        // Find player
+
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
         {
             player = playerObj.transform;
         }
-        
-        // Hide UI initially
+
         if (promptUI != null) promptUI.SetActive(false);
         if (inspectionPanel != null) inspectionPanel.SetActive(false);
     }
@@ -53,15 +51,12 @@ public class InspectableObject : MonoBehaviour
     {
         if (player == null) return;
 
-        // Check distance to player
         float distance = Vector3.Distance(transform.position, player.position);
         bool wasInRange = playerInRange;
         playerInRange = distance <= inspectionRange;
 
-        // Update prompt visibility
         UpdatePrompt();
 
-        // Handle inspection input
         if (playerInRange && canInspect && !hasBeenInspected)
         {
             if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
@@ -81,12 +76,11 @@ public class InspectableObject : MonoBehaviour
             
             if (shouldShow && promptText != null)
             {
-                // Make it SUPER CLEAR what to do!
+
                 promptText.text = ">>> PRESS E TO INSPECT <<<";
                 promptText.fontSize = 36; // Big and obvious
                 promptText.color = Color.yellow; // Bright yellow
-                
-                // Add outline for visibility
+
                 if (promptText.outlineWidth == 0)
                 {
                     promptText.outlineWidth = 0.2f;
@@ -102,29 +96,23 @@ public class InspectableObject : MonoBehaviour
         
         hasBeenInspected = true;
 
-        // Hide prompt
         if (promptUI != null) promptUI.SetActive(false);
 
-        // Show inspection result
         if (inspectionPanel != null && inspectionText != null)
         {
             inspectionPanel.SetActive(true);
             inspectionText.text = inspectionResult;
-            
-            // Hide after delay
+
             Invoke(nameof(HideInspectionPanel), inspectionDisplayTime);
         }
 
-        // Play sound
         if (audioSource != null && inspectionSound != null)
         {
             audioSource.PlayOneShot(inspectionSound);
         }
 
-        // Trigger event
         onInspected?.Invoke();
 
-        // Disable if inspect once
         if (inspectOnce)
         {
             canInspect = false;

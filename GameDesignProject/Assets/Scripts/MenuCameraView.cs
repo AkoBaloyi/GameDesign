@@ -1,9 +1,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Shows live camera view from Game scene as Main Menu background
-/// </summary>
+
+
 public class MenuCameraView : MonoBehaviour
 {
     [Header("Settings")]
@@ -20,7 +19,7 @@ public class MenuCameraView : MonoBehaviour
 
     void Start()
     {
-        // Load Game scene additively (in background)
+
         if (!SceneManager.GetSceneByName(gameSceneName).isLoaded)
         {
             StartCoroutine(LoadGameSceneInBackground());
@@ -29,7 +28,7 @@ public class MenuCameraView : MonoBehaviour
 
     System.Collections.IEnumerator LoadGameSceneInBackground()
     {
-        // Load Game scene without switching to it
+
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(gameSceneName, LoadSceneMode.Additive);
         asyncLoad.allowSceneActivation = true;
 
@@ -40,7 +39,6 @@ public class MenuCameraView : MonoBehaviour
 
         Debug.Log("[MenuCameraView] Game scene loaded in background");
 
-        // Position camera in the game scene
         SetupCamera();
     }
 
@@ -63,14 +61,14 @@ public class MenuCameraView : MonoBehaviour
     {
         if (gameSceneLoaded && menuCamera != null)
         {
-            // Slow rotation for cinematic effect
+
             menuCamera.transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
         }
     }
 
     void OnDestroy()
     {
-        // Unload game scene when leaving main menu
+
         if (gameSceneLoaded && gameScene.isLoaded)
         {
             SceneManager.UnloadSceneAsync(gameScene);

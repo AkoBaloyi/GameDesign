@@ -49,13 +49,12 @@ public class ObjectiveManager : MonoBehaviour
 
 	private void Start()
 	{
-		// Hide banner initially
+
 		if (objectiveBanner != null)
 		{
 			objectiveBanner.SetActive(false);
 		}
-		
-		// Show tracker panel
+
 		if (trackerPanel != null)
 		{
 			trackerPanel.SetActive(true);
@@ -78,11 +77,10 @@ public class ObjectiveManager : MonoBehaviour
 
 	public void OnPowerCellPicked()
 	{
-		// From core loop: pick up power cell → insert in Power Bay
+
 		SetStep(Step.InsertPowerCell, "Insert the Power Cell into the Power Bay");
 		UpdateTracker("Power Cells: 1/1 - Find Power Bay");
-		
-		// Update directional display
+
 		if (directionalDisplay != null && powerBayTransform != null)
 		{
 			directionalDisplay.SetTarget(powerBayTransform);
@@ -105,8 +103,7 @@ public class ObjectiveManager : MonoBehaviour
 		Debug.Log("[ObjectiveManager] Invoking onStartGlowingPath event...");
 		onStartGlowingPath?.Invoke();
 		Debug.Log("[ObjectiveManager] onStartGlowingPath event invoked!");
-		
-		// Update directional display
+
 		if (directionalDisplay != null && consoleTransform != null)
 		{
 			directionalDisplay.SetTarget(consoleTransform);
@@ -164,16 +161,14 @@ public class ObjectiveManager : MonoBehaviour
 
 	private IEnumerator ShowBannerCoroutine(string message)
 	{
-		// Set text
+
 		if (objectiveText != null)
 		{
 			objectiveText.text = message;
 		}
 
-		// Show banner
 		objectiveBanner.SetActive(true);
 
-		// Fade in
 		if (bannerCanvasGroup != null)
 		{
 			float elapsed = 0f;
@@ -187,10 +182,8 @@ public class ObjectiveManager : MonoBehaviour
 			bannerCanvasGroup.alpha = 1;
 		}
 
-		// Wait
 		yield return new WaitForSeconds(bannerDisplayDuration);
 
-		// Fade out
 		if (bannerCanvasGroup != null)
 		{
 			float elapsed = 0f;
@@ -204,7 +197,6 @@ public class ObjectiveManager : MonoBehaviour
 			bannerCanvasGroup.alpha = 0;
 		}
 
-		// Hide banner
 		objectiveBanner.SetActive(false);
 	}
 }

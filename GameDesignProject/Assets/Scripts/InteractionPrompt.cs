@@ -1,10 +1,9 @@
 using UnityEngine;
 using TMPro;
 
-/// <summary>
-/// Enhanced interaction prompt with smooth fade and glow effect
-/// Attach to any interactable object
-/// </summary>
+
+
+
 public class InteractionPrompt : MonoBehaviour
 {
     [Header("UI References")]
@@ -30,7 +29,7 @@ public class InteractionPrompt : MonoBehaviour
 
     private void Awake()
     {
-        // Setup canvas if not assigned
+
         if (promptCanvas == null)
         {
             promptCanvas = GetComponentInChildren<Canvas>();
@@ -41,8 +40,7 @@ public class InteractionPrompt : MonoBehaviour
             promptCanvas.renderMode = RenderMode.WorldSpace;
             promptCanvas.transform.localPosition = Vector3.up * hoverHeight;
         }
-        
-        // Setup canvas group
+
         if (canvasGroup == null && promptCanvas != null)
         {
             canvasGroup = promptCanvas.GetComponent<CanvasGroup>();
@@ -51,8 +49,7 @@ public class InteractionPrompt : MonoBehaviour
                 canvasGroup = promptCanvas.gameObject.AddComponent<CanvasGroup>();
             }
         }
-        
-        // Setup text
+
         if (promptText == null && promptCanvas != null)
         {
             promptText = promptCanvas.GetComponentInChildren<TextMeshProUGUI>();
@@ -65,14 +62,12 @@ public class InteractionPrompt : MonoBehaviour
             promptText.fontSize = 24;
             promptText.alignment = TextAlignmentOptions.Center;
         }
-        
-        // Start hidden
+
         if (canvasGroup != null)
         {
             canvasGroup.alpha = 0f;
         }
-        
-        // Find player
+
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
@@ -82,26 +77,23 @@ public class InteractionPrompt : MonoBehaviour
 
     private void Update()
     {
-        // Fade in/out
+
         if (canvasGroup != null)
         {
             canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, targetAlpha, fadeSpeed * Time.deltaTime);
         }
-        
-        // Pulse effect when visible
+
         if (isVisible && promptText != null)
         {
             float pulse = Mathf.Sin(Time.time * pulseSpeed) * pulseAmount;
             float currentGlow = glowIntensity * (1f + pulse);
-            
-            // Apply glow to text
+
             if (promptText.fontMaterial.HasProperty("_GlowColor"))
             {
                 promptText.fontMaterial.SetColor("_GlowColor", glowColor * currentGlow);
             }
         }
-        
-        // Face player
+
         if (playerTransform != null && promptCanvas != null)
         {
             promptCanvas.transform.LookAt(playerTransform);
@@ -109,27 +101,24 @@ public class InteractionPrompt : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Show the prompt
-    /// </summary>
+
+
     public void Show()
     {
         isVisible = true;
         targetAlpha = 1f;
     }
 
-    /// <summary>
-    /// Hide the prompt
-    /// </summary>
+
+
     public void Hide()
     {
         isVisible = false;
         targetAlpha = 0f;
     }
 
-    /// <summary>
-    /// Set custom prompt message
-    /// </summary>
+
+
     public void SetMessage(string message)
     {
         promptMessage = message;
@@ -139,9 +128,8 @@ public class InteractionPrompt : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Flash the prompt for attention
-    /// </summary>
+
+
     public void Flash()
     {
         StartCoroutine(FlashCoroutine());

@@ -2,10 +2,9 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
 
-/// <summary>
-/// Clear, simple objective manager with room names and map markers
-/// No confusing directional arrows - just clear instructions!
-/// </summary>
+
+
+
 public class ClearObjectiveManager : MonoBehaviour
 {
     [Header("UI")]
@@ -47,10 +46,9 @@ public class ClearObjectiveManager : MonoBehaviour
 
     private void Start()
     {
-        // Hide all map markers initially
+
         HideAllMapMarkers();
-        
-        // Hide full map initially
+
         if (fullMapPanel != null)
         {
             fullMapPanel.SetActive(false);
@@ -59,7 +57,7 @@ public class ClearObjectiveManager : MonoBehaviour
 
     private void Update()
     {
-        // M key to toggle full map
+
         if (Keyboard.current != null && Keyboard.current.mKey.wasPressedThisFrame)
         {
             ToggleFullMap();
@@ -74,8 +72,7 @@ public class ClearObjectiveManager : MonoBehaviour
         {
             fullMapPanel.SetActive(mapOpen);
         }
-        
-        // Hide minimap when full map is open
+
         if (minimapPanel != null)
         {
             minimapPanel.SetActive(!mapOpen);
@@ -117,19 +114,16 @@ public class ClearObjectiveManager : MonoBehaviour
         Debug.Log($"[ClearObjectiveManager] {objective} | {location} | {instruction}");
     }
 
-    // ===== TUTORIAL =====
     public void OnTutorialComplete()
     {
         currentStep = Step.LightsOut;
-        
-        // START SPEEDRUN TIMER!
+
         if (speedrunTimer != null)
         {
             speedrunTimer.StartTimer();
             Debug.Log("[ClearObjectiveManager] Speedrun timer started!");
         }
-        
-        // Turn off all lights
+
         foreach (var light in factoryLights)
         {
             if (light != null) light.enabled = false;
@@ -140,8 +134,7 @@ public class ClearObjectiveManager : MonoBehaviour
             "The factory has lost power",
             "Press M to open map"
         );
-        
-        // Wait a moment then move to next step
+
         Invoke("StartInvestigation", 3f);
     }
 
@@ -156,15 +149,13 @@ public class ClearObjectiveManager : MonoBehaviour
         );
         
         ShowMapMarker(consoleMapMarker);
-        
-        // Enable console inspection
+
         if (consoleInspectable != null)
         {
             consoleInspectable.canInspect = true;
         }
     }
 
-    // ===== CONSOLE INSPECTION =====
     public void OnConsoleInspected()
     {
         if (currentStep != Step.CheckConsole) return;
@@ -178,15 +169,13 @@ public class ClearObjectiveManager : MonoBehaviour
         );
         
         ShowMapMarker(powerBayMapMarker);
-        
-        // Enable power bay inspection
+
         if (powerBayInspectable != null)
         {
             powerBayInspectable.canInspect = true;
         }
     }
 
-    // ===== POWER BAY INSPECTION =====
     public void OnPowerBayInspected()
     {
         if (currentStep != Step.CheckPowerBay) return;
@@ -200,8 +189,7 @@ public class ClearObjectiveManager : MonoBehaviour
         );
         
         ShowMapMarker(workshopMapMarker);
-        
-        // Start enemy spawning
+
         if (enemySpawner != null)
         {
             enemySpawner.EnableSpawning();
@@ -209,7 +197,6 @@ public class ClearObjectiveManager : MonoBehaviour
         }
     }
 
-    // ===== POWER CELL PICKUP =====
     public void OnPowerCellPickedUp()
     {
         if (currentStep != Step.GoToWorkshop) return;
@@ -225,20 +212,17 @@ public class ClearObjectiveManager : MonoBehaviour
         ShowMapMarker(powerBayMapMarker);
     }
 
-    // ===== POWER CELL INSERTED =====
     public void OnPowerCellInserted()
     {
         if (currentStep != Step.ReturnToPowerBay) return;
         
         currentStep = Step.GoToConsole;
-        
-        // Turn lights back on
+
         foreach (var light in factoryLights)
         {
             if (light != null) light.enabled = true;
         }
-        
-        // Stop enemy spawning
+
         if (enemySpawner != null)
         {
             enemySpawner.OnPowerRestored();
@@ -254,14 +238,12 @@ public class ClearObjectiveManager : MonoBehaviour
         ShowMapMarker(consoleMapMarker);
     }
 
-    // ===== CONSOLE ACTIVATED =====
     public void OnConsoleActivated()
     {
         if (currentStep != Step.GoToConsole) return;
         
         currentStep = Step.Complete;
-        
-        // STOP TIMER AND SHOW LEADERBOARD!
+
         if (speedrunTimer != null)
         {
             speedrunTimer.CompleteRun();
@@ -277,10 +259,9 @@ public class ClearObjectiveManager : MonoBehaviour
         HideAllMapMarkers();
     }
 
-    // ===== NAILGUN PICKUP (Optional) =====
     public void OnNailgunPickedUp()
     {
-        // Just a notification, doesn't change objective
+
         if (instructionText != null)
         {
             instructionText.text = "Weapon equipped! Left-click to shoot bots";

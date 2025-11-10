@@ -1,10 +1,9 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-/// <summary>
-/// SMART Enemy AI - Actually tries to catch and kill player
-/// Avoids other enemies, aggressive pursuit, kills on contact
-/// </summary>
+
+
+
 [RequireComponent(typeof(NavMeshAgent))]
 public class SmartEnemyAI : MonoBehaviour
 {
@@ -28,8 +27,7 @@ public class SmartEnemyAI : MonoBehaviour
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        
-        // Find player
+
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
         {
@@ -46,8 +44,7 @@ public class SmartEnemyAI : MonoBehaviour
             enabled = false;
             return;
         }
-        
-        // Configure NavMeshAgent for smart behavior
+
         agent.speed = chaseSpeed;
         agent.acceleration = 12f;
         agent.angularSpeed = 200f;
@@ -55,8 +52,7 @@ public class SmartEnemyAI : MonoBehaviour
         agent.autoBraking = false; // Don't slow down
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
         agent.avoidancePriority = Random.Range(30, 70); // Random priority so they don't all behave the same
-        
-        // Prevent sinking
+
         agent.baseOffset = 0f;
         agent.height = 1.8f;
         agent.radius = 0.4f;
@@ -66,7 +62,7 @@ public class SmartEnemyAI : MonoBehaviour
 
     void Update()
     {
-        // Find player if lost
+
         if (player == null)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
@@ -83,14 +79,12 @@ public class SmartEnemyAI : MonoBehaviour
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-        // KILL CHECK - if close enough, kill player immediately
         if (distanceToPlayer <= killDistance)
         {
             KillPlayer();
             return;
         }
 
-        // DETECTION - start chasing if player in range
         if (distanceToPlayer <= detectionRange)
         {
             if (!isChasing)
@@ -103,7 +97,7 @@ public class SmartEnemyAI : MonoBehaviour
         }
         else
         {
-            // Player out of range
+
             if (isChasing)
             {
                 isChasing = false;
@@ -114,7 +108,7 @@ public class SmartEnemyAI : MonoBehaviour
 
     void ChasePlayer(float distance)
     {
-        // Speed up when close
+
         if (distance < 5f)
         {
             agent.speed = aggressiveSpeed; // FAST when close!
@@ -124,20 +118,17 @@ public class SmartEnemyAI : MonoBehaviour
             agent.speed = chaseSpeed;
         }
 
-        // Update path periodically (not every frame for performance)
         updatePathTimer += Time.deltaTime;
         if (updatePathTimer >= updatePathInterval)
         {
             updatePathTimer = 0f;
-            
-            // Calculate path to player
+
             Vector3 targetPosition = player.position;
-            
-            // Avoid other enemies
+
             Vector3 avoidanceVector = CalculateEnemyAvoidance();
             if (avoidanceVector != Vector3.zero)
             {
-                // Adjust target to avoid other enemies
+
                 targetPosition += avoidanceVector;
             }
             
@@ -147,7 +138,7 @@ public class SmartEnemyAI : MonoBehaviour
 
     Vector3 CalculateEnemyAvoidance()
     {
-        // Find nearby enemies
+
         Collider[] nearbyEnemies = Physics.OverlapSphere(transform.position, enemyAvoidanceRadius, enemyLayer);
         
         if (nearbyEnemies.Length <= 1) // Only self
@@ -159,14 +150,13 @@ public class SmartEnemyAI : MonoBehaviour
         foreach (Collider enemy in nearbyEnemies)
         {
             if (enemy.gameObject == gameObject) continue; // Skip self
-            
-            // Calculate direction away from other enemy
+
             Vector3 directionAway = transform.position - enemy.transform.position;
             float distance = directionAway.magnitude;
             
             if (distance < enemyAvoidanceRadius && distance > 0.1f)
             {
-                // Closer enemies have more influence
+
                 avoidanceVector += directionAway.normalized / distance;
                 count++;
             }
@@ -186,14 +176,12 @@ public class SmartEnemyAI : MonoBehaviour
         {
             Debug.LogWarning($"[SmartEnemyAI] {gameObject.name} KILLED PLAYER!");
             playerHealth.Die();
-            
-            // Stop moving after kill
+
             agent.ResetPath();
             isChasing = false;
         }
     }
 
-    // Also catch with collision (backup method)
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))
@@ -212,15 +200,13 @@ public class SmartEnemyAI : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        // Draw detection range
+
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
-        
-        // Draw kill range
+
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, killDistance);
-        
-        // Draw avoidance range
+
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, enemyAvoidanceRadius);
     }

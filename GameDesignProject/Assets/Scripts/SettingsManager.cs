@@ -3,10 +3,9 @@ using UnityEngine.UI;
 using UnityEngine.Audio;
 using TMPro;
 
-/// <summary>
-/// Manages game settings (sensitivity, brightness, volume, quality)
-/// Can be used in both main menu and pause menu
-/// </summary>
+
+
+
 public class SettingsManager : MonoBehaviour
 {
     [Header("Player Reference")]
@@ -43,22 +42,18 @@ public class SettingsManager : MonoBehaviour
     
     private void Start()
     {
-        // Find player controller if not assigned
+
         if (playerController == null)
         {
             playerController = FindObjectOfType<FPController>();
         }
-        
-        // Load saved settings
+
         LoadSettings();
-        
-        // Setup listeners
+
         SetupListeners();
-        
-        // Setup resolutions
+
         SetupResolutions();
-        
-        // Apply loaded settings
+
         ApplyAllSettings();
     }
     
@@ -115,8 +110,7 @@ public class SettingsManager : MonoBehaviour
         resolutionDropdown.value = currentResolutionIndex;
         resolutionDropdown.RefreshShownValue();
     }
-    
-    // === SENSITIVITY ===
+
     public void OnSensitivityChanged(float value)
     {
         if (playerController != null)
@@ -131,8 +125,7 @@ public class SettingsManager : MonoBehaviour
         
         PlayerPrefs.SetFloat("Sensitivity", value);
     }
-    
-    // === BRIGHTNESS ===
+
     public void OnBrightnessChanged(float value)
     {
         if (playerController != null)
@@ -154,8 +147,7 @@ public class SettingsManager : MonoBehaviour
         
         PlayerPrefs.SetFloat("Brightness", value);
     }
-    
-    // === VOLUME ===
+
     public void OnMasterVolumeChanged(float value)
     {
         if (audioMixer != null)
@@ -200,8 +192,7 @@ public class SettingsManager : MonoBehaviour
         
         PlayerPrefs.SetFloat("SFXVolume", value);
     }
-    
-    // === GRAPHICS ===
+
     public void OnQualityChanged(int qualityIndex)
     {
         QualitySettings.SetQualityLevel(qualityIndex);
@@ -223,25 +214,22 @@ public class SettingsManager : MonoBehaviour
             PlayerPrefs.SetInt("ResolutionIndex", resolutionIndex);
         }
     }
-    
-    // === SAVE/LOAD ===
+
     private void LoadSettings()
     {
-        // Sensitivity
+
         float sensitivity = PlayerPrefs.GetFloat("Sensitivity", defaultSensitivity);
         if (sensitivitySlider != null)
         {
             sensitivitySlider.value = sensitivity;
         }
-        
-        // Brightness
+
         float brightness = PlayerPrefs.GetFloat("Brightness", defaultBrightness);
         if (brightnessSlider != null)
         {
             brightnessSlider.value = brightness;
         }
-        
-        // Volume
+
         float masterVolume = PlayerPrefs.GetFloat("MasterVolume", 0.8f);
         if (masterVolumeSlider != null)
         {
@@ -259,8 +247,7 @@ public class SettingsManager : MonoBehaviour
         {
             sfxVolumeSlider.value = sfxVolume;
         }
-        
-        // Graphics
+
         int qualityLevel = PlayerPrefs.GetInt("QualityLevel", QualitySettings.GetQualityLevel());
         if (qualityDropdown != null)
         {
@@ -282,19 +269,17 @@ public class SettingsManager : MonoBehaviour
     
     private void ApplyAllSettings()
     {
-        // Apply sensitivity
+
         if (sensitivitySlider != null)
         {
             OnSensitivityChanged(sensitivitySlider.value);
         }
-        
-        // Apply brightness
+
         if (brightnessSlider != null)
         {
             OnBrightnessChanged(brightnessSlider.value);
         }
-        
-        // Apply volumes
+
         if (masterVolumeSlider != null)
         {
             OnMasterVolumeChanged(masterVolumeSlider.value);

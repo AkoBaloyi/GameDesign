@@ -23,11 +23,9 @@ public class MinimapCalibrator : MonoBehaviour
     public RectTransform arrow;      // Player arrow UI RectTransform (child of minimapBG)
     public Transform player;         // Player root transform (use position.x and position.z)
 
-    // Affine coefficients: uiX = a*x + b*y + tx ; uiY = c*x + d*y + ty
     private float a,b,tx,c,d,ty;
     private bool calibrated = false;
 
-    // Editor / manual call
     [ContextMenu("Calibrate")]
     public void Calibrate()
     {
@@ -44,7 +42,6 @@ public class MinimapCalibrator : MonoBehaviour
             return;
         }
 
-        // Build A matrix (3x3) from world anchors using (x, y, 1) where y = world.z
         float[,] A = new float[3,3];
         float[] u = new float[3];
         float[] v = new float[3];
@@ -68,7 +65,6 @@ public class MinimapCalibrator : MonoBehaviour
             return;
         }
 
-        // Solve [a b tx]^T = invA * u  and [c d ty]^T = invA * v
         float[] solU = MultiplyMatrixVector(invA, u);
         float[] solV = MultiplyMatrixVector(invA, v);
 
@@ -82,27 +78,22 @@ public class MinimapCalibrator : MonoBehaviour
     [ContextMenu("Quick Calibrate - Player Start Position")]
     public void QuickCalibrate()
     {
-        // Create 3 virtual anchor points based on player start position
-        // This creates a simple 1:1 mapping with offset
-        
-        // Calculate the scale factor based on your specific values
-        // Player world: (-181.4, 96.7) -> UI: (-82, 75)
-        // We need to determine the scale and offset
-        
-        // Use the scale factors from the inspector
-        // This allows you to fine-tune the calibration
-        
-        // Calculate offset: UI = (World - WorldOffset) * Scale + UIOffset
-        // -82 = (-181.4 - WorldOffsetX) * ScaleX + UIOffsetX
-        // 75 = (96.7 - WorldOffsetY) * ScaleY + UIOffsetY
-        
-        // For now, let's use a simple offset calculation
+
+
+
+
+
+
+
+
+
+
+
         float worldOffsetX = playerStartWorldPos.x;
         float worldOffsetY = playerStartWorldPos.z;
         float uiOffsetX = playerStartUIPos.x;
         float uiOffsetY = playerStartUIPos.y;
-        
-        // Set up the transformation: UI = (World - WorldOffset) + UIOffset
+
         a = scaleX; b = 0f; tx = uiOffsetX - worldOffsetX * scaleX;
         c = 0f; d = scaleY; ty = uiOffsetY - worldOffsetY * scaleY;
         
@@ -142,38 +133,33 @@ public class MinimapCalibrator : MonoBehaviour
 
     void Update()
     {
-        // Optionally auto-calibrate in editor when anchors change:
+
 #if UNITY_EDITOR
         if (!Application.isPlaying && worldAnchors.Length >= 3 && uiAnchors.Length >= 3 && !calibrated)
         {
-            // Attempt calibrate once (useful while editing)
+
             Calibrate();
         }
 #endif
         if (!calibrated) return;
         if (player == null || arrow == null) return;
 
-        // Map player world (x,z) to ui anchored position
         Vector3 p = player.position;
         float uiX = a * p.x + b * p.z + tx;
         float uiY = c * p.x + d * p.z + ty;
 
-        // Apply position and rotation
         arrow.anchoredPosition = new Vector2(uiX, uiY);
 
-        // Rotate arrow: match player's yaw (negative because UI y-axis is up)
         float yaw = player.eulerAngles.y;
         arrowRect.localEulerAngles = new Vector3(0, 0, -player.eulerAngles.y);
     }
 
-    // Helper: proper rotation assignment
     private void SetArrowRotation(float yaw)
     {
         if (arrow != null)
             arrow.localEulerAngles = new Vector3(0f, 0f, -yaw);
     }
 
-    // Multiply 3x3 matrix by 3x1 vector
     private static float[] MultiplyMatrixVector(float[,] M, float[] v)
     {
         float[] r = new float[3];
@@ -182,7 +168,6 @@ public class MinimapCalibrator : MonoBehaviour
         return r;
     }
 
-    // Inverse of 3x3 matrix. Returns false if determinant ~ 0.
     private static bool Inverse3x3(float[,] m, out float[,] inv)
     {
         inv = new float[3,3];
@@ -193,7 +178,6 @@ public class MinimapCalibrator : MonoBehaviour
         float det = m00*(m11*m22 - m12*m21) - m01*(m10*m22 - m12*m20) + m02*(m10*m21 - m11*m20);
         if (Mathf.Abs(det) < 1e-6f) return false;
 
-        // Cofactor matrix (not transposed yet)
         float c00 =  (m11*m22 - m12*m21);
         float c01 = -(m10*m22 - m12*m20);
         float c02 =  (m10*m21 - m11*m20);
@@ -206,7 +190,6 @@ public class MinimapCalibrator : MonoBehaviour
         float c21 = -(m00*m12 - m02*m10);
         float c22 =  (m00*m11 - m01*m10);
 
-        // adjugate = cofactor^T, then divide by det
         inv[0,0] = c00 / det;
         inv[0,1] = c10 / det;
         inv[0,2] = c20 / det;
@@ -222,7 +205,6 @@ public class MinimapCalibrator : MonoBehaviour
         return true;
     }
 
-    // ensure compile by setting rotation via this call
     private void LateUpdate()
     {
         if (!calibrated || player == null || arrow == null) return;

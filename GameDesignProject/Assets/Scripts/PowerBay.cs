@@ -3,10 +3,9 @@ using UnityEngine.InputSystem;
 using TMPro;
 using System.Collections;
 
-/// <summary>
-/// Power Bay station where player inserts the power cell
-/// Uses F key to interact when player is nearby with power cell
-/// </summary>
+
+
+
 public class PowerBay : MonoBehaviour
 {
 	[Header("References")]
@@ -45,37 +44,33 @@ public class PowerBay : MonoBehaviour
 	{
 		if (objectiveManager == null)
 			objectiveManager = FindObjectOfType<ObjectiveManager>();
-			
-		// Hide prompt initially
+
 		if (promptUI != null)
 			promptUI.SetActive(false);
-			
-		// Set inactive material
+
 		if (bayRenderer != null && inactiveMaterial != null)
 			bayRenderer.material = inactiveMaterial;
 	}
 
 	private void FixedUpdate()
 	{
-		// Check for player in range
+
 		Collider[] colliders = Physics.OverlapSphere(transform.position, detectionRange, playerLayer);
 		
 		bool wasInRange = playerInRange;
 		playerInRange = colliders.Length > 0;
-		
-		// Get player controller
+
 		if (playerInRange && playerController == null && colliders.Length > 0)
 		{
 			playerController = colliders[0].GetComponent<FPController>();
 		}
-		
-		// Update prompt visibility
+
 		UpdatePrompt();
 	}
 
 	private void Update()
 	{
-		// Direct F-key detection as fallback (in case Input System isn't wired up)
+
 		if (playerInRange && !isActivated && PlayerHasPowerCell())
 		{
 			if (Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame)
@@ -94,13 +89,12 @@ public class PowerBay : MonoBehaviour
 	{
 		if (isActivated)
 		{
-			// Already activated, hide prompt
+
 			if (promptUI != null)
 				promptUI.SetActive(false);
 			return;
 		}
-		
-		// Show prompt if player is in range and has power cell
+
 		bool shouldShowPrompt = playerInRange && PlayerHasPowerCell();
 		
 		if (promptUI != null)
@@ -110,8 +104,7 @@ public class PowerBay : MonoBehaviour
 			if (shouldShowPrompt && promptText != null)
 			{
 				promptText.text = promptMessage;
-				
-				// Show hint when player approaches with power cell
+
 				if (hintUI != null)
 				{
 					hintUI.ShowPowerBayHint();
@@ -120,32 +113,27 @@ public class PowerBay : MonoBehaviour
 		}
 	}
 
-	/// <summary>
-	/// Check if player is holding a power cell
-	/// </summary>
+
+
 	private bool PlayerHasPowerCell()
 	{
 		if (playerController == null) return false;
-		
-		// Check if player is holding an object
+
 		GameObject heldObject = playerController.GetHeldObject();
 		if (heldObject == null) return false;
-		
-		// Check if it's a power cell
+
 		PowerCell powerCell = heldObject.GetComponent<PowerCell>();
 		return powerCell != null && powerCell.IsPickedUp();
 	}
 
-	/// <summary>
-	/// Called by Input System when F key is pressed
-	/// </summary>
+
+
 	public void OnInteract(InputAction.CallbackContext context)
 	{
 		if (!context.performed) return;
 		if (!playerInRange || isActivated) return;
 		if (!PlayerHasPowerCell()) return;
-		
-		// Get the power cell from player
+
 		GameObject heldObject = playerController.GetHeldObject();
 		if (heldObject != null)
 		{
@@ -153,9 +141,8 @@ public class PowerBay : MonoBehaviour
 		}
 	}
 
-	/// <summary>
-	/// Insert power cell into the bay
-	/// </summary>
+
+
 	public void InsertPowerCell(GameObject powerCellObject)
 	{
 		if (powerCellObject == null || isActivated) return;
@@ -163,98 +150,82 @@ public class PowerBay : MonoBehaviour
 		Debug.Log("[PowerBay] Inserting power cell...");
 		
 		isActivated = true;
-		
-		// Play insert sound
+
 		if (audioSource != null && insertSound != null)
 		{
 			audioSource.PlayOneShot(insertSound);
 		}
-		
-		// Move power cell to socket
+
 		powerCellObject.transform.SetParent(socketPoint);
 		powerCellObject.transform.localPosition = Vector3.zero;
 		powerCellObject.transform.localRotation = Quaternion.identity;
-		
-		// Disable physics
+
 		var rb = powerCellObject.GetComponent<Rigidbody>();
 		if (rb != null)
 		{
 			rb.isKinematic = true;
 			rb.useGravity = false;
 		}
-		
-		// Release from player's hand
+
 		if (playerController != null)
 		{
 			playerController.DropHeldObject();
 		}
-		
-		// Hide prompt
+
 		if (promptUI != null)
 			promptUI.SetActive(false);
-		
-		// Start activation sequence
+
 		StartCoroutine(ActivationSequence());
 	}
 
 	private IEnumerator ActivationSequence()
 	{
 		yield return new WaitForSeconds(0.5f);
-		
-		// DRAMATIC SPARK SURGE before stopping
+
 		if (sparksEffect != null)
 		{
 			var emission = sparksEffect.emission;
 			var originalRate = emission.rateOverTime;
-			
-			// Surge!
+
 			emission.rateOverTime = 100f;
 			yield return new WaitForSeconds(0.3f);
-			
-			// Stop sparks
+
 			sparksEffect.Stop();
 			Debug.Log("[PowerBay] Sparks stopped!");
 		}
-		
-		// Play particle effect
+
 		if (insertEffect != null)
 		{
 			insertEffect.Play();
 		}
-		
-		// Change material to active
+
 		if (bayRenderer != null && activeMaterial != null)
 		{
 			bayRenderer.material = activeMaterial;
-			
-			// Make it glow!
+
 			activeMaterial.EnableKeyword("_EMISSION");
 			activeMaterial.SetColor("_EmissionColor", Color.cyan * 2f);
 		}
-		
-		// Play activation sound
+
 		if (audioSource != null && activationSound != null)
 		{
 			audioSource.PlayOneShot(activationSound);
 		}
 		
 		yield return new WaitForSeconds(1f);
-		
-		// Notify objective manager
+
 		if (objectiveManager != null)
 		{
 			objectiveManager.OnPowerCellInserted();
 		}
-		
-		// ALSO notify ClearObjectiveManager if it exists
+
 		ClearObjectiveManager clearManager = FindObjectOfType<ClearObjectiveManager>();
 		if (clearManager != null)
 		{
 			clearManager.OnPowerCellInserted();
 			Debug.Log("[PowerBay] Notified ClearObjectiveManager!");
 		}
-		
-		// Show enemy warning hint (3rd hint)
+
 		if (hintUI != null)
 		{
 			hintUI.ShowEnemyWarningHint();
@@ -265,7 +236,7 @@ public class PowerBay : MonoBehaviour
 
 	private void OnDrawGizmosSelected()
 	{
-		// Draw detection range
+
 		Gizmos.color = isActivated ? Color.green : Color.cyan;
 		Gizmos.DrawWireSphere(transform.position, detectionRange);
 	}

@@ -1,9 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
-/// <summary>
-/// Controls factory lights and glowing path activation
-/// </summary>
+
+
 public class LightsController : MonoBehaviour
 {
 	[Header("Lights")]
@@ -33,23 +32,20 @@ public class LightsController : MonoBehaviour
 			
 		if (factoryConsole == null)
 			factoryConsole = FindObjectOfType<FactoryConsole>();
-			
-		// Disable all lights initially
+
 		foreach (var light in lights)
 		{
 			if (light != null) light.enabled = false;
 		}
-		
-		// Hide path segments initially
+
 		foreach (var segment in pathSegments)
 		{
 			if (segment != null) segment.SetActive(false);
 		}
 	}
 
-	/// <summary>
-	/// Activate all factory lights with sequential effect
-	/// </summary>
+
+
 	public void ActivateLights()
 	{
 		StartCoroutine(ActivateLightsSequence());
@@ -59,14 +55,12 @@ public class LightsController : MonoBehaviour
 	{
 		Debug.Log("[LightsController] Activating lights...");
 		Debug.Log($"[LightsController] Found {lights.Length} lights to activate");
-		
-		// Play power on sound
+
 		if (audioSource != null && powerOnSfx != null)
 		{
 			audioSource.PlayOneShot(powerOnSfx);
 		}
-		
-		// Turn on lights one by one
+
 		int activatedCount = 0;
 		foreach (var light in lights)
 		{
@@ -80,14 +74,12 @@ public class LightsController : MonoBehaviour
 		}
 		
 		Debug.Log($"[LightsController] All {activatedCount} lights activated!");
-		
-		// Play activation VFX
+
 		foreach (var vfx in activationVfx)
 		{
 			if (vfx != null) vfx.Play();
 		}
-		
-		// Start factory ambient sound (factory comes alive!)
+
 		if (factoryAmbientSource != null)
 		{
 			factoryAmbientSource.Play();
@@ -95,8 +87,7 @@ public class LightsController : MonoBehaviour
 		}
 		
 		yield return new WaitForSeconds(1f);
-		
-		// Notify objective manager
+
 		Debug.Log("[LightsController] Notifying ObjectiveManager...");
 		if (objectiveManager != null)
 		{
@@ -111,9 +102,8 @@ public class LightsController : MonoBehaviour
 		Debug.Log("[LightsController] Lights activated!");
 	}
 
-	/// <summary>
-	/// Activate the glowing path to the console
-	/// </summary>
+
+
 	public void ActivateGlowingPath()
 	{
 		StartCoroutine(ActivatePathSequence());
@@ -122,21 +112,18 @@ public class LightsController : MonoBehaviour
 	private IEnumerator ActivatePathSequence()
 	{
 		Debug.Log("[LightsController] Activating glowing path...");
-		
-		// Play path activation sound
+
 		if (audioSource != null && pathActivationSfx != null)
 		{
 			audioSource.PlayOneShot(pathActivationSfx);
 		}
-		
-		// Activate path segments one by one
+
 		foreach (var segment in pathSegments)
 		{
 			if (segment != null)
 			{
 				segment.SetActive(true);
-				
-				// Apply glowing material if available
+
 				if (glowingMaterial != null)
 				{
 					Renderer renderer = segment.GetComponent<Renderer>();
@@ -149,8 +136,7 @@ public class LightsController : MonoBehaviour
 				yield return new WaitForSeconds(pathActivationDelay);
 			}
 		}
-		
-		// Enable the console for interaction
+
 		if (factoryConsole != null)
 		{
 			Debug.Log("[LightsController] Enabling factory console...");

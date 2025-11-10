@@ -1,9 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-/// <summary>
-/// Spawns enemies continuously until power is restored
-/// </summary>
+
+
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Spawning")]
@@ -47,13 +46,10 @@ public class EnemySpawner : MonoBehaviour
         if (powerRestored && stopWhenPowerRestored) return;
         if (enemyPrefab == null || spawnPoints == null || spawnPoints.Length == 0) return;
 
-        // Clean up dead enemies from list
         spawnedEnemies.RemoveAll(enemy => enemy == null);
 
-        // Check if we can spawn more
         if (spawnedEnemies.Count >= maxEnemiesAlive) return;
 
-        // Spawn timer
         spawnTimer += Time.deltaTime;
         if (spawnTimer >= spawnInterval)
         {
@@ -64,7 +60,7 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        // Choose random spawn point
+
         Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
         
         if (spawnPoint == null)
@@ -73,19 +69,16 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
 
-        // Spawn effect
         if (spawnEffect != null)
         {
             Instantiate(spawnEffect, spawnPoint.position, Quaternion.identity);
         }
 
-        // Play spawn sound
         if (audioSource != null && spawnSound != null)
         {
             audioSource.PlayOneShot(spawnSound);
         }
 
-        // Spawn enemy
         GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
         spawnedEnemies.Add(enemy);
 

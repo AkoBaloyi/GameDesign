@@ -1,8 +1,7 @@
 using UnityEngine;
 
-/// <summary>
-/// Simple camera controller for Main Menu - slow cinematic rotation
-/// </summary>
+
+
 public class MenuCameraController : MonoBehaviour
 {
     [Header("Rotation")]
@@ -24,13 +23,12 @@ public class MenuCameraController : MonoBehaviour
 
     void Update()
     {
-        // Slow rotation
+
         if (enableRotation)
         {
             transform.Rotate(rotationAxis, rotationSpeed * Time.deltaTime);
         }
 
-        // Gentle sway (optional)
         if (enableSway)
         {
             float swayX = Mathf.Sin(Time.time * swaySpeed) * swayAmount;

@@ -1,9 +1,8 @@
 using UnityEngine;
 
-/// <summary>
-/// Adds atmospheric particle effects to make the factory feel alive
-/// Attach to empty GameObject in scene
-/// </summary>
+
+
+
 public class AtmosphericEffects : MonoBehaviour
 {
     [Header("Dust Particles")]
@@ -120,7 +119,6 @@ public class AtmosphericEffects : MonoBehaviour
             colorOverLifetime.color = gradient;
         }
 
-        // Start burst coroutine
         if (steamSystems.Length > 0)
         {
             InvokeRepeating(nameof(SteamBurst), steamBurstInterval, steamBurstInterval);
@@ -180,7 +178,6 @@ public class AtmosphericEffects : MonoBehaviour
             );
             colorOverLifetime.color = gradient;
 
-            // Add light
             Light sparkLight = sparkObj.AddComponent<Light>();
             sparkLight.type = LightType.Point;
             sparkLight.color = new Color(1f, 0.8f, 0.3f);
@@ -188,7 +185,6 @@ public class AtmosphericEffects : MonoBehaviour
             sparkLight.intensity = 0f;
         }
 
-        // Start spark coroutine
         if (sparkSystems.Length > 0)
         {
             InvokeRepeating(nameof(TriggerRandomSpark), sparkInterval, sparkInterval);
@@ -199,14 +195,12 @@ public class AtmosphericEffects : MonoBehaviour
     {
         if (steamSystems == null) return;
 
-        // Randomly burst one steam vent
         int randomIndex = Random.Range(0, steamSystems.Length);
         if (steamSystems[randomIndex] != null)
         {
             var emission = steamSystems[randomIndex].emission;
             emission.rateOverTime = steamEmissionRate * 3f;
 
-            // Reset after 1 second
             Invoke(nameof(ResetSteam), 1f);
         }
     }
@@ -229,13 +223,11 @@ public class AtmosphericEffects : MonoBehaviour
     {
         if (sparkSystems == null) return;
 
-        // Randomly trigger one spark location
         int randomIndex = Random.Range(0, sparkSystems.Length);
         if (sparkSystems[randomIndex] != null)
         {
             sparkSystems[randomIndex].Play();
 
-            // Flash light
             Light sparkLight = sparkSystems[randomIndex].GetComponent<Light>();
             if (sparkLight != null)
             {

@@ -2,10 +2,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-/// <summary>
-/// Player health - if enemy touches you, you die and restart
-/// Simple permadeath for speedrun challenge
-/// </summary>
+
+
+
 public class PlayerHealth : MonoBehaviour
 {
     [Header("UI")]
@@ -32,7 +31,7 @@ public class PlayerHealth : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        // Check if hit by enemy
+
         if (collision.gameObject.CompareTag("Enemy") && !isDead)
         {
             Die();
@@ -41,14 +40,13 @@ public class PlayerHealth : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        // Also check triggers in case enemies use triggers
+
         if (other.CompareTag("Enemy") && !isDead)
         {
             Die();
         }
     }
 
-    // Public method so enemies can call it directly
     public void Die()
     {
         if (isDead) return; // Already dead
@@ -56,22 +54,19 @@ public class PlayerHealth : MonoBehaviour
         isDead = true;
         
         Debug.Log("[PlayerHealth] Player died! Restarting...");
-        
-        // Play death sound
+
         if (audioSource != null && deathSound != null)
         {
             audioSource.PlayOneShot(deathSound);
         }
-        
-        // Stop timer
+
         float finalTime = 0f;
         if (timer != null)
         {
             timer.StopTimer();
             finalTime = timer.GetCurrentTime();
         }
-        
-        // Show death screen
+
         if (deathScreen != null)
         {
             deathScreen.SetActive(true);
@@ -86,22 +81,20 @@ public class PlayerHealth : MonoBehaviour
                 finalTimeText.text = $"Survived: {FormatTime(finalTime)}";
             }
         }
-        
-        // Freeze player
+
         FPController controller = GetComponent<FPController>();
         if (controller != null)
         {
             controller.SetInputEnabled(false);
         }
-        
-        // Lock cursor
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
 
     void Update()
     {
-        // Press R to restart after death
+
         if (isDead && Input.GetKeyDown(KeyCode.R))
         {
             RestartGame();
@@ -110,7 +103,7 @@ public class PlayerHealth : MonoBehaviour
 
     void RestartGame()
     {
-        // Reload current scene
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

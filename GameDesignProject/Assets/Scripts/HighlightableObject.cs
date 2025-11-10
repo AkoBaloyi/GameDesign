@@ -14,10 +14,9 @@ public class HighlightableObject : MonoBehaviour
 
     void Awake()
     {
-        // Try to get Renderer on this GameObject first
+
         objectRenderer = GetComponent<Renderer>();
-        
-        // If not found, try to get it from children
+
         if (objectRenderer == null)
         {
             objectRenderer = GetComponentInChildren<Renderer>();
@@ -40,12 +39,10 @@ public class HighlightableObject : MonoBehaviour
         for (int i = 0; i < originalMaterials.Length; i++)
         {
             highlightMaterials[i] = new Material(originalMaterials[i]);
-            
-            // Enable emission
+
             highlightMaterials[i].EnableKeyword("_EMISSION");
             highlightMaterials[i].SetColor("_EmissionColor", highlightColor * highlightIntensity);
-            
-            // Make it slightly brighter
+
             if (highlightMaterials[i].HasProperty("_Color"))
             {
                 Color baseColor = highlightMaterials[i].GetColor("_Color");
@@ -76,7 +73,7 @@ public class HighlightableObject : MonoBehaviour
     
     void OnDestroy()
     {
-        // Clean up created materials
+
         if (highlightMaterials != null)
         {
             for (int i = 0; i < highlightMaterials.Length; i++)

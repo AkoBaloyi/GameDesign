@@ -50,7 +50,7 @@ public class DoorInteractor : MonoBehaviour
 
 	private void Start()
 	{
-		// If animator is not assigned, try to find it in children
+
 		if (doorAnimator == null)
 		{
 			doorAnimator = GetComponentInChildren<Animator>();
@@ -60,14 +60,13 @@ public class DoorInteractor : MonoBehaviour
 			}
 		}
 
-		// Safety: ensure door starts closed and param is reset
 		if (doorAnimator != null && resetAnimatorOnStart)
 		{
 			if (useBoolToOpen)
 			{
 				doorAnimator.SetBool(animatorOpenTrigger, false);
 			}
-			// If you have a named closed state, force Animator to it at time 0
+
 			if (!string.IsNullOrEmpty(closedStateName))
 			{
 				try { doorAnimator.Play(closedStateName, 0, 0f); } catch { /* ignore if state name invalid */ }
@@ -94,7 +93,6 @@ public class DoorInteractor : MonoBehaviour
 	{
 		if (!playerInRange || isOpen) return;
 
-		// Optional LoS gate
 		if (requireLineOfSight && rayOrigin != null)
 		{
 			if (!HasLineOfSight())
@@ -104,11 +102,9 @@ public class DoorInteractor : MonoBehaviour
 			}
 		}
 
-		// Display prompt while in range
 		SetPromptVisible(true);
 	}
 
-	// New Input System callback - wire this to the "Interact" action (F key)
 	public void OnInteract(InputAction.CallbackContext context)
 	{
 		Debug.Log($"[DoorInteractor] OnInteract called on {gameObject.name}");
@@ -116,7 +112,6 @@ public class DoorInteractor : MonoBehaviour
 		Debug.Log($"  - Player in range: {playerInRange}");
 		Debug.Log($"  - Door is open: {isOpen}");
 
-		// Allow interaction even if context.performed is false (for manual calls)
 		if (isOpen)
 		{
 			Debug.Log("  - Door already open, ignoring");
@@ -129,7 +124,6 @@ public class DoorInteractor : MonoBehaviour
 			return;
 		}
 
-		// Optional LoS check
 		if (requireLineOfSight && rayOrigin != null)
 		{
 			if (!HasLineOfSight())
@@ -157,7 +151,7 @@ public class DoorInteractor : MonoBehaviour
 
 		if (doorAnimator != null)
 		{
-			// Try to play the animation directly by state name
+
 			try
 			{
 				if (useBoolToOpen)
@@ -175,8 +169,7 @@ public class DoorInteractor : MonoBehaviour
 			{
 				Debug.LogWarning($"  - Parameter '{animatorOpenTrigger}' not found, trying to play animation directly");
 				Debug.LogWarning($"  - Error: {e.Message}");
-				
-				// Fallback: Try to play the animation clip directly
+
 				try
 				{
 					doorAnimator.Play("Door", 0, 0f);
@@ -191,7 +184,7 @@ public class DoorInteractor : MonoBehaviour
 		else if (doorPivot != null)
 		{
 			Debug.Log("  - Using pivot rotation (no animator)");
-			// Rotate door open over time
+
 			startRot = doorPivot.localRotation;
 			targetRot = Quaternion.Euler(openLocalEuler);
 			StartCoroutine(OpenLerp());

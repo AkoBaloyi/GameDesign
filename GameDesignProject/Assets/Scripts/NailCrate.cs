@@ -24,8 +24,7 @@ public class NailCrate : MonoBehaviour
     
     [Header("References")]
     public TutorialManager tutorialManager;
-    
-    // Private variables
+
     private bool playerInRange = false;
     private FPController playerController;
     
@@ -41,18 +40,16 @@ public class NailCrate : MonoBehaviour
     
     void Update()
     {
-        // Handle interaction input when player is in range
+
         if (playerInRange && CanTakeNails())
         {
             bool interactPressed = false;
-            
-            // Check for keyboard input
+
             if (UnityEngine.InputSystem.Keyboard.current != null && UnityEngine.InputSystem.Keyboard.current.eKey.wasPressedThisFrame)
             {
                 interactPressed = true;
             }
-            
-            // Check for gamepad input
+
             if (UnityEngine.InputSystem.Gamepad.current != null && UnityEngine.InputSystem.Gamepad.current.buttonSouth.wasPressedThisFrame)
             {
                 interactPressed = true;
@@ -71,8 +68,7 @@ public class NailCrate : MonoBehaviour
         {
             playerInRange = true;
             playerController = other.GetComponent<FPController>();
-            
-            // Show interaction prompt
+
             if (interactionPrompt != null && CanTakeNails())
             {
                 interactionPrompt.SetActive(true);
@@ -86,8 +82,7 @@ public class NailCrate : MonoBehaviour
         {
             playerInRange = false;
             playerController = null;
-            
-            // Hide interaction prompt
+
             if (interactionPrompt != null)
             {
                 interactionPrompt.SetActive(false);
@@ -107,35 +102,28 @@ public class NailCrate : MonoBehaviour
             PlayEmptySound();
             return;
         }
-        
-        // Find the player's nailgun
+
         NailgunWeapon nailgun = FindObjectOfType<NailgunWeapon>();
         if (nailgun == null || !nailgun.IsEquipped())
         {
             Debug.Log("Need to equip Nailgun first!");
             return;
         }
-        
-        // Check if nailgun is full
+
         if (nailgun.GetCurrentAmmo() >= nailgun.GetMaxAmmo())
         {
             Debug.Log("Nailgun is already full!");
             return;
         }
-        
-        // Take one bundle
+
         currentBundles--;
-        
-        // Load nails into nailgun
+
         nailgun.LoadAmmo(nailsPerBundle);
-        
-        // Update visual state
+
         UpdateVisualState();
-        
-        // Play effects
+
         PlayLoadingEffects();
-        
-        // Hide prompt if empty
+
         if (!CanTakeNails() && interactionPrompt != null)
         {
             interactionPrompt.SetActive(false);
@@ -146,7 +134,7 @@ public class NailCrate : MonoBehaviour
     
     void UpdateVisualState()
     {
-        // Update nail bundle visuals
+
         if (nailBundleVisuals != null)
         {
             for (int i = 0; i < nailBundleVisuals.Length; i++)
@@ -157,8 +145,7 @@ public class NailCrate : MonoBehaviour
                 }
             }
         }
-        
-        // Update crate material
+
         if (crateRenderer != null)
         {
             if (currentBundles > 0)
@@ -174,25 +161,22 @@ public class NailCrate : MonoBehaviour
     
     void PlayLoadingEffects()
     {
-        // Particle effect
+
         if (loadingEffect != null)
         {
             loadingEffect.Play();
         }
-        
-        // Sound effect
+
         if (crateAudio != null && takeNailsSound != null)
         {
             crateAudio.PlayOneShot(takeNailsSound);
         }
-        
-        // Notify tutorial manager
+
         if (tutorialManager != null)
         {
             tutorialManager.OnNailsLoaded();
         }
-        
-        // Optional: Camera shake for feedback
+
         StartCoroutine(CameraShake());
     }
     
@@ -228,8 +212,7 @@ public class NailCrate : MonoBehaviour
         
         playerCamera.localPosition = originalPos;
     }
-    
-    // Method to refill the crate (for testing or gameplay mechanics)
+
     [ContextMenu("Refill Crate")]
     public void RefillCrate()
     {
@@ -241,14 +224,12 @@ public class NailCrate : MonoBehaviour
             interactionPrompt.SetActive(true);
         }
     }
-    
-    // Method to check if crate is empty
+
     public bool IsEmpty()
     {
         return currentBundles <= 0;
     }
-    
-    // Method to get remaining bundles
+
     public int GetRemainingBundles()
     {
         return currentBundles;

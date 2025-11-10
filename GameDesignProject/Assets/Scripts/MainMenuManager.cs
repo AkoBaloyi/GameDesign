@@ -55,7 +55,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void StartGame()
     {
-        // Use SceneTransitionManager for loading screen
+
         if (SceneTransitionManager.Instance != null)
         {
             SceneTransitionManager.Instance.LoadScene("Game");
@@ -66,7 +66,7 @@ public class MainMenuManager : MonoBehaviour
         }
         else
         {
-            // Fallback: direct load (no loading screen)
+
             Debug.LogWarning("SceneTransitionManager not found. Loading scene directly.");
             SceneManager.LoadScene("Game");
         }

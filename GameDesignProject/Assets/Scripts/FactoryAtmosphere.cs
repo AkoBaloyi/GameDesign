@@ -1,9 +1,8 @@
 using UnityEngine;
 
-/// <summary>
-/// Manages atmospheric effects for the factory environment
-/// Attach to a GameObject in your scene
-/// </summary>
+
+
+
 public class FactoryAtmosphere : MonoBehaviour
 {
     [Header("Dust Particles")]
@@ -93,7 +92,7 @@ public class FactoryAtmosphere : MonoBehaviour
 
     private void UpdateEmergencyLights()
     {
-        // Flicker emergency lights
+
         float flicker = Mathf.PerlinNoise(Time.time * flickerSpeed, 0f);
         float intensity = 1f + (flicker - 0.5f) * flickerAmount;
         
@@ -131,9 +130,8 @@ public class FactoryAtmosphere : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Enable/disable atmospheric effects
-    /// </summary>
+
+
     public void SetAtmosphereActive(bool active)
     {
         if (dustParticles != null)
@@ -153,9 +151,8 @@ public class FactoryAtmosphere : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Increase atmosphere intensity (more dramatic)
-    /// </summary>
+
+
     public void IntensifyAtmosphere()
     {
         if (dustParticles != null)

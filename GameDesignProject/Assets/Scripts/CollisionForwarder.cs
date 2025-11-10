@@ -1,9 +1,8 @@
 using UnityEngine;
 
-/// <summary>
-/// Forwards collision events from child to parent
-/// Attach to child object with collider
-/// </summary>
+
+
+
 public class CollisionForwarder : MonoBehaviour
 {
     private Transform parentTransform;
@@ -17,7 +16,7 @@ public class CollisionForwarder : MonoBehaviour
     {
         if (parentTransform != null)
         {
-            // Forward to parent
+
             parentTransform.SendMessage("OnCollisionEnter", collision, SendMessageOptions.DontRequireReceiver);
         }
     }
@@ -26,7 +25,7 @@ public class CollisionForwarder : MonoBehaviour
     {
         if (parentTransform != null)
         {
-            // Forward to parent
+
             parentTransform.SendMessage("OnTriggerEnter", other, SendMessageOptions.DontRequireReceiver);
         }
     }

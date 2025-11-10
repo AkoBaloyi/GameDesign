@@ -1,9 +1,8 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-/// <summary>
-/// FAST Enemy AI - Directly chases player with REAL speed
-/// </summary>
+
+
 [RequireComponent(typeof(NavMeshAgent))]
 public class SimpleEnemyAI : MonoBehaviour
 {
@@ -33,12 +32,10 @@ public class SimpleEnemyAI : MonoBehaviour
             enabled = false;
             return;
         }
-        
-        // DISABLE NavMesh movement - we'll move manually for REAL speed
+
         agent.updatePosition = false;
         agent.updateRotation = false;
-        
-        // Find player
+
         FindPlayer();
         
         Debug.Log($"[SimpleEnemyAI] {gameObject.name} ready to hunt at REAL speed {chaseSpeed}!");
@@ -64,7 +61,7 @@ public class SimpleEnemyAI : MonoBehaviour
 
     void Update()
     {
-        // Find player if not set
+
         if (player == null)
         {
             FindPlayer();
@@ -73,7 +70,6 @@ public class SimpleEnemyAI : MonoBehaviour
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-        // KILL CHECK
         if (distanceToPlayer <= killDistance)
         {
             if (playerHealth != null && !playerHealth.isDead)
@@ -84,7 +80,6 @@ public class SimpleEnemyAI : MonoBehaviour
             }
         }
 
-        // CHASE PLAYER if in range
         if (distanceToPlayer <= detectionRange)
         {
             if (!isChasing)
@@ -93,13 +88,11 @@ public class SimpleEnemyAI : MonoBehaviour
                 Debug.Log($"[SimpleEnemyAI] {gameObject.name} CHASING at speed {chaseSpeed}!");
             }
 
-            // MOVE DIRECTLY TOWARD PLAYER - NO NAVMESH SLOWDOWN!
             Vector3 directionToPlayer = (player.position - transform.position).normalized;
             directionToPlayer.y = 0; // Keep movement horizontal only
             
             Vector3 moveVector = directionToPlayer * chaseSpeed * Time.deltaTime;
-            
-            // Apply gravity
+
             if (controller != null && controller.isGrounded)
             {
                 verticalVelocity = -2f; // Small downward force to stay grounded
@@ -110,8 +103,7 @@ public class SimpleEnemyAI : MonoBehaviour
             }
             
             moveVector.y = verticalVelocity * Time.deltaTime;
-            
-            // Move with CharacterController if available, otherwise direct transform
+
             if (controller != null)
             {
                 controller.Move(moveVector);
@@ -120,8 +112,7 @@ public class SimpleEnemyAI : MonoBehaviour
             {
                 transform.position += moveVector;
             }
-            
-            // Rotate to face player
+
             if (directionToPlayer != Vector3.zero)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
@@ -130,7 +121,7 @@ public class SimpleEnemyAI : MonoBehaviour
         }
         else
         {
-            // Lost player
+
             if (isChasing)
             {
                 isChasing = false;
@@ -139,7 +130,6 @@ public class SimpleEnemyAI : MonoBehaviour
         }
     }
 
-    // Backup collision detection
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))
@@ -166,11 +156,10 @@ public class SimpleEnemyAI : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        // Draw detection range (red)
+
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
-        
-        // Draw kill range (yellow)
+
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, killDistance);
     }

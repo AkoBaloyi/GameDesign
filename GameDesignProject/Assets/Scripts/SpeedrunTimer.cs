@@ -3,10 +3,9 @@ using TMPro;
 using System.Collections.Generic;
 using System.Linq;
 
-/// <summary>
-/// Speedrun timer with leaderboard
-/// Tracks completion time and saves best times
-/// </summary>
+
+
+
 public class SpeedrunTimer : MonoBehaviour
 {
     [Header("UI")]
@@ -37,8 +36,7 @@ public class SpeedrunTimer : MonoBehaviour
             currentTime += Time.deltaTime;
             UpdateTimerDisplay();
         }
-        
-        // Press ESC to close leaderboard
+
         if (leaderboardPanel != null && leaderboardPanel.activeSelf)
         {
             if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Return))
@@ -75,11 +73,9 @@ public class SpeedrunTimer : MonoBehaviour
             hasCompleted = true;
             
             Debug.Log($"[SpeedrunTimer] Run completed in {FormatTime(currentTime)}!");
-            
-            // Save to leaderboard
+
             SaveTime(currentTime);
-            
-            // Show leaderboard
+
             ShowLeaderboard();
         }
     }
@@ -102,22 +98,18 @@ public class SpeedrunTimer : MonoBehaviour
 
     void SaveTime(float time)
     {
-        // Get existing times
+
         List<float> times = GetLeaderboardTimes();
-        
-        // Add new time
+
         times.Add(time);
-        
-        // Sort (fastest first)
+
         times.Sort();
-        
-        // Keep only top entries
+
         if (times.Count > maxLeaderboardEntries)
         {
             times = times.Take(maxLeaderboardEntries).ToList();
         }
-        
-        // Save to PlayerPrefs
+
         for (int i = 0; i < times.Count; i++)
         {
             PlayerPrefs.SetFloat($"Speedrun_Time_{i}", times[i]);
@@ -195,7 +187,6 @@ public class SpeedrunTimer : MonoBehaviour
         return isRunning;
     }
 
-    // Called by ClearObjectiveManager when tutorial completes
     public void OnTutorialComplete()
     {
         if (startOnTutorialComplete)
@@ -204,7 +195,6 @@ public class SpeedrunTimer : MonoBehaviour
         }
     }
 
-    // Called by ClearObjectiveManager when game is won
     public void OnGameComplete()
     {
         CompleteRun();

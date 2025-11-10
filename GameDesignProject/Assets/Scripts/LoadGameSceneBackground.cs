@@ -2,10 +2,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-/// <summary>
-/// Loads Game scene additively to show MenuBackgroundCamera
-/// Disables player and gameplay for background only
-/// </summary>
+
+
+
 public class LoadGameSceneBackground : MonoBehaviour
 {
     public string gameSceneName = "Game";
@@ -17,7 +16,7 @@ public class LoadGameSceneBackground : MonoBehaviour
     
     IEnumerator LoadSceneAndDisableGameplay()
     {
-        // Load Game scene in background
+
         if (!SceneManager.GetSceneByName(gameSceneName).isLoaded)
         {
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(gameSceneName, LoadSceneMode.Additive);
@@ -26,13 +25,11 @@ public class LoadGameSceneBackground : MonoBehaviour
             Debug.Log("[LoadGameSceneBackground] Game scene loaded, disabling gameplay...");
             
             Scene gameScene = SceneManager.GetSceneByName(gameSceneName);
-            
-            // Disable ALL gameplay - only keep camera, lights, and environment
+
             foreach (GameObject obj in gameScene.GetRootGameObjects())
             {
                 string objName = obj.name.ToLower();
-                
-                // DISABLE these completely
+
                 if (objName.Contains("player") || 
                     objName.Contains("enemy") ||
                     objName.Contains("manager") ||
@@ -45,8 +42,7 @@ public class LoadGameSceneBackground : MonoBehaviour
                     Debug.Log($"[LoadGameSceneBackground] DISABLED: {obj.name}");
                     continue;
                 }
-                
-                // KEEP these
+
                 if (objName.Contains("camera") || 
                     objName.Contains("light") ||
                     objName.Contains("floor") ||
@@ -55,8 +51,7 @@ public class LoadGameSceneBackground : MonoBehaviour
                     objName.Contains("factory"))
                 {
                     obj.SetActive(true);
-                    
-                    // Also disable player controller scripts if they exist
+
                     MonoBehaviour[] scripts = obj.GetComponentsInChildren<MonoBehaviour>();
                     foreach (MonoBehaviour script in scripts)
                     {
@@ -71,8 +66,7 @@ public class LoadGameSceneBackground : MonoBehaviour
                     }
                 }
             }
-            
-            // CRITICAL: Disable mouse look on MenuBackgroundCamera
+
             GameObject bgCamera = GameObject.Find("MenuBackgroundCamera");
             if (bgCamera != null)
             {

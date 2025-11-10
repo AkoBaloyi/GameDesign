@@ -1,11 +1,10 @@
 using UnityEngine;
 using TMPro;
 
-/// <summary>
-/// Diagnostic tool to verify gameplay loop setup
-/// Attach to empty GameObject in scene
-/// Shows real-time status of all critical components
-/// </summary>
+
+
+
+
 public class GameplayLoopDiagnostic : MonoBehaviour
 {
     [Header("UI")]
@@ -77,20 +76,17 @@ public class GameplayLoopDiagnostic : MonoBehaviour
     {
         if (!showDiagnosticUI || !uiVisible || !initialized) return;
 
-        // Background panel
         GUI.Box(new Rect(10, 10, 400, 600), "");
         
         float y = 20;
         float lineHeight = 20;
-        
-        // Title
+
         GUI.Label(new Rect(20, y, 380, 30), "GAMEPLAY LOOP DIAGNOSTIC", headerStyle);
         y += 35;
         
         GUI.Label(new Rect(20, y, 380, 20), $"Press {toggleKey} to toggle this panel", normalStyle);
         y += 25;
-        
-        // Component Status
+
         GUI.Label(new Rect(20, y, 380, 20), "=== COMPONENT STATUS ===", headerStyle);
         y += lineHeight + 5;
         
@@ -102,8 +98,7 @@ public class GameplayLoopDiagnostic : MonoBehaviour
         DrawComponentStatus("Player (FPController)", player != null, ref y);
         
         y += 10;
-        
-        // Current Game State
+
         GUI.Label(new Rect(20, y, 380, 20), "=== CURRENT STATE ===", headerStyle);
         y += lineHeight + 5;
         
@@ -133,12 +128,10 @@ public class GameplayLoopDiagnostic : MonoBehaviour
         }
         
         y += 10;
-        
-        // Setup Verification
+
         GUI.Label(new Rect(20, y, 380, 20), "=== SETUP VERIFICATION ===", headerStyle);
         y += lineHeight + 5;
-        
-        // Check PowerCell setup
+
         if (powerCell != null)
         {
             bool hasPickUpObject = powerCell.GetComponent<PickUpObject>() != null;
@@ -149,8 +142,7 @@ public class GameplayLoopDiagnostic : MonoBehaviour
             DrawSetupCheck("PowerCell has Rigidbody", hasRigidbody, ref y);
             DrawSetupCheck("PowerCell has Collider", hasCollider, ref y);
         }
-        
-        // Check PowerBay setup
+
         if (powerBay != null)
         {
             bool hasObjectiveManager = GetPrivateField<ObjectiveManager>(powerBay, "objectiveManager") != null;
@@ -159,8 +151,7 @@ public class GameplayLoopDiagnostic : MonoBehaviour
             DrawSetupCheck("PowerBay has ObjectiveManager ref", hasObjectiveManager, ref y);
             DrawSetupCheck("PowerBay has SocketPoint", hasSocketPoint, ref y);
         }
-        
-        // Check FactoryConsole setup
+
         if (factoryConsole != null)
         {
             bool hasObjectiveManager = GetPrivateField<ObjectiveManager>(factoryConsole, "objectiveManager") != null;
@@ -169,8 +160,7 @@ public class GameplayLoopDiagnostic : MonoBehaviour
         }
         
         y += 10;
-        
-        // Player Distance to Objectives
+
         if (player != null)
         {
             GUI.Label(new Rect(20, y, 380, 20), "=== DISTANCES ===", headerStyle);
@@ -202,8 +192,7 @@ public class GameplayLoopDiagnostic : MonoBehaviour
         }
         
         y += 10;
-        
-        // Instructions
+
         GUI.Label(new Rect(20, y, 380, 20), "=== QUICK TESTS ===", headerStyle);
         y += lineHeight + 5;
         
@@ -219,8 +208,7 @@ public class GameplayLoopDiagnostic : MonoBehaviour
         y += lineHeight;
         
         y += 10;
-        
-        // Warnings
+
         if (objectiveManager == null || powerCell == null || powerBay == null || 
             factoryConsole == null || player == null)
         {
@@ -259,7 +247,6 @@ public class GameplayLoopDiagnostic : MonoBehaviour
         return null;
     }
 
-    // Console logging for debugging
     [ContextMenu("Log Full Diagnostic")]
     public void LogFullDiagnostic()
     {

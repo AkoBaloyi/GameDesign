@@ -1,10 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// Minimap marker for objectives with pulsing animation
-/// Attach to UI Image on minimap
-/// </summary>
+
+
+
 public class MinimapMarker : MonoBehaviour
 {
     [Header("Target")]
@@ -50,11 +49,9 @@ public class MinimapMarker : MonoBehaviour
         {
             initialScale = rectTransform.localScale;
         }
-        
-        // Set color based on type
+
         SetMarkerColor();
-        
-        // Find player if not assigned
+
         if (player == null)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
@@ -74,36 +71,30 @@ public class MinimapMarker : MonoBehaviour
     private void UpdatePosition()
     {
         if (worldTarget == null || player == null || minimapRect == null) return;
-        
-        // Calculate relative position
+
         Vector3 relativePos = worldTarget.position - player.position;
-        
-        // Convert to minimap coordinates (top-down view)
+
         Vector2 minimapPos = new Vector2(relativePos.x, relativePos.z) * minimapScale;
-        
-        // Clamp to minimap bounds
+
         float halfWidth = minimapRect.rect.width * 0.5f;
         float halfHeight = minimapRect.rect.height * 0.5f;
         minimapPos.x = Mathf.Clamp(minimapPos.x, -halfWidth, halfWidth);
         minimapPos.y = Mathf.Clamp(minimapPos.y, -halfHeight, halfHeight);
-        
-        // Update marker position
+
         rectTransform.anchoredPosition = minimapPos;
     }
 
     private void UpdatePulse()
     {
         if (markerImage == null) return;
-        
-        // Pulse alpha
+
         float pulse = Mathf.Sin(Time.time * pulseSpeed) * 0.5f + 0.5f;
         float alpha = Mathf.Lerp(minAlpha, maxAlpha, pulse);
         
         Color color = markerImage.color;
         color.a = alpha;
         markerImage.color = color;
-        
-        // Pulse scale
+
         if (rectTransform != null)
         {
             float scale = 1f + (pulse * pulseAmount);
@@ -131,25 +122,22 @@ public class MinimapMarker : MonoBehaviour
         markerImage.color = markerColor;
     }
 
-    /// <summary>
-    /// Set the world target to track
-    /// </summary>
+
+
     public void SetTarget(Transform target)
     {
         worldTarget = target;
     }
 
-    /// <summary>
-    /// Show or hide the marker
-    /// </summary>
+
+
     public void SetVisible(bool visible)
     {
         gameObject.SetActive(visible);
     }
 
-    /// <summary>
-    /// Change marker type and color
-    /// </summary>
+
+
     public void SetMarkerType(MarkerType newType)
     {
         type = newType;

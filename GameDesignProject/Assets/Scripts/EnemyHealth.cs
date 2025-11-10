@@ -1,8 +1,7 @@
 using UnityEngine;
 
-/// <summary>
-/// Enemy health system - Takes damage and dies
-/// </summary>
+
+
 public class EnemyHealth : MonoBehaviour, IDamageable
 {
     [Header("Health")]
@@ -51,19 +50,16 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         
         Debug.Log($"[Enemy {gameObject.name}] Took {damage} damage. Health: {currentHealth}/{maxHealth}");
 
-        // Play hit sound
         if (audioSource != null && hitSound != null)
         {
             audioSource.PlayOneShot(hitSound);
         }
 
-        // Visual feedback
         if (enemyRenderer != null && damageMaterial != null)
         {
             StartCoroutine(DamageFlash());
         }
 
-        // Check if dead
         if (currentHealth <= 0)
         {
             Die();
@@ -87,22 +83,18 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
         Debug.Log($"[Enemy {gameObject.name}] Died!");
 
-        // Play death sound
         if (audioSource != null && deathSound != null)
         {
             audioSource.PlayOneShot(deathSound);
         }
 
-        // Spawn death effect
         if (deathEffect != null)
         {
             Instantiate(deathEffect, transform.position, Quaternion.identity);
         }
 
-        // Drop items
         DropItems();
 
-        // Disable AI and collisions
         var ai = GetComponent<SimpleEnemyAI>();
         if (ai != null) ai.enabled = false;
 
@@ -112,7 +104,6 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         var collider = GetComponent<Collider>();
         if (collider != null) collider.enabled = false;
 
-        // Destroy after delay (let death sound play)
         Destroy(gameObject, 2f);
     }
 
@@ -125,8 +116,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
             if (item != null)
             {
                 GameObject dropped = Instantiate(item, transform.position + Vector3.up, Quaternion.identity);
-                
-                // Add some force for dramatic effect
+
                 Rigidbody rb = dropped.GetComponent<Rigidbody>();
                 if (rb != null)
                 {
@@ -142,13 +132,11 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         }
     }
 
-    // Public method to check if enemy is alive
     public bool IsAlive()
     {
         return !isDead;
     }
 
-    // Public method to get health percentage
     public float GetHealthPercentage()
     {
         return currentHealth / maxHealth;

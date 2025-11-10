@@ -133,8 +133,7 @@ public void OnJump(InputAction.CallbackContext context)
     {
         velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         Debug.Log("Jump executed!"); // Debug line
-        
-        // Notify tutorial
+
         if (tutorialManager != null)
         {
             tutorialManager.OnJump();
@@ -144,8 +143,7 @@ public void OnJump(InputAction.CallbackContext context)
     else if (context.performed && !controller.isGrounded)
     {
         Debug.Log("Jump attempted but not grounded!"); // Debug line
-        
-        // Still notify tutorial even if not grounded (player tried to jump)
+
         if (tutorialManager != null)
         {
             tutorialManager.OnJump();
@@ -156,13 +154,11 @@ public void OnJump(InputAction.CallbackContext context)
     public void OnSprint(InputAction.CallbackContext context)
 {
     if (!inputEnabled || isPaused) return;
-    
-    // Sprint while button is held down
+
     if (context.performed)
     {
         isSprinting = true;
-        
-        // Notify tutorial when sprint starts
+
         if (tutorialManager != null)
         {
             tutorialManager.OnSprint();
@@ -223,7 +219,7 @@ public void OnJump(InputAction.CallbackContext context)
 
         if (heldObject == null)
         {
-            // Try to pick up an object
+
             Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
 
             if (Physics.Raycast(ray, out RaycastHit hit, pickupRange))
@@ -237,8 +233,7 @@ public void OnJump(InputAction.CallbackContext context)
                     Debug.Log($"Picking up: {hit.collider.name}");
                     pickUp.PickUp(holdPoint);
                     heldObject = pickUp;
-                    
-                    // Notify tutorial - check if it's the orange cube
+
                     if (tutorialManager != null)
                     {
                         if (hit.collider.name.ToLower().Contains("orange") || 
@@ -264,12 +259,11 @@ public void OnJump(InputAction.CallbackContext context)
         }
         else
         {
-            // Drop the current object
+
             Debug.Log($"Dropping: {heldObject.name}");
             heldObject.Drop();
             heldObject = null;
-            
-            // Notify tutorial
+
             if (tutorialManager != null)
             {
                 tutorialManager.OnObjectDroppedOrThrown();
@@ -296,8 +290,7 @@ public void OnJump(InputAction.CallbackContext context)
 
     heldObject.Throw(impulse);
     heldObject = null;
-    
-    // Notify tutorial
+
     if (tutorialManager != null)
     {
         tutorialManager.OnObjectDroppedOrThrown();
@@ -354,7 +347,6 @@ public void OnJump(InputAction.CallbackContext context)
 {
     if (!inputEnabled) return;
 
-    // Stop sprinting if not moving or crouching
     if (moveInput.magnitude < 0.1f || isCrouching)
     {
         isSprinting = false;
@@ -433,8 +425,6 @@ private void HandlePickupHighlighting()
 {
     Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
 
-    
-    //Debug.DrawRay(cameraTransform.position, cameraTransform.forward * pickupRange, Color.green, 0.1f);
 
     if (Physics.Raycast(ray, out RaycastHit hit, pickupRange))
     {
@@ -477,7 +467,6 @@ private void HandlePickupHighlighting()
     }
 }
 
-    // Helper methods for Power Bay interaction
     public GameObject GetHeldObject()
     {
         return heldObject != null ? heldObject.gameObject : null;

@@ -1,9 +1,8 @@
 using UnityEngine;
 
-/// <summary>
-/// Creates dramatic spark effect when power cell is inserted into power bay
-/// Attach to PowerBay GameObject
-/// </summary>
+
+
+
 public class PowerBaySparkEffect : MonoBehaviour
 {
     [Header("Spark Effect")]
@@ -24,19 +23,17 @@ public class PowerBaySparkEffect : MonoBehaviour
 
     private void Awake()
     {
-        // Setup spark particles if not assigned
+
         if (sparkParticles == null)
         {
             sparkParticles = GetComponentInChildren<ParticleSystem>();
         }
-        
-        // Setup flash light if not assigned
+
         if (flashLight == null)
         {
             flashLight = GetComponentInChildren<Light>();
         }
-        
-        // Disable initially
+
         if (sparkParticles != null)
         {
             sparkParticles.Stop();
@@ -48,9 +45,8 @@ public class PowerBaySparkEffect : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Play spark effect when power cell is inserted
-    /// </summary>
+
+
     public void PlaySparkEffect()
     {
         if (isPlaying) return;
@@ -63,29 +59,25 @@ public class PowerBaySparkEffect : MonoBehaviour
         isPlaying = true;
         
         Debug.Log("[PowerBaySparkEffect] Playing spark effect!");
-        
-        // Play spark sound
+
         if (audioSource != null && sparkSound != null)
         {
             audioSource.PlayOneShot(sparkSound);
         }
-        
-        // Start particle effect
+
         if (sparkParticles != null)
         {
             var main = sparkParticles.main;
             main.startColor = sparkColor;
             sparkParticles.Play();
         }
-        
-        // Flash light effect
+
         if (flashLight != null)
         {
             flashLight.enabled = true;
             flashLight.color = sparkColor;
             flashLight.intensity = flashIntensity;
-            
-            // Fade out flash
+
             float elapsed = 0f;
             while (elapsed < flashDuration)
             {
@@ -96,11 +88,9 @@ public class PowerBaySparkEffect : MonoBehaviour
             
             flashLight.enabled = false;
         }
-        
-        // Wait for spark duration
+
         yield return new WaitForSeconds(sparkDuration);
-        
-        // Stop particles
+
         if (sparkParticles != null)
         {
             sparkParticles.Stop();
@@ -111,9 +101,8 @@ public class PowerBaySparkEffect : MonoBehaviour
         Debug.Log("[PowerBaySparkEffect] Spark effect complete!");
     }
 
-    /// <summary>
-    /// Stop spark effect immediately
-    /// </summary>
+
+
     public void StopSparkEffect()
     {
         StopAllCoroutines();

@@ -43,8 +43,7 @@ public class TutorialManager : MonoBehaviour
     public float stepDelay = 0.5f; // Reduced from 2f to 0.5f
     public float textDisplayDuration = 1.5f; // Reduced from 4f to 1.5f  
     public bool skipTutorial = false;
-    
-    // Tutorial state
+
     public enum TutorialStep
     {
         Detecting,
@@ -66,8 +65,7 @@ public class TutorialManager : MonoBehaviour
     [Header("Debug")]
     public TutorialStep currentStep = TutorialStep.Detecting;
     public InputDevice detectedDevice = InputDevice.KeyboardMouse;
-    
-    // Private variables
+
     private bool tutorialActive = true;
     private bool stepCompleted = false;
     private float lookMovement = 0f;
@@ -76,8 +74,7 @@ public class TutorialManager : MonoBehaviour
     private bool hasDroppedOrThrown = false;
     private bool hasSprinted = false;
     private bool hasJumped = false;
-    
-    // Input detection
+
     private bool mouseDetected = false;
     private bool gamepadDetected = false;
     private float detectionTimer = 0f;
@@ -120,8 +117,7 @@ public class TutorialManager : MonoBehaviour
         currentStep = TutorialStep.Detecting;
         UpdateTutorialText("Welcome to the Factory Tutorial!", "Move your mouse or gamepad to begin...");
         textDisplayed = true;
-        
-        // Highlight the orange cube for later pickup tutorial
+
         if (cubeHighlight != null)
         {
             cubeHighlight.HighlightOn();
@@ -135,7 +131,6 @@ public class TutorialManager : MonoBehaviour
         detectionTimer += Time.deltaTime;
         if (detectionTimer < textDisplayDuration) return;
 
-        // Check for mouse movement
         if (Mouse.current != null)
         {
             Vector2 mouseDelta = Mouse.current.delta.ReadValue();
@@ -145,7 +140,6 @@ public class TutorialManager : MonoBehaviour
             }
         }
 
-        // Check for gamepad input
         if (Gamepad.current != null)
         {
             Vector2 rightStick = Gamepad.current.rightStick.ReadValue();
@@ -294,7 +288,7 @@ public class TutorialManager : MonoBehaviour
         }
         else if (Gamepad.current != null)
         {
-            // FIXED: Changed 'gamepad' to 'Gamepad.current'
+
             if (Gamepad.current.leftStickButton.wasPressedThisFrame)
             {
                 sprintPressed = true;
@@ -480,22 +474,19 @@ public class TutorialManager : MonoBehaviour
         Debug.Log("Tutorial Complete! You're ready for the factory.");
         PlayerPrefs.SetInt("TutorialCompleted", 1);
 
-        // Notify ObjectiveManager to start core objectives
         ObjectiveManager objectiveManager = FindObjectOfType<ObjectiveManager>();
         if (objectiveManager != null)
         {
             objectiveManager.OnTutorialCompleted();
         }
-        
-        // ALSO notify ClearObjectiveManager if it exists
+
         ClearObjectiveManager clearManager = FindObjectOfType<ClearObjectiveManager>();
         if (clearManager != null)
         {
             clearManager.OnTutorialComplete();
             Debug.Log("[TutorialManager] Notified ClearObjectiveManager!");
         }
-        
-        // Start hint system
+
         InspectionHintUI hintUI = FindObjectOfType<InspectionHintUI>();
         if (hintUI != null)
         {
@@ -515,8 +506,7 @@ public class TutorialManager : MonoBehaviour
         yield return new WaitForSeconds(stepDelay);
         NextStep();
     }
-    
-    // Public callback methods
+
     public void OnJump()
     {
         hasJumped = true;
@@ -550,8 +540,7 @@ public class TutorialManager : MonoBehaviour
         hasDroppedOrThrown = true;
         Debug.Log("Object dropped/thrown!");
     }
-    
-    // Empty stub methods for compatibility with other scripts
+
     public void OnNailgunPickedUp() { /* Tutorial no longer uses nailgun */ }
     public void OnNailsLoaded() { /* Tutorial no longer uses nails */ }
     public void OnNailgunFired() { /* Tutorial no longer uses shooting */ }

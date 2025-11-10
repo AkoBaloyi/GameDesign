@@ -14,7 +14,7 @@ public class GunSlotManager : MonoBehaviour
     
     void Start()
     {
-        // Initially hide any weapon
+
         if (currentWeapon != null)
         {
             currentWeapon.gameObject.SetActive(false);
@@ -23,29 +23,25 @@ public class GunSlotManager : MonoBehaviour
     
     public void EquipNailgun(NailgunWeapon nailgun)
     {
-        // Unequip current weapon
+
         if (currentWeapon != null)
         {
             currentWeapon.UnequipWeapon();
         }
-        
-        // Set new weapon
+
         currentWeapon = nailgun;
-        
-        // Position weapon in gun slot
+
         if (gunSlot != null)
         {
             nailgun.transform.SetParent(gunSlot);
             nailgun.transform.localPosition = Vector3.zero;
             nailgun.transform.localRotation = Quaternion.identity;
         }
-        
-        // Equip the weapon
+
         nailgun.EquipWeapon();
         
         Debug.Log("Nailgun equipped in gun slot!");
-        
-        // Notify tutorial
+
         if (tutorialManager != null)
         {
             tutorialManager.OnNailgunPickedUp();

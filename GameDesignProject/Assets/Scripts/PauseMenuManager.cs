@@ -3,10 +3,9 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-/// <summary>
-/// Manages the pause menu during gameplay
-/// Integrates with SettingsManager for in-game settings adjustments
-/// </summary>
+
+
+
 public class PauseMenuManager : MonoBehaviour
 {
     [Header("Menu Panels")]
@@ -31,16 +30,14 @@ public class PauseMenuManager : MonoBehaviour
     
     private void Start()
     {
-        // Find player controller if not assigned
+
         if (playerController == null)
         {
             playerController = FindObjectOfType<FPController>();
         }
-        
-        // Setup button listeners
+
         SetupButtons();
-        
-        // Hide all panels initially
+
         HideAllPanels();
     }
     
@@ -70,22 +67,22 @@ public class PauseMenuManager : MonoBehaviour
     
     private void Update()
     {
-        // Check for ESC key
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (isPaused)
             {
-                // If in settings, go back to pause menu
+
                 if (settingsPanel != null && settingsPanel.activeSelf)
                 {
                     ShowPauseMenu();
                 }
-                // If in confirm quit, go back to pause menu
+
                 else if (confirmQuitPanel != null && confirmQuitPanel.activeSelf)
                 {
                     ShowPauseMenu();
                 }
-                // Otherwise resume game
+
                 else
                 {
                     ResumeGame();
@@ -102,15 +99,12 @@ public class PauseMenuManager : MonoBehaviour
     {
         isPaused = true;
         ShowPauseMenu();
-        
-        // Pause time
+
         Time.timeScale = 0f;
-        
-        // Show cursor
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        
-        // Disable player input
+
         if (playerController != null)
         {
             playerController.SetInputEnabled(false);
@@ -123,15 +117,12 @@ public class PauseMenuManager : MonoBehaviour
     {
         isPaused = false;
         HideAllPanels();
-        
-        // Resume time
+
         Time.timeScale = 1f;
-        
-        // Hide cursor
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        
-        // Enable player input
+
         if (playerController != null)
         {
             playerController.SetInputEnabled(true);
@@ -158,8 +149,7 @@ public class PauseMenuManager : MonoBehaviour
         {
             settingsPanel.SetActive(true);
         }
-        
-        // Initialize settings manager if needed
+
         if (settingsManager != null && playerController != null)
         {
             settingsManager.playerController = playerController;
@@ -179,11 +169,9 @@ public class PauseMenuManager : MonoBehaviour
     public void QuitToMainMenu()
     {
         Debug.Log("[PauseMenu] Returning to main menu...");
-        
-        // Resume time before loading
+
         Time.timeScale = 1f;
-        
-        // Load main menu scene (index 0)
+
         SceneManager.LoadScene(0);
     }
     
@@ -209,8 +197,7 @@ public class PauseMenuManager : MonoBehaviour
         if (confirmQuitPanel != null)
             confirmQuitPanel.SetActive(false);
     }
-    
-    // Public method for other scripts to check pause state
+
     public bool IsPaused()
     {
         return isPaused;

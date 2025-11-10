@@ -17,8 +17,7 @@ public class NailgunPickup : MonoBehaviour
     void Start()
     {
         highlightable = GetComponent<HighlightableObject>();
-        
-        // Auto-find components if not assigned
+
         if (gunSlotManager == null)
         {
             gunSlotManager = FindObjectOfType<GunSlotManager>();
@@ -43,27 +42,23 @@ public class NailgunPickup : MonoBehaviour
     void Update()
     {
         if (isPickedUp) return;
-        
-        // Check if player is looking at this nailgun
+
         if (IsPlayerLookingAt())
         {
-            // Highlight the nailgun
+
             if (highlightable != null)
             {
                 highlightable.HighlightOn();
             }
-            
-            // Check for pickup input
+
             bool pickupPressed = false;
-            
-            // Keyboard input
+
             if (UnityEngine.InputSystem.Keyboard.current != null && 
                 UnityEngine.InputSystem.Keyboard.current.eKey.wasPressedThisFrame)
             {
                 pickupPressed = true;
             }
-            
-            // Gamepad input
+
             if (UnityEngine.InputSystem.Gamepad.current != null && 
                 UnityEngine.InputSystem.Gamepad.current.buttonSouth.wasPressedThisFrame)
             {
@@ -77,7 +72,7 @@ public class NailgunPickup : MonoBehaviour
         }
         else
         {
-            // Turn off highlight when not looking
+
             if (highlightable != null)
             {
                 highlightable.HighlightOff();
@@ -89,8 +84,7 @@ public class NailgunPickup : MonoBehaviour
     {
         Camera playerCamera = Camera.main;
         if (playerCamera == null) return false;
-        
-        // Cast ray from camera
+
         Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
         
         if (Physics.Raycast(ray, out RaycastHit hit, pickupRange))
@@ -106,8 +100,7 @@ public class NailgunPickup : MonoBehaviour
         if (isPickedUp) return;
         
         isPickedUp = true;
-        
-        // Equip nailgun in gun slot (not pickup hand)
+
         if (gunSlotManager != null && nailgunWeapon != null)
         {
             gunSlotManager.EquipNailgun(nailgunWeapon);
@@ -116,8 +109,7 @@ public class NailgunPickup : MonoBehaviour
         {
             Debug.LogError("GunSlotManager or NailgunWeapon not found!");
         }
-        
-        // Turn off highlight
+
         if (highlightable != null)
         {
             highlightable.HighlightOff();
@@ -125,15 +117,13 @@ public class NailgunPickup : MonoBehaviour
         
         Debug.Log("Nailgun picked up and equipped in gun slot!");
     }
-    
-    // Public method to force pickup (for testing)
+
     [ContextMenu("Force Pickup Nailgun")]
     public void ForcePickup()
     {
         PickupNailgun();
     }
-    
-    // Reset method for testing
+
     [ContextMenu("Reset Pickup")]
     public void ResetPickup()
     {

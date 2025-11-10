@@ -2,10 +2,9 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
 
-/// <summary>
-/// Enhanced objective manager for new narrative flow
-/// Handles: Tutorial → Lights Off → Console Check → Power Bay Check → Workshop → Combat → Power Restore
-/// </summary>
+
+
+
 public class EnhancedObjectiveManager : MonoBehaviour
 {
     [Header("UI")]
@@ -53,7 +52,7 @@ public class EnhancedObjectiveManager : MonoBehaviour
 
     void Start()
     {
-        // Find player
+
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
         {
@@ -80,8 +79,7 @@ public class EnhancedObjectiveManager : MonoBehaviour
 
         float distance = Vector3.Distance(player.position, target.position);
         Vector3 direction = (target.position - player.position).normalized;
-        
-        // Simple direction indicator
+
         string directionStr = GetDirectionString(direction);
         directionText.text = $"{directionStr} {distance:F0}m";
     }
@@ -184,14 +182,12 @@ public class EnhancedObjectiveManager : MonoBehaviour
         Debug.Log($"[EnhancedObjectiveManager] Objective: {text}");
     }
 
-    // Called by tutorial manager
     public void OnTutorialComplete()
     {
         Debug.Log("[EnhancedObjectiveManager] Tutorial complete - turning off lights!");
         TurnOffLights();
         SetObjective(ObjectiveStep.LightsOut);
-        
-        // Wait a moment then tell player to check console
+
         Invoke(nameof(PromptCheckConsole), 2f);
     }
 
@@ -213,7 +209,6 @@ public class EnhancedObjectiveManager : MonoBehaviour
         onLightsGoOut?.Invoke();
     }
 
-    // Called by console inspection
     public void OnConsoleInspected()
     {
         Debug.Log("[EnhancedObjectiveManager] Console inspected - directing to power bay");
@@ -221,21 +216,18 @@ public class EnhancedObjectiveManager : MonoBehaviour
         onConsoleInspected?.Invoke();
     }
 
-    // Called by power bay inspection
     public void OnPowerBayInspected()
     {
         Debug.Log("[EnhancedObjectiveManager] Power bay inspected - directing to workshop");
         SetObjective(ObjectiveStep.GoToWorkshop);
         onPowerBayInspected?.Invoke();
-        
-        // Enable enemy spawning
+
         if (enemySpawner != null)
         {
             enemySpawner.EnableSpawning();
         }
     }
 
-    // Called when player picks up nailgun
     public void OnNailgunPickedUp()
     {
         Debug.Log("[EnhancedObjectiveManager] Nailgun picked up");
@@ -243,7 +235,6 @@ public class EnhancedObjectiveManager : MonoBehaviour
         onNailgunPickedUp?.Invoke();
     }
 
-    // Called when player picks up power cell
     public void OnPowerCellPickedUp()
     {
         Debug.Log("[EnhancedObjectiveManager] Power cell picked up - return to power bay");
@@ -251,12 +242,10 @@ public class EnhancedObjectiveManager : MonoBehaviour
         onPowerCellPickedUp?.Invoke();
     }
 
-    // Called when power cell is inserted
     public void OnPowerCellInserted()
     {
         Debug.Log("[EnhancedObjectiveManager] Power cell inserted - restoring power");
-        
-        // Turn lights back on
+
         if (factoryLights != null)
         {
             foreach (var light in factoryLights)
@@ -264,8 +253,7 @@ public class EnhancedObjectiveManager : MonoBehaviour
                 if (light != null) light.enabled = true;
             }
         }
-        
-        // Stop enemy spawning
+
         if (enemySpawner != null)
         {
             enemySpawner.OnPowerRestored();
@@ -275,7 +263,6 @@ public class EnhancedObjectiveManager : MonoBehaviour
         onPowerRestored?.Invoke();
     }
 
-    // Called when console is activated
     public void OnConsoleActivated()
     {
         Debug.Log("[EnhancedObjectiveManager] Console activated - game complete!");

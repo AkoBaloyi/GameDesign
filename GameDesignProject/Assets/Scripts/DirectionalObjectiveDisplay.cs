@@ -1,10 +1,9 @@
 using UnityEngine;
 using TMPro;
 
-/// <summary>
-/// Shows objective with direction arrow and distance
-/// Always visible at top of screen
-/// </summary>
+
+
+
 public class DirectionalObjectiveDisplay : MonoBehaviour
 {
     [Header("UI References")]
@@ -25,7 +24,7 @@ public class DirectionalObjectiveDisplay : MonoBehaviour
 
     void Start()
     {
-        // Find player
+
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
         {
@@ -57,14 +56,11 @@ public class DirectionalObjectiveDisplay : MonoBehaviour
             return;
         }
 
-        // Calculate direction
         Vector3 toTarget = currentTarget.position - player.position;
         float distance = toTarget.magnitude;
-        
-        // Get direction arrow
+
         string arrow = GetDirectionArrow(toTarget.normalized);
-        
-        // Build display text
+
         string displayText = arrow;
         
         if (showDistance)
@@ -78,12 +74,10 @@ public class DirectionalObjectiveDisplay : MonoBehaviour
     string GetDirectionArrow(Vector3 direction)
     {
         if (player == null) return "↑";
-        
-        // Get angle relative to player's forward
+
         Vector3 playerForward = player.forward;
         float angle = Vector3.SignedAngle(playerForward, direction, Vector3.up);
-        
-        // Convert angle to arrow
+
         if (angle >= -22.5f && angle < 22.5f) return "↑";
         if (angle >= 22.5f && angle < 67.5f) return "↗";
         if (angle >= 67.5f && angle < 112.5f) return "→";
